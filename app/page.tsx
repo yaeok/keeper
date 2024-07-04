@@ -1,13 +1,14 @@
 'use client'
 
 import Head from 'next/head'
-import Features from '@/components/home/Feature'
-import Testimonials from '@/components/home/Testimonials'
-import Signup from '@/components/home/SignUp'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+
+import Features from '@/components/home/Feature'
 import Header from '@/components/home/Header'
+import Signup from '@/components/home/SignUp'
 import SignUpButton from '@/components/home/SignUpButton'
+import Testimonials from '@/components/home/Testimonials'
 
 const TopView = () => {
   const router = useRouter()
@@ -17,7 +18,7 @@ const TopView = () => {
   }
 
   return (
-    <div className='w-screen'>
+    <div className='w-2/3'>
       <Head>
         <title>KeePer - 資格取得のモチベーション維持</title>
         <meta

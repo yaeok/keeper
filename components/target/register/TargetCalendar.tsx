@@ -1,14 +1,16 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Goal } from '@/app/target/props/goal'
+import React from 'react'
+
+import TargetDialog from '@/components/target/register/TargetDialog'
 
 interface CalendarProps {
-  goals: Goal[]
+  initialTargets: Target[]
 }
 
-const GoalCalendar: React.FC<CalendarProps> = ({ goals }) => {
-  const [currentDate, setCurrentDate] = useState(new Date())
+const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
+  const [currentDate, setCurrentDate] = React.useState(new Date())
+
   const startOfMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth(),
@@ -19,6 +21,12 @@ const GoalCalendar: React.FC<CalendarProps> = ({ goals }) => {
     currentDate.getMonth() + 1,
     0
   )
+  const [openDialog, setOpenDialog] = React.useState(false)
+  const [dialogMessage, setDialogMessage] = React.useState('')
+
+  const handleAddSchedule = () => {
+    console.log('handleAddSchedule')
+  }
 
   const generateCalendar = (): Date[][] => {
     const weeks: Date[][] = []
@@ -41,10 +49,23 @@ const GoalCalendar: React.FC<CalendarProps> = ({ goals }) => {
   const weeks = generateCalendar()
 
   return (
-    <div>
-      <div className='flex items-center justify-between mb-4'>
+    <div className='px-2'>
+      <section className='py-2'>
         <button
           className='px-4 py-2 bg-gray-300 rounded'
+          onClick={handleAddSchedule}
+        >
+          スケジュールに反映する
+        </button>
+        <TargetDialog
+          open={openDialog}
+          handleClose={() => setOpenDialog(false)}
+          message={dialogMessage}
+        />
+      </section>
+      <div className='flex items-center justify-between mb-4'>
+        <button
+          className='px-4 py-2 bg-gray-300 rounded text-sm'
           onClick={() =>
             setCurrentDate(
               new Date(currentDate.setMonth(currentDate.getMonth() - 1))
@@ -53,11 +74,11 @@ const GoalCalendar: React.FC<CalendarProps> = ({ goals }) => {
         >
           前月
         </button>
-        <span className='text-lg font-medium'>
+        <span className='text-xl font-normal'>
           {currentDate.getFullYear()}年 {currentDate.getMonth() + 1}月
         </span>
         <button
-          className='px-4 py-2 bg-gray-300 rounded'
+          className='px-4 py-2 bg-gray-300 rounded text-sm'
           onClick={() =>
             setCurrentDate(
               new Date(currentDate.setMonth(currentDate.getMonth() + 1))
@@ -77,14 +98,24 @@ const GoalCalendar: React.FC<CalendarProps> = ({ goals }) => {
           week.map((day) => (
             <div
               key={day.toISOString()}
-              className='p-2 border border-gray-300 h-24 overflow-hidden rounded'
+              className='p-2 border border-gray-300 h-28 overflow-hidden rounded-sm'
             >
               <div>{day.getDate()}</div>
-              {goals
-                .filter((goal) => goal.studyDays.includes(day.getDay()))
-                .map((goal, index) => (
+              {initialTargets
+                .filter((target) => {
+                  const dayOfWeek = day.getDay()
+                  const currentDate = new Date(day)
+                  const startDate = new Date(target.startDate)
+                  const endDate = new Date(target.endDate)
+                  return (
+                    target.studyDays.includes(dayOfWeek) &&
+                    currentDate >= startDate &&
+                    currentDate <= endDate
+                  )
+                })
+                .map((target, index) => (
                   <div key={index} className='bg-blue-200 mt-1 p-1 rounded'>
-                    {goal.goal}
+                    <p className='text-xs'>{target.target}</p>
                   </div>
                 ))}
             </div>
@@ -95,4 +126,4 @@ const GoalCalendar: React.FC<CalendarProps> = ({ goals }) => {
   )
 }
 
-export default GoalCalendar
+export default TargetCalendar

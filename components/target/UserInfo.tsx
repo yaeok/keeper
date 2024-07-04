@@ -4,7 +4,7 @@ const UserInfo = () => {
   const user = {
     avatarUrl: 'https://via.placeholder.com/150', // ユーザのアイコンURL
     name: 'ユーザ名',
-    achievedGoals: 5, // 達成した目標数
+    achievedTargets: 5, // 達成した目標数
   }
 
   return (
@@ -19,7 +19,7 @@ const UserInfo = () => {
       </div>
       <div className='border-r border-gray-300 h-28'></div>
       <div className='mx-8'>
-        <h2 className='text-3xl'>{user.achievedGoals}</h2>
+        <h2 className='text-3xl'>{user.achievedTargets}</h2>
         <p className='text-sm'>達成した目標数</p>
       </div>
     </section>
