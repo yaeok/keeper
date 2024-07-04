@@ -1,15 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import { ContentCard } from '@/components/target/ContentCard'
+
 import { ContentCardProps } from '@/app/target/props/card'
 import Header from '@/components/home/Header'
+import { ContentCard } from '@/components/target/ContentCard'
 
 interface TargetListViewProps {
   id: string
 }
 
-const TargetView = (props: TargetListViewProps) => {
+const TargetDetailView = (props: TargetListViewProps) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [cards, setCards] = useState<ContentCardProps[]>([])
@@ -92,4 +93,4 @@ const TargetView = (props: TargetListViewProps) => {
   )
 }
 
-export default TargetView
+export default TargetDetailView

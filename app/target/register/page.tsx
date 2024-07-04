@@ -1,27 +1,42 @@
 'use client'
 
 import { useState } from 'react'
-import GoalForm from '@/components/target/register/GoalForm'
-import GoalCalendar from '@/components/target/register/GoalManager'
-import { Goal } from '@/app/target/props/goal'
 
-const GoalManager: React.FC = () => {
-  const [goals, setGoals] = useState<Goal[]>([])
+import TargetCalendar from '@/components/target/register/TargetCalendar'
+import TargetForm from '@/components/target/register/TargetForm'
 
-  const handleNewGoal = (goal: Goal) => {
-    setGoals([...goals, goal])
+const TargetRegisterView: React.FC = () => {
+  const [targets, setTargets] = useState<Target[]>([])
+  const [currentTarget, setCurrentTarget] = useState<Target | null>(null)
+
+  const handleNewTarget = (target: Target) => {
+    console.log('handleNewTarget')
+    console.log(target)
+    setTargets([...targets, target])
+  }
+
+  const handleFormChange = (target: Target) => {
+    console.log('handleFormChange')
+    console.log(target)
+    setCurrentTarget(target)
   }
 
   return (
-    <div className='container mx-auto p-4'>
-      <h1 className='text-2xl font-bold mb-4'>目標とタスクの管理</h1>
-      <GoalForm onNewGoal={handleNewGoal} />
-      <div>
-        <h2 className='text-xl font-semibold mt-8 mb-4'>カレンダー</h2>
-        <GoalCalendar goals={goals} />
+    <div className='bg-gray-100 w-screen'>
+      <div className='w-2/3 mx-auto p-4 bg-white'>
+        <h1 className='text-xl font-normal mb-4'>目標とタスクの管理</h1>
+        <TargetForm onNewTarget={handleNewTarget} onChange={handleFormChange} />
+        <div>
+          <h2 className='text-xl font-normal mt-8 mb-4'>カレンダー</h2>
+          <TargetCalendar
+            initialTargets={
+              currentTarget ? [currentTarget, ...targets] : targets
+            }
+          />
+        </div>
       </div>
     </div>
   )
 }
 
-export default GoalManager
+export default TargetRegisterView

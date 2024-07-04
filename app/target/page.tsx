@@ -1,12 +1,13 @@
 'use client'
 
-import Calendar from '@/components/target/Calendar'
-import StudySchedule from '@/components/target/StudySchedule'
-import UserInfo from '@/components/target/UserInfo'
-import Header from '@/components/target/Header'
 import { useRouter } from 'next/navigation'
 
-export default function Home() {
+import Calendar from '@/components/target/Calendar'
+import Header from '@/components/target/Header'
+import StudySchedule from '@/components/target/StudySchedule'
+import UserInfo from '@/components/target/UserInfo'
+
+const TargetView: React.FC = () => {
   const router = useRouter()
 
   const handleSignupClick = () => {
@@ -15,14 +16,14 @@ export default function Home() {
   return (
     <main className='flex flex-col items-center justify-center mt-20 w-screen bg-gray-50'>
       <Header />
-      <div className='flex flex-col w-11/12 mx-auto my-12 items-center'>
+      <div className='flex flex-col w-2/3 mx-auto my-12 items-center'>
         <button
           className='bg-blue-500 text-white font-bold py-4 px-6 rounded'
           onClick={handleSignupClick}
         >
           新しく目標をたてる
         </button>
-        <div className='flex flex-row h-screen mx-auto py-12'>
+        <div className='flex flex-row mx-auto py-12'>
           <div className='w-3/4 p-4'>
             <UserInfo />
             <h2 className='text-xl my-6'>挑戦中の目標</h2>
@@ -44,3 +45,5 @@ export default function Home() {
     </main>
   )
 }
+
+export default TargetView
