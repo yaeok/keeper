@@ -18,7 +18,7 @@ const TopView = () => {
   }
 
   return (
-    <div className='w-2/3'>
+    <div className='w-screen'>
       <Head>
         <title>KeePer - 資格取得のモチベーション維持</title>
         <meta

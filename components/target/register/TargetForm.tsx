@@ -5,10 +5,9 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 interface TargetFormProps {
   onNewTarget: (target: Target) => void
-  onChange: (targets: Target) => void
 }
 
-const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
+const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
   const { register, handleSubmit, watch } = useForm<Target>()
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
@@ -17,6 +16,16 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
   const onSubmit: SubmitHandler<Target> = (data: Target) => {
     data.studyDays = data.studyDays.map(Number)
     data.studyHoursPerDay = studyHoursPerDay
+  }
+
+  const handleAddSchedule = () => {
+    const data: Target = {
+      target: watch('target'),
+      studyDays: watch('studyDays').map(Number),
+      studyHoursPerDay: studyHoursPerDay,
+      startDate: startDate,
+      endDate: endDate,
+    }
     onNewTarget(data)
   }
 
@@ -25,24 +34,6 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
   const target = watchFields[1]
   const startDateWatch = watchFields[2]
   const endDateWatch = watchFields[3]
-
-  useEffect(() => {
-    if (
-      target &&
-      studyDays &&
-      studyHoursPerDay &&
-      startDateWatch &&
-      endDateWatch
-    ) {
-      onChange({
-        target,
-        studyDays,
-        studyHoursPerDay,
-        startDate: startDateWatch,
-        endDate: endDateWatch,
-      })
-    }
-  }, [])
 
   const calculateTotalHours = (): number => {
     const daysPerWeek = studyDays ? studyDays.length : 0
@@ -131,6 +122,15 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
             className='mt-4 p-2 border border-gray-300 rounded w-full'
           />
         </div>
+      </section>
+
+      <section className='py-2'>
+        <button
+          className='px-4 py-2 bg-gray-300 rounded'
+          onClick={handleAddSchedule}
+        >
+          スケジュールに反映する
+        </button>
       </section>
     </form>
   )

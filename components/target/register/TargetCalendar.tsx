@@ -5,10 +5,10 @@ import React from 'react'
 import TargetDialog from '@/components/target/register/TargetDialog'
 
 interface CalendarProps {
-  initialTargets: Target[]
+  initialTarget: Target | null
 }
 
-const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
+const TargetCalendar: React.FC<CalendarProps> = ({ initialTarget }) => {
   const [currentDate, setCurrentDate] = React.useState(new Date())
 
   const startOfMonth = new Date(
@@ -23,10 +23,6 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
   )
   const [openDialog, setOpenDialog] = React.useState(false)
   const [dialogMessage, setDialogMessage] = React.useState('')
-
-  const handleAddSchedule = () => {
-    console.log('handleAddSchedule')
-  }
 
   const generateCalendar = (): Date[][] => {
     const weeks: Date[][] = []
@@ -46,23 +42,23 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
     return weeks
   }
 
+  const isTargetDay = (date: Date): boolean => {
+    if (!initialTarget) return false
+    const dayOfWeek = date.getDay()
+    const startDate = new Date(initialTarget.startDate)
+    const endDate = new Date(initialTarget.endDate)
+
+    return (
+      date >= startDate &&
+      date <= endDate &&
+      initialTarget.studyDays.includes(dayOfWeek)
+    )
+  }
+
   const weeks = generateCalendar()
 
   return (
     <div className='px-2'>
-      <section className='py-2'>
-        <button
-          className='px-4 py-2 bg-gray-300 rounded'
-          onClick={handleAddSchedule}
-        >
-          スケジュールに反映する
-        </button>
-        <TargetDialog
-          open={openDialog}
-          handleClose={() => setOpenDialog(false)}
-          message={dialogMessage}
-        />
-      </section>
       <div className='flex items-center justify-between mb-4'>
         <button
           className='px-4 py-2 bg-gray-300 rounded text-sm'
@@ -89,7 +85,7 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
         </button>
       </div>
       <div className='grid grid-cols-7 gap-2'>
-        {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
+        {['日', '月', '火', '水', '木', '金', '土'].map((day: string) => (
           <div key={day} className='text-center font-bold'>
             {day}
           </div>
@@ -101,23 +97,12 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
               className='p-2 border border-gray-300 h-28 overflow-hidden rounded-sm'
             >
               <div>{day.getDate()}</div>
-              {initialTargets
-                .filter((target) => {
-                  const dayOfWeek = day.getDay()
-                  const currentDate = new Date(day)
-                  const startDate = new Date(target.startDate)
-                  const endDate = new Date(target.endDate)
-                  return (
-                    target.studyDays.includes(dayOfWeek) &&
-                    currentDate >= startDate &&
-                    currentDate <= endDate
-                  )
-                })
-                .map((target, index) => (
-                  <div key={index} className='bg-blue-200 mt-1 p-1 rounded'>
-                    <p className='text-xs'>{target.target}</p>
-                  </div>
-                ))}
+
+              {isTargetDay(day) ? (
+                <div className='bg-blue-200 my-1 px-2 py-1 text-sm rounded-sm'>
+                  {initialTarget?.target}
+                </div>
+              ) : null}
             </div>
           ))
         )}
