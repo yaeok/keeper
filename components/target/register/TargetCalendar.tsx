@@ -2,13 +2,15 @@
 
 import React from 'react'
 
-import TargetDialog from '@/components/target/register/TargetDialog'
-
-interface CalendarProps {
+interface TargetCalendarProps {
   initialTarget: Target | null
+  initialTasks: Task[]
 }
 
-const TargetCalendar: React.FC<CalendarProps> = ({ initialTarget }) => {
+const TargetCalendar: React.FC<TargetCalendarProps> = ({
+  initialTarget,
+  initialTasks,
+}) => {
   const [currentDate, setCurrentDate] = React.useState(new Date())
 
   const startOfMonth = new Date(
@@ -21,8 +23,6 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTarget }) => {
     currentDate.getMonth() + 1,
     0
   )
-  const [openDialog, setOpenDialog] = React.useState(false)
-  const [dialogMessage, setDialogMessage] = React.useState('')
 
   const generateCalendar = (): Date[][] => {
     const weeks: Date[][] = []
@@ -55,11 +55,70 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTarget }) => {
     )
   }
 
+  const calculateWeeklyTotalHours = (
+    startDate: Date,
+    endDate: Date,
+    studyDays: number[]
+  ): number => {
+    let totalHours = 0
+    let currentDate = new Date(startDate)
+
+    while (currentDate <= endDate) {
+      if (studyDays.includes(currentDate.getDay())) {
+        totalHours += initialTarget!.studyHoursPerDay
+      }
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    return totalHours
+  }
+
+  const distributeTasks = (): { [key: string]: Task[] } => {
+    const taskDistribution: { [key: string]: Task[] } = {}
+    if (!initialTarget) return taskDistribution
+
+    const totalStudyHours = calculateWeeklyTotalHours(
+      new Date(initialTarget.startDate),
+      new Date(initialTarget.endDate),
+      initialTarget.studyDays
+    )
+
+    let remainingTasks = [...initialTasks]
+    let currentDate = new Date(initialTarget.startDate)
+
+    while (currentDate <= new Date(initialTarget.endDate)) {
+      const dayOfWeek = currentDate.getDay()
+      if (initialTarget.studyDays.includes(dayOfWeek)) {
+        const key = currentDate.toISOString().split('T')[0]
+        taskDistribution[key] = []
+
+        while (remainingTasks.length > 0 && totalStudyHours > 0) {
+          const task = remainingTasks.shift()
+          if (task) {
+            taskDistribution[key].push(task)
+          }
+        }
+      }
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    return taskDistribution
+  }
+
+  const taskDistribution = distributeTasks()
   const weeks = generateCalendar()
 
   return (
-    <div className='px-2'>
-      <div className='flex items-center justify-between mb-4'>
+    <div>
+      <section className='flex items-start mb-4'>
+        <button
+          className='px-4 py-2 bg-gray-300 rounded text-sm'
+          onClick={() => setCurrentDate(new Date())}
+        >
+          今日
+        </button>
+      </section>
+      <section className='flex items-center justify-between mb-4'>
         <button
           className='px-4 py-2 bg-gray-300 rounded text-sm'
           onClick={() =>
@@ -83,30 +142,36 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTarget }) => {
         >
           次月
         </button>
-      </div>
-      <div className='grid grid-cols-7 gap-2'>
+      </section>
+      <section className='grid grid-cols-7 gap-2'>
         {['日', '月', '火', '水', '木', '金', '土'].map((day: string) => (
           <div key={day} className='text-center font-bold'>
             {day}
           </div>
         ))}
-        {weeks.map((week, i) =>
+        {weeks.map((week) =>
           week.map((day) => (
             <div
               key={day.toISOString()}
-              className='p-2 border border-gray-300 h-28 overflow-hidden rounded-sm'
+              className={`p-1 border border-gray-300 h-28 overflow-hidden rounded-sm ${
+                isTargetDay(day) ? 'bg-red-100' : ''
+              }`}
             >
-              <div>{day.getDate()}</div>
-
-              {isTargetDay(day) ? (
-                <div className='bg-blue-200 my-1 px-2 py-1 text-sm rounded-sm'>
-                  {initialTarget?.target}
-                </div>
-              ) : null}
+              <div className='px-1'>{day.getDate()}</div>
+              {taskDistribution[day.toISOString().split('T')[0]]?.map(
+                (task, index) => (
+                  <div
+                    key={index}
+                    className='text-sm bg-green-500 text-white p-1 mb-1 rounded-sm'
+                  >
+                    {task.task}
+                  </div>
+                )
+              )}
             </div>
           ))
         )}
-      </div>
+      </section>
     </div>
   )
 }
