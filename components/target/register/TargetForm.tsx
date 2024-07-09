@@ -40,6 +40,7 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
 
   // 合計勉強時間を計算（目標期間）
   const calculateTotalHours = (): number => {
+    if (!startDate || !endDate) return 0
     const daysPerWeek = studyDays ? studyDays.length : 0
     const totalDays = Math.floor(
       (new Date(endDate).getTime() - new Date(startDate).getTime()) /

@@ -45,12 +45,26 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
   const isTargetDay = (date: Date): boolean => {
     if (!initialTarget) return false
     const dayOfWeek = date.getDay()
-    const startDate = new Date(initialTarget.startDate)
-    const endDate = new Date(initialTarget.endDate)
-
+    const strDate = date.toISOString().split('T')[0]
+    const strStartDate = new Date(initialTarget.startDate)
+      .toISOString()
+      .split('T')[0]
+    const strEndDate = new Date(initialTarget.endDate)
+      .toISOString()
+      .split('T')[0]
+    const convertedDate = new Date(strDate)
+    const startDate = new Date(strStartDate)
+    const endDate = new Date(strEndDate)
+    if (
+      convertedDate >= startDate &&
+      convertedDate <= endDate &&
+      initialTarget.studyDays.includes(dayOfWeek)
+    ) {
+      console.log('convertedDate', convertedDate)
+    }
     return (
-      date >= startDate &&
-      date <= endDate &&
+      convertedDate >= startDate &&
+      convertedDate <= endDate &&
       initialTarget.studyDays.includes(dayOfWeek)
     )
   }
@@ -58,33 +72,25 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
   const calculateWeeklyTotalHours = (
     startDate: Date,
     endDate: Date,
-    studyDays: number[]
+    studyDays: number[],
+    studyHoursPerDay: number
   ): number => {
-    let totalHours = 0
-    let currentDate = new Date(startDate)
-
-    while (currentDate <= endDate) {
-      if (studyDays.includes(currentDate.getDay())) {
-        totalHours += initialTarget!.studyHoursPerDay
-      }
-      currentDate.setDate(currentDate.getDate() + 1)
-    }
-
-    return totalHours
+    if (!startDate || !endDate) return 0
+    const daysPerWeek = studyDays ? studyDays.length : 0
+    const totalDays = Math.floor(
+      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
+        (1000 * 60 * 60 * 24)
+    )
+    return daysPerWeek * studyHoursPerDay * (totalDays / 7)
   }
 
   const distributeTasks = (): { [key: string]: Task[] } => {
     const taskDistribution: { [key: string]: Task[] } = {}
     if (!initialTarget) return taskDistribution
 
-    const totalStudyHours = calculateWeeklyTotalHours(
-      new Date(initialTarget.startDate),
-      new Date(initialTarget.endDate),
-      initialTarget.studyDays
-    )
-
     let remainingTasks = [...initialTasks]
     let currentDate = new Date(initialTarget.startDate)
+    let dailyStudyHours = initialTarget.studyHoursPerDay
 
     while (currentDate <= new Date(initialTarget.endDate)) {
       const dayOfWeek = currentDate.getDay()
@@ -92,10 +98,23 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
         const key = currentDate.toISOString().split('T')[0]
         taskDistribution[key] = []
 
-        while (remainingTasks.length > 0 && totalStudyHours > 0) {
-          const task = remainingTasks.shift()
+        let remainingStudyHoursForDay = dailyStudyHours
+
+        while (remainingTasks.length > 0 && remainingStudyHoursForDay > 0) {
+          const task = remainingTasks[0] // 先頭のタスクを参照
           if (task) {
-            taskDistribution[key].push(task)
+            const taskTime = Math.min(
+              task.taskStudyHours,
+              remainingStudyHoursForDay
+            ) // タスクの時間とその日に学習可能な時間の小さい方を取る
+            taskDistribution[key].push({ ...task, taskStudyHours: taskTime }) // タスクを分配
+
+            remainingStudyHoursForDay -= taskTime // 残りの学習時間を減らす
+            task.taskStudyHours -= taskTime // タスクの残り時間を減らす
+
+            if (task.taskStudyHours <= 0) {
+              remainingTasks.shift() // タスクが完了したら、リストから削除
+            }
           }
         }
       }
@@ -164,7 +183,7 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
                     key={index}
                     className='text-sm bg-green-500 text-white p-1 mb-1 rounded-sm'
                   >
-                    {task.task}
+                    {task.task} - {task.taskStudyHours}時間
                   </div>
                 )
               )}
