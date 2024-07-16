@@ -41,10 +41,13 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     }
     return weeks
   }
-
   const isTargetDay = (date: Date): boolean => {
     if (!initialTarget) return false
+
+    // 与えられた日付の曜日を取得
     const dayOfWeek = date.getDay()
+
+    // 与えられた日付、開始日、終了日を時間部分を切り捨ててISO形式の文字列に変換
     const strDate = date.toISOString().split('T')[0]
     const strStartDate = new Date(initialTarget.startDate)
       .toISOString()
@@ -52,36 +55,27 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     const strEndDate = new Date(initialTarget.endDate)
       .toISOString()
       .split('T')[0]
-    const convertedDate = new Date(strDate)
-    const startDate = new Date(strStartDate)
-    const endDate = new Date(strEndDate)
-    if (
-      convertedDate >= startDate &&
-      convertedDate <= endDate &&
-      initialTarget.studyDays.includes(dayOfWeek)
-    ) {
-      console.log('convertedDate', convertedDate)
-    }
-    return (
-      convertedDate >= startDate &&
-      convertedDate <= endDate &&
-      initialTarget.studyDays.includes(dayOfWeek)
-    )
-  }
 
-  const calculateWeeklyTotalHours = (
-    startDate: Date,
-    endDate: Date,
-    studyDays: number[],
-    studyHoursPerDay: number
-  ): number => {
-    if (!startDate || !endDate) return 0
-    const daysPerWeek = studyDays ? studyDays.length : 0
-    const totalDays = Math.floor(
-      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
-        (1000 * 60 * 60 * 24)
-    )
-    return daysPerWeek * studyHoursPerDay * (totalDays / 7)
+    // 再度、時間部分を切り捨てた日付オブジェクトを生成
+    const convertedDate = new Date(strDate + 'T00:00:00Z')
+    const startDate = new Date(strStartDate + 'T00:00:00Z')
+    const endDate = new Date(strEndDate + 'T00:00:00Z')
+
+    console.log('対象日', convertedDate)
+    console.log('開始日', startDate)
+    console.log('終了日', endDate)
+
+    // 日付が開始日と終了日の範囲内にあり、指定された曜日に含まれているかどうかを確認
+    const isTarget =
+      convertedDate >= startDate &&
+      convertedDate <= endDate &&
+      initialTarget.studyDays.includes(dayOfWeek)
+
+    if (isTarget) {
+      console.log('対象日: if', convertedDate)
+    }
+
+    return isTarget
   }
 
   const distributeTasks = (): { [key: string]: Task[] } => {

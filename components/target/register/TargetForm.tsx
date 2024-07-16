@@ -46,7 +46,8 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
       (new Date(endDate).getTime() - new Date(startDate).getTime()) /
         (1000 * 60 * 60 * 24)
     )
-    return daysPerWeek * studyHoursPerDay * (totalDays / 7)
+    // 小数点を切り捨てて返す
+    return Math.floor(daysPerWeek * studyHoursPerDay * (totalDays / 7))
   }
 
   return (
