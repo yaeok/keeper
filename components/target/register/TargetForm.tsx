@@ -1,14 +1,13 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 interface TargetFormProps {
   onNewTarget: (target: Target) => void
-  onChange: (targets: Target) => void
 }
 
-const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
+const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
   const { register, handleSubmit, watch } = useForm<Target>()
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
@@ -17,41 +16,43 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
   const onSubmit: SubmitHandler<Target> = (data: Target) => {
     data.studyDays = data.studyDays.map(Number)
     data.studyHoursPerDay = studyHoursPerDay
+  }
+
+  const handleAddSchedule = () => {
+    const data: Target = {
+      target: watch('target'),
+      studyDays: watch('studyDays').map(Number),
+      studyHoursPerDay: studyHoursPerDay,
+      startDate: startDate,
+      endDate: endDate,
+    }
     onNewTarget(data)
   }
 
   const watchFields = watch(['studyDays', 'target', 'startDate', 'endDate'])
   const studyDays = watchFields[0]
-  const target = watchFields[1]
-  const startDateWatch = watchFields[2]
-  const endDateWatch = watchFields[3]
 
-  useEffect(() => {
-    if (
-      target &&
-      studyDays &&
-      studyHoursPerDay &&
-      startDateWatch &&
-      endDateWatch
-    ) {
-      onChange({
-        target,
-        studyDays,
-        studyHoursPerDay,
-        startDate: startDateWatch,
-        endDate: endDateWatch,
-      })
-    }
-  }, [])
-
-  const calculateTotalHours = (): number => {
+  // 週次の合計勉強時間を計算
+  const calculateWeeklyTotalHours = (): number => {
     const daysPerWeek = studyDays ? studyDays.length : 0
     return daysPerWeek * studyHoursPerDay
   }
 
+  // 合計勉強時間を計算（目標期間）
+  const calculateTotalHours = (): number => {
+    if (!startDate || !endDate) return 0
+    const daysPerWeek = studyDays ? studyDays.length : 0
+    const totalDays = Math.floor(
+      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
+        (1000 * 60 * 60 * 24)
+    )
+    // 小数点を切り捨てて返す
+    return Math.floor(daysPerWeek * studyHoursPerDay * (totalDays / 7))
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-      <section className='py-2'>
+      <section className='py-1'>
         <label className='block font-normal p-1 border-b-red-400 border-b-2'>
           目標
         </label>
@@ -60,7 +61,7 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
           className='mt-4 p-2 border border-gray-300 rounded w-full'
         />
       </section>
-      <section className='py-2'>
+      <section className='py-1'>
         <label className='block font-normal p-1 border-b-red-400 border-b-2'>
           週に何回勉強しますか？
         </label>
@@ -81,7 +82,7 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
           ))}
         </div>
       </section>
-      <section className='py-2'>
+      <section className='py-1'>
         <label className='block font-normal p-1 border-b-red-400 border-b-2'>
           1日何時間勉強しますか？
         </label>
@@ -97,9 +98,12 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
         />
         <div className='text-right mt-2'>{studyHoursPerDay} 時間</div>
       </section>
-      <section className='my-4'>
-        <label className='block font-normal p-1 border-b-red-400 border-b-2'>
-          合計勉強時間（週）: {calculateTotalHours()} 時間
+      <section className='flex flex-row space-x-4 py-2'>
+        <label className='w-full block font-normal p-1 border-b-red-400 border-b-2'>
+          合計勉強時間（週）: {calculateWeeklyTotalHours()} 時間
+        </label>
+        <label className='w-full block font-normal p-1 border-b-red-400 border-b-2'>
+          合計勉強時間: {calculateTotalHours()} 時間
         </label>
       </section>
       <section className='flex flex-row space-x-4 py-2'>
@@ -131,6 +135,15 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget, onChange }) => {
             className='mt-4 p-2 border border-gray-300 rounded w-full'
           />
         </div>
+      </section>
+
+      <section className='py-2'>
+        <button
+          className='px-4 py-2 bg-gray-300 rounded'
+          onClick={handleAddSchedule}
+        >
+          スケジュールに反映する
+        </button>
       </section>
     </form>
   )

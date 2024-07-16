@@ -2,13 +2,15 @@
 
 import React from 'react'
 
-import TargetDialog from '@/components/target/register/TargetDialog'
-
-interface CalendarProps {
-  initialTargets: Target[]
+interface TargetCalendarProps {
+  initialTarget: Target | null
+  initialTasks: Task[]
 }
 
-const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
+const TargetCalendar: React.FC<TargetCalendarProps> = ({
+  initialTarget,
+  initialTasks,
+}) => {
   const [currentDate, setCurrentDate] = React.useState(new Date())
 
   const startOfMonth = new Date(
@@ -21,12 +23,6 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
     currentDate.getMonth() + 1,
     0
   )
-  const [openDialog, setOpenDialog] = React.useState(false)
-  const [dialogMessage, setDialogMessage] = React.useState('')
-
-  const handleAddSchedule = () => {
-    console.log('handleAddSchedule')
-  }
 
   const generateCalendar = (): Date[][] => {
     const weeks: Date[][] = []
@@ -45,25 +41,97 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
     }
     return weeks
   }
+  const isTargetDay = (date: Date): boolean => {
+    if (!initialTarget) return false
 
+    // 与えられた日付の曜日を取得
+    const dayOfWeek = date.getDay()
+
+    // 与えられた日付、開始日、終了日を時間部分を切り捨ててISO形式の文字列に変換
+    const strDate = date.toISOString().split('T')[0]
+    const strStartDate = new Date(initialTarget.startDate)
+      .toISOString()
+      .split('T')[0]
+    const strEndDate = new Date(initialTarget.endDate)
+      .toISOString()
+      .split('T')[0]
+
+    // 再度、時間部分を切り捨てた日付オブジェクトを生成
+    const convertedDate = new Date(strDate + 'T00:00:00Z')
+    const startDate = new Date(strStartDate + 'T00:00:00Z')
+    const endDate = new Date(strEndDate + 'T00:00:00Z')
+
+    console.log('対象日', convertedDate)
+    console.log('開始日', startDate)
+    console.log('終了日', endDate)
+
+    // 日付が開始日と終了日の範囲内にあり、指定された曜日に含まれているかどうかを確認
+    const isTarget =
+      convertedDate >= startDate &&
+      convertedDate <= endDate &&
+      initialTarget.studyDays.includes(dayOfWeek)
+
+    if (isTarget) {
+      console.log('対象日: if', convertedDate)
+    }
+
+    return isTarget
+  }
+
+  const distributeTasks = (): { [key: string]: Task[] } => {
+    const taskDistribution: { [key: string]: Task[] } = {}
+    if (!initialTarget) return taskDistribution
+
+    let remainingTasks = [...initialTasks]
+    let currentDate = new Date(initialTarget.startDate)
+    let dailyStudyHours = initialTarget.studyHoursPerDay
+
+    while (currentDate <= new Date(initialTarget.endDate)) {
+      const dayOfWeek = currentDate.getDay()
+      if (initialTarget.studyDays.includes(dayOfWeek)) {
+        const key = currentDate.toISOString().split('T')[0]
+        taskDistribution[key] = []
+
+        let remainingStudyHoursForDay = dailyStudyHours
+
+        while (remainingTasks.length > 0 && remainingStudyHoursForDay > 0) {
+          const task = remainingTasks[0] // 先頭のタスクを参照
+          if (task) {
+            const taskTime = Math.min(
+              task.taskStudyHours,
+              remainingStudyHoursForDay
+            ) // タスクの時間とその日に学習可能な時間の小さい方を取る
+            taskDistribution[key].push({ ...task, taskStudyHours: taskTime }) // タスクを分配
+
+            remainingStudyHoursForDay -= taskTime // 残りの学習時間を減らす
+            task.taskStudyHours -= taskTime // タスクの残り時間を減らす
+
+            if (task.taskStudyHours <= 0) {
+              remainingTasks.shift() // タスクが完了したら、リストから削除
+            }
+          }
+        }
+      }
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    return taskDistribution
+  }
+
+  const taskDistribution = distributeTasks()
   const weeks = generateCalendar()
 
   return (
-    <div className='px-2'>
-      <section className='py-2'>
+    <div>
+      <section className='flex items-start mb-4'>
         <button
-          className='px-4 py-2 bg-gray-300 rounded'
-          onClick={handleAddSchedule}
+          className='px-4 py-2 bg-gray-300 rounded text-sm'
+          onClick={() => setCurrentDate(new Date())}
         >
-          スケジュールに反映する
+          今日
         </button>
-        <TargetDialog
-          open={openDialog}
-          handleClose={() => setOpenDialog(false)}
-          message={dialogMessage}
-        />
       </section>
-      <div className='flex items-center justify-between mb-4'>
+      <section className='flex items-center justify-between mb-4'>
         <button
           className='px-4 py-2 bg-gray-300 rounded text-sm'
           onClick={() =>
@@ -87,41 +155,36 @@ const TargetCalendar: React.FC<CalendarProps> = ({ initialTargets }) => {
         >
           次月
         </button>
-      </div>
-      <div className='grid grid-cols-7 gap-2'>
-        {['日', '月', '火', '水', '木', '金', '土'].map((day) => (
+      </section>
+      <section className='grid grid-cols-7 gap-2'>
+        {['日', '月', '火', '水', '木', '金', '土'].map((day: string) => (
           <div key={day} className='text-center font-bold'>
             {day}
           </div>
         ))}
-        {weeks.map((week, i) =>
+        {weeks.map((week) =>
           week.map((day) => (
             <div
               key={day.toISOString()}
-              className='p-2 border border-gray-300 h-28 overflow-hidden rounded-sm'
+              className={`p-1 border border-gray-300 h-28 overflow-hidden rounded-sm ${
+                isTargetDay(day) ? 'bg-red-100' : ''
+              }`}
             >
-              <div>{day.getDate()}</div>
-              {initialTargets
-                .filter((target) => {
-                  const dayOfWeek = day.getDay()
-                  const currentDate = new Date(day)
-                  const startDate = new Date(target.startDate)
-                  const endDate = new Date(target.endDate)
-                  return (
-                    target.studyDays.includes(dayOfWeek) &&
-                    currentDate >= startDate &&
-                    currentDate <= endDate
-                  )
-                })
-                .map((target, index) => (
-                  <div key={index} className='bg-blue-200 mt-1 p-1 rounded'>
-                    <p className='text-xs'>{target.target}</p>
+              <div className='px-1'>{day.getDate()}</div>
+              {taskDistribution[day.toISOString().split('T')[0]]?.map(
+                (task, index) => (
+                  <div
+                    key={index}
+                    className='text-sm bg-green-500 text-white p-1 mb-1 rounded-sm'
+                  >
+                    {task.task} - {task.taskStudyHours}時間
                   </div>
-                ))}
+                )
+              )}
             </div>
           ))
         )}
-      </div>
+      </section>
     </div>
   )
 }
