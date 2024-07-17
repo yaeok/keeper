@@ -5,9 +5,8 @@ import { useState } from 'react'
 import TargetCalendar from '@/components/target/register/TargetCalendar'
 import TargetForm from '@/components/target/register/TargetForm'
 import TaskForm from '@/components/target/register/TaskForm'
-
-import { Target } from '../domain/entities/target'
-import { Task } from '../domain/entities/task'
+import { Target } from '@/domain/entity/target_entity'
+import { Task } from '@/domain/entity/task_entity'
 
 const TargetRegisterView: React.FC = () => {
   const [currentTarget, setCurrentTarget] = useState<Target | null>(null)

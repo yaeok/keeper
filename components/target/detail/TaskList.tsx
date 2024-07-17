@@ -1,9 +1,8 @@
 import React from 'react'
 
-// components/TaskList.tsx
-import { Actual } from '@/domain/entities/actual'
-import { Task } from '@/domain/entities/task'
 import TaskProgress from '@/components/target/detail/TaskProgress'
+import { Actual } from '@/domain/entity/actual_entity'
+import { Task } from '@/domain/entity/task_entity'
 
 interface TaskListProps {
   tasks: Task[]

@@ -2,6 +2,9 @@
 
 import React from 'react'
 
+import { Target } from '@/domain/entity/target_entity'
+import { Task } from '@/domain/entity/task_entity'
+
 interface TargetCalendarProps {
   initialTarget: Target | null
   initialTasks: Task[]

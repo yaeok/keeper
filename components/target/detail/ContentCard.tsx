@@ -1,4 +1,4 @@
-import { ContentCardProps } from '@/props/'
+import { ContentCardProps } from '@/props/ContentCardProps'
 
 export const ContentCard = ({ title, description, date }: ContentCardProps) => {
   return (

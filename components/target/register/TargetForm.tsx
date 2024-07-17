@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { Target } from '@/domain/entities/target'
+import { Target } from '@/domain/entity/target_entity'
 
 interface TargetFormProps {
   onNewTarget: (target: Target) => void
@@ -28,6 +28,9 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
       studyHoursPerDay: studyHoursPerDay,
       startDate: startDate,
       endDate: endDate,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     }
     onNewTarget(data)
   }

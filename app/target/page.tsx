@@ -7,8 +7,7 @@ import Header from '@/components/target/Header'
 import StudySchedule from '@/components/target/StudySchedule'
 import TargetList from '@/components/target/TargetList'
 import UserInfo from '@/components/target/UserInfo'
-
-import { Target } from './domain/entities/target'
+import { Target } from '@/domain/entity/target_entity'
 
 const TargetView: React.FC = () => {
   const router = useRouter()
@@ -21,6 +20,9 @@ const TargetView: React.FC = () => {
       studyHoursPerDay: 2,
       startDate: '2024-07-16',
       endDate: '2024-09-16',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     },
     {
       targetId: '2',
@@ -29,6 +31,9 @@ const TargetView: React.FC = () => {
       studyHoursPerDay: 2,
       startDate: '2024-07-16',
       endDate: '2024-09-16',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     },
   ]
 

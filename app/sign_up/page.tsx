@@ -1,15 +1,47 @@
 'use client'
 
-import { useState } from 'react'
 import NextLink from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+
+import { IAuthRepository } from '@/infrastructure/repository/auth_repository'
+import { IUserRepository } from '@/infrastructure/repository/user_repository'
+import { SignUpWithEmailUseCase } from '@/use_case/sign_up/sign_up_with_email_use_case'
 
 const SignUpView = () => {
+  const router = useRouter()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const authRepository = new IAuthRepository()
+    const userRepository = new IUserRepository()
+    try {
+      const result = await new SignUpWithEmailUseCase({
+        authRepository: authRepository,
+        userRepository: userRepository,
+      }).execute({
+        username,
+        email,
+        password,
+      })
+      if (result) {
+        router.push('/target')
+      }
+    } catch (e) {
+      if (e instanceof String) {
+        alert(e)
+      } else {
+        alert('エラーが発生しました')
+      }
+    } finally {
+      // 初期化
+      setUsername('')
+      setEmail('')
+      setPassword('')
+    }
   }
 
   return (

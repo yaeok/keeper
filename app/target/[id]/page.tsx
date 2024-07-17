@@ -42,13 +42,13 @@
 // pages/dashboard.tsx
 import React from 'react'
 
-import { Actual } from '@/domain/entities/actual'
-import { Target } from '@/domain/entities/target'
-import { Task } from '@/domain/entities/task'
 import GoalSummary from '@/components/target/detail/GoalSummary'
 import CustomLearningTimeChart from '@/components/target/detail/LearningTimeChart'
 import TaskList from '@/components/target/detail/TaskList'
 import Header from '@/components/target/Header'
+import { Actual } from '@/domain/entity/actual_entity'
+import { Target } from '@/domain/entity/target_entity'
+import { Task } from '@/domain/entity/task_entity'
 
 const Dashboard: React.FC = () => {
   const target: Target = {
@@ -58,6 +58,9 @@ const Dashboard: React.FC = () => {
     studyHoursPerDay: 2,
     startDate: '2024-07-16',
     endDate: '2024-09-16',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
   }
 
   const tasks: Task[] = [
@@ -67,6 +70,9 @@ const Dashboard: React.FC = () => {
       content: 'AWSの基本知識を学ぶ',
       priority: 1,
       taskStudyHours: 10,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     },
     {
       taskId: '2',
@@ -74,19 +80,30 @@ const Dashboard: React.FC = () => {
       content: 'AWSのサービスを理解する',
       priority: 2,
       taskStudyHours: 20,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     },
   ]
 
   const actuals: Actual[] = [
     {
+      actualId: '1',
       date: '2024-07-17',
       studyHours: 2,
       taskId: '1',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     },
     {
+      actualId: '2',
       date: '2024-07-18',
       studyHours: 1.5,
       taskId: '2',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     },
   ]
 

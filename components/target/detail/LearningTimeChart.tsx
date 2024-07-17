@@ -1,6 +1,6 @@
-// components/CustomLearningTimeChart.tsx
-import { Actual } from '@/domain/entities/actual'
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
+
+import { Actual } from '@/domain/entity/actual_entity'
 
 interface CustomLearningTimeChartProps {
   actuals: Actual[]
