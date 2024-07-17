@@ -1,5 +1,5 @@
 // components/CustomLearningTimeChart.tsx
-import { Actual } from '@/app/target/props/actual'
+import { Actual } from '@/domain/entities/actual'
 import React, { useRef, useEffect } from 'react'
 
 interface CustomLearningTimeChartProps {

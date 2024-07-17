@@ -2,7 +2,7 @@
 
 // import { useState } from 'react'
 
-// import { ContentCardProps } from '@/app/target/props/card'
+// import { ContentCardProps } from '@/props/'
 // import Header from '@/components/target/Header'
 // import { ContentCard } from '@/components/target/detail/ContentCard'
 
@@ -42,9 +42,9 @@
 // pages/dashboard.tsx
 import React from 'react'
 
-import { Actual } from '@/app/target/props/actual'
-import { Target } from '@/app/target/props/target'
-import { Task } from '@/app/target/props/task'
+import { Actual } from '@/domain/entities/actual'
+import { Target } from '@/domain/entities/target'
+import { Task } from '@/domain/entities/task'
 import GoalSummary from '@/components/target/detail/GoalSummary'
 import CustomLearningTimeChart from '@/components/target/detail/LearningTimeChart'
 import TaskList from '@/components/target/detail/TaskList'

@@ -1,8 +1,8 @@
 import React from 'react'
 
 // components/TaskList.tsx
-import { Actual } from '@/app/target/props/actual'
-import { Task } from '@/app/target/props/task'
+import { Actual } from '@/domain/entities/actual'
+import { Task } from '@/domain/entities/task'
 import TaskProgress from '@/components/target/detail/TaskProgress'
 
 interface TaskListProps {

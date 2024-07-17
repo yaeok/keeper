@@ -8,7 +8,7 @@ import StudySchedule from '@/components/target/StudySchedule'
 import TargetList from '@/components/target/TargetList'
 import UserInfo from '@/components/target/UserInfo'
 
-import { Target } from './props/target'
+import { Target } from './domain/entities/target'
 
 const TargetView: React.FC = () => {
   const router = useRouter()

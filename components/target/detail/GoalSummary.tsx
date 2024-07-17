@@ -1,8 +1,8 @@
 import React from 'react'
 
 // components/GoalSummary.tsx
-import { Actual } from '@/app/target/props/actual'
-import { Target } from '@/app/target/props/target'
+import { Actual } from '@/domain/entities/actual'
+import { Target } from '@/domain/entities/target'
 
 interface GoalSummaryProps {
   target: Target

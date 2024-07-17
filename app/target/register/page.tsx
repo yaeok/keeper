@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react';
+import { useState } from 'react'
 
-import TargetCalendar from '@/components/target/register/TargetCalendar';
-import TargetForm from '@/components/target/register/TargetForm';
-import TaskForm from '@/components/target/register/TaskForm';
+import TargetCalendar from '@/components/target/register/TargetCalendar'
+import TargetForm from '@/components/target/register/TargetForm'
+import TaskForm from '@/components/target/register/TaskForm'
 
-import { Target } from '../props/target';
-import { Task } from '../props/task';
+import { Target } from '../domain/entities/target'
+import { Task } from '../domain/entities/task'
 
 const TargetRegisterView: React.FC = () => {
   const [currentTarget, setCurrentTarget] = useState<Target | null>(null)

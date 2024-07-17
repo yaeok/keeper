@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { Target } from '@/app/target/props/target'
+import { Target } from '@/domain/entities/target'
 
 interface TargetFormProps {
   onNewTarget: (target: Target) => void

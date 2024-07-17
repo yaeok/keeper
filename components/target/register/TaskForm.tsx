@@ -3,7 +3,7 @@
 import React from 'react'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
-import { Task } from '@/app/target/props/task'
+import { Task } from '@/domain/entities/task'
 
 interface TaskFormProps {
   onNewTask: (tasks: Task[]) => void

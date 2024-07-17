@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
-import { Target } from '@/app/target/props/target'
+import { Target } from '@/domain/entities/target'
 
 interface TargetListProps {
   targets: Target[]
