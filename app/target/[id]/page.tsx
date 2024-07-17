@@ -1,96 +1,108 @@
 'use client'
 
-import { useState } from 'react'
+// import { useState } from 'react'
 
-import { ContentCardProps } from '@/app/target/props/card'
-import Header from '@/components/home/Header'
-import { ContentCard } from '@/components/target/ContentCard'
+// import { ContentCardProps } from '@/app/target/props/card'
+// import Header from '@/components/target/Header'
+// import { ContentCard } from '@/components/target/detail/ContentCard'
 
-interface TargetListViewProps {
-  id: string
-}
+// interface TargetDetailViewProps {
+//   params: {
+//     id: string
+//   }
+// }
 
-const TargetDetailView = (props: TargetListViewProps) => {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [cards, setCards] = useState<ContentCardProps[]>([])
+// const TargetDetailView = (props: TargetDetailViewProps) => {
+//   return (
+//     <main className='bg-white w-screen mt-20'>
+//       <Header />
+//       <div className='w-3/4 mx-auto p-4 bg-gray-100 min-h-screen'>
+//         <h2 className='text-2xl font-bold border-b-red-400 border-b-2 p-2 bg-white rounded-sm'>
+//           タイトル
+//         </h2>
+//         <div className='flex flex-row my-4 space-x-2'>
+//           <section className='w-1/2 bg-white rounded-sm flex flex-col'>
+//             <h2 className='text-md font-bold border-b-red-400 border-b-2 rounded-sm m-2 p-2'>
+//               タスク状況
+//             </h2>
+//             <div className='m-2'>テスト</div>
+//           </section>
+//           <section className='w-1/2 bg-white rounded-sm flex flex-col'>
+//             <h2 className='text-md font-bold border-b-red-400 border-b-2 rounded-sm m-2 p-2'>
+//               学習内容
+//             </h2>
+//           </section>
+//         </div>
+//       </div>
+//     </main>
+//   )
+// }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const newCard = {
-      title,
-      description,
-      date: new Date().toLocaleString(),
-    }
-    setCards([newCard, ...cards])
-    setTitle('')
-    setDescription('')
+// export default TargetDetailView
+// pages/dashboard.tsx
+import React from 'react'
+import { Target } from '@/app/target/props/target'
+import { Task } from '@/app/target/props/task'
+import { Actual } from '@/app/target/props/actual'
+import Header from '@/components/target/Header'
+import GoalSummary from '@/components/target/detail/GoalSummary'
+import TaskList from '@/components/target/detail/TaskList'
+import CustomLearningTimeChart from '@/components/target/detail/LearningTimeChart'
+
+const Dashboard: React.FC = () => {
+  const target: Target = {
+    target: 'AWS資格取得',
+    studyDays: [1, 2, 3, 4, 5], // 平日
+    studyHoursPerDay: 2,
+    startDate: '2024-07-16',
+    endDate: '2024-09-16',
   }
 
+  const tasks: Task[] = [
+    {
+      taskId: '1',
+      task: '課題1',
+      content: 'AWSの基本知識を学ぶ',
+      priority: 1,
+      taskStudyHours: 10,
+    },
+    {
+      taskId: '2',
+      task: '課題2',
+      content: 'AWSのサービスを理解する',
+      priority: 2,
+      taskStudyHours: 20,
+    },
+  ]
+
+  const actuals: Actual[] = [
+    {
+      date: '2024-07-17',
+      studyHours: 2,
+      taskId: '1',
+    },
+    {
+      date: '2024-07-18',
+      studyHours: 1.5,
+      taskId: '2',
+    },
+  ]
+
+  const progress = 60 // 仮の進捗率
+
   return (
-    <main className='flex flex-col items-center justify-center min-h-screen mt-20 w-screen bg-gray-50'>
+    <main className='min-h-screen mt-20 w-screen bg-white'>
       <Header />
-      <div className='flex h-screen w-screen'>
-        <div className='w-1/4 bg-blue-500 flex flex-col items-center p-4 fixed h-screen'>
-          <h1 className='text-white text-3xl mb-4'>今日やったこと</h1>
-          <form className='w-full max-w-xs' onSubmit={handleSubmit}>
-            <div className='mb-4'>
-              <label
-                className='block text-white text-sm font-bold mb-2'
-                htmlFor='title'
-              >
-                タイトル
-              </label>
-              <input
-                id='title'
-                type='text'
-                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </div>
-            <div className='mb-6'>
-              <label
-                className='block text-white text-sm font-bold mb-2'
-                htmlFor='description'
-              >
-                やったこと
-              </label>
-              <textarea
-                id='description'
-                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline resize-none'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-                style={{ height: '50vh' }}
-              />
-            </div>
-            <div className='flex items-center justify-between'>
-              <button
-                type='submit'
-                className='w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-              >
-                送信
-              </button>
-            </div>
-          </form>
-        </div>
-        <div className='w-3/4 ml-auto bg-gray-100 flex justify-center overflow-y-scroll h-screen'>
-          <div className='w-full p-4'>
-            {cards.map((card, index) => (
-              <ContentCard
-                key={index}
-                title={card.title}
-                description={card.description}
-                date={card.date}
-              />
-            ))}
-          </div>
-        </div>
+      <div className='w-3/4 mx-auto bg-gray-50 p-4'>
+        <h2 className='text-2xl font-bold border-b-red-400 border-b-2 p-2 bg-white rounded-sm'>
+          {target.target}
+        </h2>
+        <GoalSummary target={target} progress={progress} />
+        <TaskList tasks={tasks} actuals={actuals} />
+        <CustomLearningTimeChart actuals={actuals} />
       </div>
     </main>
   )
 }
 
-export default TargetDetailView
+export default Dashboard

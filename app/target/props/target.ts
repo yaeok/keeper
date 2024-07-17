@@ -1,4 +1,4 @@
-interface Target {
+export interface Target {
   target: string
   studyDays: number[]
   studyHoursPerDay: number

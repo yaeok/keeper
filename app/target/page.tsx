@@ -16,7 +16,7 @@ const TargetView: React.FC = () => {
   return (
     <main className='flex flex-col items-center justify-center mt-20 w-screen bg-gray-50'>
       <Header />
-      <div className='flex flex-col w-2/3 mx-auto my-12 items-center'>
+      <div className='flex flex-col w-2/3 mx-auto mt-12 items-center'>
         <button
           className='bg-blue-500 text-white font-bold py-4 px-6 rounded'
           onClick={handleSignupClick}
@@ -30,11 +30,13 @@ const TargetView: React.FC = () => {
             <section className='mb-4 p-8 bg-white shadow rounded-sm'>
               <p>挑戦中の目標をここに表示</p>
             </section>
-            <h2 className='text-xl my-6'>今週の学習状況</h2>
+            <h2 className='text-xl my-6'>学習状況</h2>
             <StudySchedule />
-            <h2 className='text-xl my-6'>これまでの目標実績</h2>
+            <h2 className='text-xl my-6'>今週の学習時間</h2>
+            <StudySchedule />
+            <h2 className='text-xl my-6'>これまでの実績</h2>
             <section className='mb-4 p-8 bg-white shadow rounded-sm'>
-              <p>挑戦中の目標をここに表示</p>
+              <p>挑戦履歴をここに表示</p>
             </section>
           </div>
           <div className='w-1/4 p-4'>

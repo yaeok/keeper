@@ -1,4 +1,5 @@
-interface Task {
+export interface Task {
+  taskId: string
   task: string
   content: string
   priority: number
