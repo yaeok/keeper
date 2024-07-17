@@ -1,5 +1,5 @@
+import { eachDayOfInterval, endOfMonth, startOfMonth } from 'date-fns'
 import React from 'react'
-import { startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns'
 
 const Calendar = () => {
   const currentMonth = new Date()
@@ -18,7 +18,7 @@ const Calendar = () => {
 
   return (
     <div className='p-4'>
-      <h2 className='text-xl mb-4'>学習カレンダー</h2>
+      <h2 className='text-xl mb-4 w-full'>学習カレンダー</h2>
       <table className='w-full text-center'>
         <thead>
           <tr>

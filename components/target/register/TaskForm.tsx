@@ -1,14 +1,9 @@
 'use client'
 
 import React from 'react'
-import { SubmitHandler, useForm, useFieldArray } from 'react-hook-form'
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
-interface Task {
-  task: string
-  content: string
-  priority: number
-  taskStudyHours: number
-}
+import { Task } from '@/app/target/props/task'
 
 interface TaskFormProps {
   onNewTask: (tasks: Task[]) => void
@@ -36,7 +31,13 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
         <button
           type='button'
           onClick={() =>
-            append({ task: '', content: '', priority: 0, taskStudyHours: 0 })
+            append({
+              taskId: '',
+              task: '',
+              content: '',
+              priority: 0,
+              taskStudyHours: 0,
+            })
           }
           className='px-4 py-2 bg-blue-500 text-white rounded'
         >

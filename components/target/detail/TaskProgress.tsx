@@ -1,7 +1,8 @@
+import React from 'react'
+
 // components/TaskProgress.tsx
 import { Actual } from '@/app/target/props/actual'
 import { Task } from '@/app/target/props/task'
-import React from 'react'
 
 interface TaskProgressProps {
   task: Task
@@ -23,8 +24,9 @@ const TaskProgress: React.FC<TaskProgressProps> = ({ task, actuals }) => {
           style={{ width: `${progress}%` }}
         ></div>
       </div>
-      <div className='mt-2'>予定学習時間: {task.taskStudyHours}時間</div>
-      <div className='mt-2'>実際の学習時間: {totalStudyHours}時間</div>
+      <div className='mt-4 text-right'>
+        学習時間状況 : {totalStudyHours} / {task.taskStudyHours} 時間
+      </div>
     </div>
   )
 }

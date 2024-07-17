@@ -41,16 +41,18 @@
 // export default TargetDetailView
 // pages/dashboard.tsx
 import React from 'react'
+
+import { Actual } from '@/app/target/props/actual'
 import { Target } from '@/app/target/props/target'
 import { Task } from '@/app/target/props/task'
-import { Actual } from '@/app/target/props/actual'
-import Header from '@/components/target/Header'
 import GoalSummary from '@/components/target/detail/GoalSummary'
-import TaskList from '@/components/target/detail/TaskList'
 import CustomLearningTimeChart from '@/components/target/detail/LearningTimeChart'
+import TaskList from '@/components/target/detail/TaskList'
+import Header from '@/components/target/Header'
 
 const Dashboard: React.FC = () => {
   const target: Target = {
+    targetId: '1',
     target: 'AWS資格取得',
     studyDays: [1, 2, 3, 4, 5], // 平日
     studyHoursPerDay: 2,
@@ -94,10 +96,10 @@ const Dashboard: React.FC = () => {
     <main className='min-h-screen mt-20 w-screen bg-white'>
       <Header />
       <div className='w-3/4 mx-auto bg-gray-50 p-4'>
-        <h2 className='text-2xl font-bold border-b-red-400 border-b-2 p-2 bg-white rounded-sm'>
+        <h2 className='text-2xl font-bold border-b-red-400 border-b-2 my-4'>
           {target.target}
         </h2>
-        <GoalSummary target={target} progress={progress} />
+        <GoalSummary target={target} actuals={actuals} />
         <TaskList tasks={tasks} actuals={actuals} />
         <CustomLearningTimeChart actuals={actuals} />
       </div>

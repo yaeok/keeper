@@ -1,13 +1,20 @@
-// components/GoalSummary.tsx
-import { Target } from '@/app/target/props/target'
 import React from 'react'
+
+// components/GoalSummary.tsx
+import { Actual } from '@/app/target/props/actual'
+import { Target } from '@/app/target/props/target'
 
 interface GoalSummaryProps {
   target: Target
-  progress: number // 0 to 100
+  actuals: Actual[]
 }
 
-const GoalSummary: React.FC<GoalSummaryProps> = ({ target, progress }) => {
+const GoalSummary: React.FC<GoalSummaryProps> = ({ target, actuals }) => {
+  const progress = Math.round(
+    (actuals.reduce((acc, actual) => acc + actual.studyHours, 0) /
+      (target.studyHoursPerDay * target.studyDays.length)) *
+      100
+  )
   return (
     <section className='mt-4'>
       <h2 className='text-xl font-bold'>全体進捗</h2>

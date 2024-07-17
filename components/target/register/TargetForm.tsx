@@ -3,6 +3,8 @@
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { Target } from '@/app/target/props/target'
+
 interface TargetFormProps {
   onNewTarget: (target: Target) => void
 }
@@ -20,6 +22,7 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
 
   const handleAddSchedule = () => {
     const data: Target = {
+      targetId: '',
       target: watch('target'),
       studyDays: watch('studyDays').map(Number),
       studyHoursPerDay: studyHoursPerDay,
