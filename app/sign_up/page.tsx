@@ -4,9 +4,9 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-import { IAuthRepository } from '@/infrastructure/repository/auth_repository'
-import { IUserRepository } from '@/infrastructure/repository/user_repository'
 import { SignUpWithEmailUseCase } from '@/use_case/sign_up/sign_up_with_email_use_case'
+import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
+import { IUserRepository } from '@/feature/infrastructure/repository/user_repository'
 
 const SignUpView = () => {
   const router = useRouter()
@@ -27,7 +27,7 @@ const SignUpView = () => {
         email,
         password,
       })
-      if (result) {
+      if (result != null) {
         router.push('/target')
       }
     } catch (e) {

@@ -1,6 +1,6 @@
 import { User } from '@/domain/entity/user_entity'
-import { IAuthRepository } from '@/infrastructure/repository/auth_repository'
-import { IUserRepository } from '@/infrastructure/repository/user_repository'
+import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
+import { IUserRepository } from '@/feature/infrastructure/repository/user_repository'
 import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
 
 interface SignUpWithEmailUseCaseInput extends UseCaseInput {

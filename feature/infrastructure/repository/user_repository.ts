@@ -1,9 +1,9 @@
 import { User } from '@/domain/entity/user_entity'
 import { UserRepository } from '@/domain/repository/user_repository'
-import { db, master } from '@/infrastructure/firestore/config'
 import { addDoc, collection } from '@firebase/firestore'
 
-import { UserDTO } from '../dto/user/user_dto'
+import { UserDTO } from '@/feature/dto/user/user_dto'
+import { db, master } from '@/feature/infrastructure/firestore/config'
 
 export class IUserRepository implements UserRepository {
   async createUser(args: {

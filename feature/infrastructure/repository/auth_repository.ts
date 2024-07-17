@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth'
 
 import { AuthRepository } from '@/domain/repository/auth_repository'
-import { auth } from '@/infrastructure/firestore/config'
+import { auth } from '@/feature/infrastructure/firestore/config'
 
 /** firebaseのエラー */
 type FirebaseError = {

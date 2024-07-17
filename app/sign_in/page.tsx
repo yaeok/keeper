@@ -3,6 +3,8 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import NextLink from 'next/link'
+import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
+import { SignInWithEmailUseCase } from '@/use_case/sign_in/sign_in_with_email_use_case'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -11,7 +13,26 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    router.push('/home')
+    const authRepository = new IAuthRepository()
+    try {
+      const result = await new SignInWithEmailUseCase(authRepository).execute({
+        email,
+        password,
+      })
+      if (result != null) {
+        router.push('/target')
+      }
+    } catch (e) {
+      if (e instanceof String) {
+        alert(e)
+      } else {
+        alert('エラーが発生しました')
+      }
+    } finally {
+      // 初期化
+      setEmail('')
+      setPassword('')
+    }
   }
 
   return (
