@@ -2,13 +2,13 @@
 import React from 'react'
 
 import GoalSummary from '@/components/target/detail/GoalSummary'
-import CustomLearningTimeChart from '@/components/target/detail/LearningTimeChart'
 import TaskList from '@/components/target/detail/TaskList'
 import Header from '@/components/target/Header'
 import { Actual } from '@/domain/entity/actual_entity'
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
 import { TargetStatus } from '@/utils/target_status'
+import TaskCalendar from '@/components/target/detail/TaskCalendar'
 
 const Dashboard: React.FC = () => {
   const target: Target = {
@@ -74,12 +74,22 @@ const Dashboard: React.FC = () => {
     <main className='min-h-screen w-screen bg-gray-50'>
       <Header />
       <div className='w-3/5 mx-auto mt-20 bg-gray-50 p-4'>
-        <h2 className='text-2xl font-bold border-b-red-400 border-b-2 my-4'>
+        <h2 className='text-3xl font-bold border-b-red-400 border-b-2 my-4'>
           {target.target}
         </h2>
-        <GoalSummary target={target} actuals={actuals} />
-        <TaskList tasks={tasks} actuals={actuals} />
-        <CustomLearningTimeChart actuals={actuals} />
+
+        <section className='mt-4'>
+          <h2 className='text-xl font-bold'>進捗</h2>
+          <GoalSummary target={target} actuals={actuals} />
+        </section>
+        <section className='mt-4'>
+          <h2 className='text-xl font-bold'>タスク一覧</h2>
+          <TaskList tasks={tasks} actuals={actuals} />
+        </section>
+        <section className='mt-4'>
+          <h2 className='text-xl font-bold'>スケジュール</h2>
+          <TaskCalendar actuals={actuals} />
+        </section>
       </div>
     </main>
   )

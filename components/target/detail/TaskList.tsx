@@ -11,8 +11,7 @@ interface TaskListProps {
 
 const TaskList: React.FC<TaskListProps> = ({ tasks, actuals }) => {
   return (
-    <section className='mt-4'>
-      <h2 className='text-xl font-bold'>タスク一覧</h2>
+    <div>
       <ul>
         {tasks.map((task) => (
           <li key={task.taskId} className='mt-4 bg-white shadow-md py-6 px-4'>
@@ -27,7 +26,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, actuals }) => {
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   )
 }
 

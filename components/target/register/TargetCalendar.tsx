@@ -45,43 +45,54 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     return weeks
   }
 
-  const getUTCDateOnly = (date: Date): Date => {
-    return new Date(
-      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
-    )
-  }
-
   const isTargetDay = (date: Date): boolean => {
     if (!initialTarget) return false
 
     // 与えられた日付の曜日を取得
     const dayOfWeek = date.getDay()
 
-    // 与えられた日付、開始日、終了日を時間部分を切り捨ててISO形式の文字列に変換
+    console.log('日付：', date.toISOString())
     const strDate = date.toISOString().split('T')[0]
-    const strStartDate = new Date(initialTarget.startDate)
-      .toISOString()
-      .split('T')[0]
-    const strEndDate = new Date(initialTarget.endDate)
-      .toISOString()
-      .split('T')[0]
+    console.log('strDate', strDate)
+    const startDate = new Date(initialTarget.startDate)
+    const strStartDate = startDate.toISOString().split('T')[0]
+    console.log('開始日：', strStartDate)
 
-    // 再度、時間部分を切り捨てた日付オブジェクトを生成
-    const convertedDate = getUTCDateOnly(new Date(strDate + 'T01:00:00Z'))
-    const startDate = getUTCDateOnly(new Date(strStartDate + 'T00:00:00Z'))
-    const endDate = getUTCDateOnly(new Date(strEndDate + 'T00:00:00Z'))
-
-    // 日付が開始日と終了日の範囲内にあり、指定された曜日に含まれているかどうかを確認
-    const isTarget =
-      convertedDate >= startDate &&
-      convertedDate <= endDate &&
-      initialTarget.studyDays.includes(dayOfWeek)
-
-    if (isTarget) {
-      console.log('convertedDate', convertedDate)
-      console.log('strStartDate', strStartDate)
-      console.log('startDate', startDate)
+    if (new Date(strDate).getTime() >= new Date(strStartDate).getTime()) {
+      console.log('date', new Date(strDate).getTime())
+      console.log('startDate', new Date(strStartDate).getTime())
     }
+
+    // console.log('dayOfWeek', dayOfWeek)
+    // console.log('initialTarget.studyDays', initialTarget.studyDays)
+    const isTarget =
+      new Date(strDate).getTime() >= new Date(strStartDate).getTime()
+
+    // // 与えられた日付、開始日、終了日を時間部分を切り捨ててISO形式の文字列に変換
+    // const strDate = date.toISOString().split('T')[0]
+    // const strStartDate = new Date(initialTarget.startDate)
+    //   .toISOString()
+    //   .split('T')[0]
+    // const strEndDate = new Date(initialTarget.endDate)
+    //   .toISOString()
+    //   .split('T')[0]
+
+    // // 再度、時間部分を切り捨てた日付オブジェクトを生成
+    // const convertedDate = getUTCDateOnly(new Date(strDate + 'T01:00:00Z'))
+    // const startDate = getUTCDateOnly(new Date(strStartDate + 'T00:00:00Z'))
+    // const endDate = getUTCDateOnly(new Date(strEndDate + 'T00:00:00Z'))
+
+    // // 日付が開始日と終了日の範囲内にあり、指定された曜日に含まれているかどうかを確認
+    // const isTarget =
+    //   convertedDate >= startDate &&
+    //   convertedDate <= endDate &&
+    //   initialTarget.studyDays.includes(dayOfWeek)
+
+    // if (isTarget) {
+    //   console.log('convertedDate', convertedDate)
+    //   console.log('strStartDate', strStartDate)
+    //   console.log('startDate', startDate)
+    // }
 
     return isTarget
   }

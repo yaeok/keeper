@@ -15,9 +15,8 @@ const GoalSummary: React.FC<GoalSummaryProps> = ({ target, actuals }) => {
       100
   )
   return (
-    <section className='mt-4'>
-      <h2 className='text-xl font-bold'>全体進捗</h2>
-      <div className='mt-2 bg-white shadow-md p-4'>
+    <div>
+      <div className='mt-2 bg-white shadow-md py-6 px-4'>
         <div className='flex justify-between'>
           <span>進捗: {progress}%</span>
           <span>取得予定日: {target.endDate}</span>
@@ -32,7 +31,7 @@ const GoalSummary: React.FC<GoalSummaryProps> = ({ target, actuals }) => {
           合計学習時間: {target.studyHoursPerDay * target.studyDays.length}時間
         </div>
       </div>
-    </section>
+    </div>
   )
 }
 

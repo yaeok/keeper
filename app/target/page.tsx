@@ -48,12 +48,12 @@ const TargetView: React.FC = () => {
       <Header />
       <div className='flex flex-col mt-20 items-center'>
         <button
-          className='bg-blue-500 text-white font-bold py-4 px-6 mt-12 rounded'
+          className='bg-blue-500 text-white font-bold py-4 px-6 mt-12 rounded w-1/3'
           onClick={handleSignupClick}
         >
           新しく目標をたてる
         </button>
-        <div className='flex flex-row my-12 space-x-2'>
+        <div className='flex flex-row my-12 space-x-2 w-3/4 justify-center'>
           <div className='w-3/4 p-4'>
             <UserInfo />
             <h2 className='text-xl my-6'>挑戦中の目標</h2>

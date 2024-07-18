@@ -25,9 +25,9 @@ const TargetRegisterView: React.FC = () => {
     <main className='bg-gray-100 w-screen'>
       <Header />
       <div className='w-3/5 mx-auto p-4 bg-white mt-20'>
-        <h1 className='text-2xl font-bold mb-4'>目標とタスクの管理</h1>
+        <h1 className='text-3xl font-bold mb-4'>目標とタスク登録</h1>
         <section className='my-2'>
-          <h2 className='text-md font-normal bg-red-200 rounded-sm p-2'>
+          <h2 className='text-xl font-bold bg-red-100 rounded-sm px-4 py-2'>
             目標管理
           </h2>
           <div className='bg-white p-2'>
@@ -35,7 +35,7 @@ const TargetRegisterView: React.FC = () => {
           </div>
         </section>
         <section className='my-2'>
-          <h2 className='text-md font-normal bg-red-200 rounded-sm p-2'>
+          <h2 className='text-xl font-bold bg-red-100 rounded-sm px-4 py-2'>
             タスク管理
           </h2>
           <div className='bg-white p-2'>
@@ -43,8 +43,8 @@ const TargetRegisterView: React.FC = () => {
           </div>
         </section>
         <section className='my-2'>
-          <h2 className='text-md font-normal bg-red-200 rounded-sm p-2'>
-            カレンダー
+          <h2 className='text-xl font-bold bg-red-100 rounded-sm px-4 py-2'>
+            スケジュール
           </h2>
           <div className='bg-white p-2'>
             <TargetCalendar
