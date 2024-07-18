@@ -7,6 +7,8 @@ export class Target {
   studyDays: number[]
   /** 1日の学習時間 */
   studyHoursPerDay: number
+  /** ステータス */
+  status: string
   /** 開始日 */
   startDate: string
   /** 終了日 */
@@ -22,6 +24,7 @@ export class Target {
     target: string
     studyDays: number[]
     studyHoursPerDay: number
+    status: string
     startDate: string
     endDate: string
     createdAt: Date
@@ -32,6 +35,7 @@ export class Target {
     this.target = args.target
     this.studyDays = args.studyDays
     this.studyHoursPerDay = args.studyHoursPerDay
+    this.status = args.status
     this.startDate = args.startDate
     this.endDate = args.endDate
     this.createdAt = args.createdAt

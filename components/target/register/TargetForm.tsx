@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { Target } from '@/domain/entity/target_entity'
+import { TargetStatus } from '@/utils/target_status'
 
 interface TargetFormProps {
   onNewTarget: (target: Target) => void
@@ -34,6 +35,7 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
       target: watch('target'),
       studyDays: watch('studyDays').map(Number),
       studyHoursPerDay: studyHoursPerDay,
+      status: TargetStatus.ACTIVE,
       startDate: startDate,
       endDate: endDate,
       createdAt: new Date(),
