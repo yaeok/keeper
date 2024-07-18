@@ -17,8 +17,8 @@ const Calendar = () => {
   const calendarDays = [...leadingDays, ...days]
 
   return (
-    <div className='p-4'>
-      <h2 className='text-xl mb-4 w-full'>学習カレンダー</h2>
+    <div className=''>
+      <h2 className='text-lg mb-4 w-full'>学習カレンダー</h2>
       <table className='w-full text-center'>
         <thead>
           <tr>
@@ -38,7 +38,7 @@ const Calendar = () => {
                   .map((day, dayIndex) => (
                     <td key={dayIndex} className='justify-center'>
                       <div
-                        className={`w-8 h-8 flex items-center justify-center ${
+                        className={`aspect-square w-fullflex items-center justify-center ${
                           day ? 'bg-gray-300' : ''
                         } rounded`}
                       ></div>

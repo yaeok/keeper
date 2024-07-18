@@ -44,6 +44,13 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     }
     return weeks
   }
+
+  const getUTCDateOnly = (date: Date): Date => {
+    return new Date(
+      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+    )
+  }
+
   const isTargetDay = (date: Date): boolean => {
     if (!initialTarget) return false
 
@@ -60,13 +67,9 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
       .split('T')[0]
 
     // 再度、時間部分を切り捨てた日付オブジェクトを生成
-    const convertedDate = new Date(strDate + 'T00:00:00Z')
-    const startDate = new Date(strStartDate + 'T00:00:00Z')
-    const endDate = new Date(strEndDate + 'T00:00:00Z')
-
-    console.log('対象日', convertedDate)
-    console.log('開始日', startDate)
-    console.log('終了日', endDate)
+    const convertedDate = getUTCDateOnly(new Date(strDate + 'T01:00:00Z'))
+    const startDate = getUTCDateOnly(new Date(strStartDate + 'T00:00:00Z'))
+    const endDate = getUTCDateOnly(new Date(strEndDate + 'T00:00:00Z'))
 
     // 日付が開始日と終了日の範囲内にあり、指定された曜日に含まれているかどうかを確認
     const isTarget =
@@ -75,7 +78,9 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
       initialTarget.studyDays.includes(dayOfWeek)
 
     if (isTarget) {
-      console.log('対象日: if', convertedDate)
+      console.log('convertedDate', convertedDate)
+      console.log('strStartDate', strStartDate)
+      console.log('startDate', startDate)
     }
 
     return isTarget

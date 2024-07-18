@@ -43,7 +43,7 @@ const TargetView: React.FC = () => {
   return (
     <main className='flex flex-col items-center justify-center mt-20 w-screen bg-gray-50'>
       <Header />
-      <div className='flex flex-col w-2/3 mx-auto mt-12 items-center'>
+      <div className='flex flex-col w-3/4 mx-auto mt-12 items-center'>
         <button
           className='bg-blue-500 text-white font-bold py-4 px-6 rounded'
           onClick={handleSignupClick}
