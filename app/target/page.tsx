@@ -53,7 +53,7 @@ const TargetView: React.FC = () => {
         >
           新しく目標をたてる
         </button>
-        <div className='flex flex-row my-12 space-x-2 w-3/4 justify-center'>
+        <div className='flex flex-row my-12 space-x-2 w-3/5 justify-center'>
           <div className='w-3/4 p-4'>
             <UserInfo />
             <h2 className='text-xl my-6'>挑戦中の目標</h2>

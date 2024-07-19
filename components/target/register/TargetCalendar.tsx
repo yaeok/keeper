@@ -4,6 +4,7 @@ import React from 'react'
 
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
+import { Utilities } from '@/utils/utilities'
 
 interface TargetCalendarProps {
   initialTarget: Target | null
@@ -16,12 +17,13 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
 }) => {
   const [currentDate, setCurrentDate] = React.useState(new Date())
 
-  const startOfMonth = new Date(
+  const startOfMonth = Utilities.convertYMDToDate(
     currentDate.getFullYear(),
     currentDate.getMonth(),
     1
   )
-  const endOfMonth = new Date(
+
+  const endOfMonth = Utilities.convertYMDToDate(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
     0
@@ -30,7 +32,11 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
   const generateCalendar = (): Date[][] => {
     const weeks: Date[][] = []
     let days: Date[] = []
-    let date = new Date(startOfMonth)
+    let date = Utilities.convertYMDToDate(
+      startOfMonth.getFullYear(),
+      startOfMonth.getMonth(),
+      startOfMonth.getDate()
+    )
     while (date.getDay() !== 0) {
       date.setDate(date.getDate() - 1)
     }
@@ -51,22 +57,21 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     // 与えられた日付の曜日を取得
     const dayOfWeek = date.getDay()
 
-    console.log('日付：', date.toISOString())
-    const strDate = date.toISOString().split('T')[0]
-    console.log('strDate', strDate)
-    const startDate = new Date(initialTarget.startDate)
-    const strStartDate = startDate.toISOString().split('T')[0]
-    console.log('開始日：', strStartDate)
+    console.log(date)
+    console.log(date.toDateString())
+    console.log(Utilities.convertStringToDate(date.toDateString()))
+    console.log(initialTarget.startDate)
+    console.log(Utilities.convertStringToDate(initialTarget.startDate))
 
-    if (new Date(strDate).getTime() >= new Date(strStartDate).getTime()) {
-      console.log('date', new Date(strDate).getTime())
-      console.log('startDate', new Date(strStartDate).getTime())
-    }
+    // if (new Date(strDate).getTime() >= new Date(strStartDate).getTime()) {
+    //   console.log('date', new Date(strDate).getTime())
+    //   console.log('startDate', new Date(strStartDate).getTime())
+    // }
 
     // console.log('dayOfWeek', dayOfWeek)
     // console.log('initialTarget.studyDays', initialTarget.studyDays)
-    const isTarget =
-      new Date(strDate).getTime() >= new Date(strStartDate).getTime()
+    // const isTarget =
+    //   new Date(strDate).getTime() >= new Date(strStartDate).getTime()
 
     // // 与えられた日付、開始日、終了日を時間部分を切り捨ててISO形式の文字列に変換
     // const strDate = date.toISOString().split('T')[0]
@@ -94,7 +99,7 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     //   console.log('startDate', startDate)
     // }
 
-    return isTarget
+    return false
   }
 
   const distributeTasks = (): { [key: string]: Task[] } => {
