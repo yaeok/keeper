@@ -1,4 +1,5 @@
 import { Target } from '@/domain/entity/target_entity'
+import { auth } from '@/feature/infrastructure/firestore/config'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
 import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
 
@@ -33,7 +34,7 @@ export class GetRecentThreeActiveTargetsUseCase
     input: GetRecentThreeActiveTargetsUseCaseInput
   ): Promise<GetRecentThreeActiveTargetsUseCaseOutput> {
     try {
-      const uid = '1'
+      const uid = auth.currentUser?.uid ?? ''
       const targets = await this.targetRepository.getRecentThreeActiveTargets({
         uid,
       })

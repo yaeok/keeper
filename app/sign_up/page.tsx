@@ -42,6 +42,7 @@ const SignUpView = () => {
         alert(e)
       } else {
         alert('エラーが発生しました')
+        console.log(e)
       }
     }
   }

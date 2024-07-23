@@ -19,8 +19,8 @@ const UserInfo = () => {
       </div>
       <div className='border-r border-gray-300 h-28'></div>
       <div className='mx-8'>
-        <h2 className='text-3xl'>{user.achievedTargets}</h2>
         <p className='text-sm'>達成した目標数</p>
+        <h2 className='text-3xl'>{user.achievedTargets}</h2>
       </div>
     </section>
   )

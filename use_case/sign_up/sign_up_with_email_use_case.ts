@@ -37,8 +37,7 @@ export class SignUpWithEmailUseCase
       email: input.email,
       password: input.password,
     })
-    if (response != null) {
-      console.log(response)
+    if (response.user != null) {
       result = await this.userRepository.createUser({
         uid: response.user.uid,
         username: input.username,

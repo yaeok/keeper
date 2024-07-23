@@ -15,7 +15,7 @@ import { GetRecentThreeCompletedTargetsUseCase } from '@/use_case/get_recent_thr
 
 const TargetView: React.FC = () => {
   const router = useRouter()
-  const [roading, setLoading] = React.useState<boolean>(true)
+  const [loading, setLoading] = React.useState<boolean>(true)
   const [activeTargets, setActiveTargets] = React.useState<Target[]>([])
   const [completedTargets, setCompletedTargets] = React.useState<Target[]>([])
 
@@ -56,13 +56,13 @@ const TargetView: React.FC = () => {
           <div className='w-3/4 p-4'>
             <UserInfo />
             <h2 className='text-xl my-6'>挑戦中の目標</h2>
-            <TargetList targets={activeTargets} />
+            <TargetList targets={activeTargets} loading={loading} />
             <h2 className='text-xl my-6'>学習状況</h2>
             <StudySchedule />
             <h2 className='text-xl my-6'>今週の学習時間</h2>
             <StudySchedule />
             <h2 className='text-xl my-6'>達成実績</h2>
-            <TargetList targets={completedTargets} />
+            <TargetList targets={completedTargets} loading={loading} />
           </div>
           <div className='w-1/4'>
             <Calendar />

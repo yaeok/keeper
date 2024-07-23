@@ -94,13 +94,11 @@ const Dashboard: React.FC = () => {
       <Header />
       <div className='w-3/5 mx-auto mt-20 bg-gray-50 p-4'>
         <h2 className='text-3xl font-bold border-b-red-400 border-b-2 my-4'>
-          {loading ? <Skeleton className='h-8 w-1/2' /> : target?.target}
+          {loading ? <Skeleton className='h-12 w-full' /> : target?.target}
         </h2>
 
         <section className='mt-4'>
-          <h2 className='text-xl font-bold'>
-            {loading ? <Skeleton className='h-6 w-1/4' /> : '進捗'}
-          </h2>
+          <h2 className='text-xl font-bold'>進捗</h2>
           {loading ? (
             <Skeleton className='h-32 w-full' />
           ) : (
@@ -108,9 +106,7 @@ const Dashboard: React.FC = () => {
           )}
         </section>
         <section className='mt-4'>
-          <h2 className='text-xl font-bold'>
-            {loading ? <Skeleton className='h-6 w-1/4' /> : 'タスク一覧'}
-          </h2>
+          <h2 className='text-xl font-bold'>タスク一覧</h2>
           {loading ? (
             <Skeleton className='h-32 w-full' />
           ) : (
@@ -118,9 +114,7 @@ const Dashboard: React.FC = () => {
           )}
         </section>
         <section className='mt-4'>
-          <h2 className='text-xl font-bold'>
-            {loading ? <Skeleton className='h-6 w-1/4' /> : 'スケジュール'}
-          </h2>
+          <h2 className='text-xl font-bold'>スケジュール</h2>
           {loading ? (
             <Skeleton className='h-32 w-full' />
           ) : (

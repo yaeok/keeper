@@ -46,7 +46,6 @@ export class TargetAndTaskRegisterUseCase
       const targetId = await this.targetRepository.createTarget({
         target: input.target,
       })
-      console.log(targetId)
       if (targetId) {
         const taskResult: string[] = await this.taskRepository.createTasks({
           tasks: input.tasks,
