@@ -4,7 +4,7 @@ import React from 'react'
 
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
-import { Utilities } from '@/utils/utilities'
+import { isAfter, isBefore, isEqual } from 'date-fns'
 
 interface TargetCalendarProps {
   initialTarget: Target | null
@@ -17,13 +17,13 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
 }) => {
   const [currentDate, setCurrentDate] = React.useState(new Date())
 
-  const startOfMonth = Utilities.convertYMDToDate(
+  const startOfMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth(),
     1
   )
 
-  const endOfMonth = Utilities.convertYMDToDate(
+  const endOfMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
     0
@@ -32,7 +32,7 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
   const generateCalendar = (): Date[][] => {
     const weeks: Date[][] = []
     let days: Date[] = []
-    let date = Utilities.convertYMDToDate(
+    let date = new Date(
       startOfMonth.getFullYear(),
       startOfMonth.getMonth(),
       startOfMonth.getDate()
@@ -57,49 +57,21 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     // 与えられた日付の曜日を取得
     const dayOfWeek = date.getDay()
 
-    console.log(date)
-    console.log(date.toDateString())
-    console.log(Utilities.convertStringToDate(date.toDateString()))
-    console.log(initialTarget.startDate)
-    console.log(Utilities.convertStringToDate(initialTarget.startDate))
+    const dateBasic = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDay(),
+      9
+    )
+    const dateStart = new Date(initialTarget.startDate)
+    const dateEnd = new Date(initialTarget.endDate)
+    const blStart = isAfter(date, dateStart) || isEqual(date, dateStart)
+    const blEnd = isBefore(date, dateEnd) || isEqual(date, dateEnd)
+    const blDay = initialTarget.studyDays.includes(dayOfWeek)
 
-    // if (new Date(strDate).getTime() >= new Date(strStartDate).getTime()) {
-    //   console.log('date', new Date(strDate).getTime())
-    //   console.log('startDate', new Date(strStartDate).getTime())
-    // }
+    const isTarget = blStart && blEnd && blDay
 
-    // console.log('dayOfWeek', dayOfWeek)
-    // console.log('initialTarget.studyDays', initialTarget.studyDays)
-    // const isTarget =
-    //   new Date(strDate).getTime() >= new Date(strStartDate).getTime()
-
-    // // 与えられた日付、開始日、終了日を時間部分を切り捨ててISO形式の文字列に変換
-    // const strDate = date.toISOString().split('T')[0]
-    // const strStartDate = new Date(initialTarget.startDate)
-    //   .toISOString()
-    //   .split('T')[0]
-    // const strEndDate = new Date(initialTarget.endDate)
-    //   .toISOString()
-    //   .split('T')[0]
-
-    // // 再度、時間部分を切り捨てた日付オブジェクトを生成
-    // const convertedDate = getUTCDateOnly(new Date(strDate + 'T01:00:00Z'))
-    // const startDate = getUTCDateOnly(new Date(strStartDate + 'T00:00:00Z'))
-    // const endDate = getUTCDateOnly(new Date(strEndDate + 'T00:00:00Z'))
-
-    // // 日付が開始日と終了日の範囲内にあり、指定された曜日に含まれているかどうかを確認
-    // const isTarget =
-    //   convertedDate >= startDate &&
-    //   convertedDate <= endDate &&
-    //   initialTarget.studyDays.includes(dayOfWeek)
-
-    // if (isTarget) {
-    //   console.log('convertedDate', convertedDate)
-    //   console.log('strStartDate', strStartDate)
-    //   console.log('startDate', startDate)
-    // }
-
-    return false
+    return isTarget
   }
 
   const distributeTasks = (): { [key: string]: Task[] } => {
@@ -144,6 +116,10 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
 
   const taskDistribution = distributeTasks()
   const weeks = generateCalendar()
+
+  const onClickRegisterBtn = () => {
+    if (!initialTarget) return
+  }
 
   return (
     <div>
@@ -195,7 +171,7 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
               }`}
             >
               <div className='px-1'>{day.getDate()}</div>
-              {taskDistribution[day.toISOString().split('T')[0]]?.map(
+              {/* {taskDistribution[day.toISOString().split('T')[0]]?.map(
                 (task, index) => (
                   <div
                     key={index}
@@ -204,10 +180,18 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
                     {task.task} - {task.taskStudyHours}時間
                   </div>
                 )
-              )}
+              )} */}
             </div>
           ))
         )}
+      </section>
+      <section className='flex items-center justify-center mt-4'>
+        <button
+          className='font-bold w-1/2 py-4 bg-green-500 text-white rounded'
+          onClick={() => onClickRegisterBtn()}
+        >
+          新規目標・タスク登録
+        </button>
       </section>
     </div>
   )

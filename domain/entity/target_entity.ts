@@ -13,6 +13,8 @@ export class Target {
   startDate: string
   /** 終了日 */
   endDate: string
+  /** 所有者Id */
+  ownerId: string
   /** 作成日 */
   createdAt: Date
   /** 更新日 */
@@ -27,6 +29,7 @@ export class Target {
     status: string
     startDate: string
     endDate: string
+    ownerId: string
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -38,6 +41,7 @@ export class Target {
     this.status = args.status
     this.startDate = args.startDate
     this.endDate = args.endDate
+    this.ownerId = args.ownerId
     this.createdAt = args.createdAt
     this.updatedAt = args.updatedAt
     this.deletedAt = args.deletedAt

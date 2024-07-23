@@ -37,6 +37,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
               content: '',
               priority: 0,
               taskStudyHours: 0,
+              targetId: '',
               createdAt: new Date(),
               updatedAt: new Date(),
               deletedAt: null,
@@ -78,9 +79,9 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
                 </svg>
               </button>
             )} */}
-            <div className='flex flex-col w-full'>
+            <div className='flex flex-col w-full space-y-2'>
               <section className='flex flex-row space-x-2 items-end'>
-                <div className='w-1/5'>
+                {/* <div className='w-1/5'>
                   <label className='block font-medium'>優先順位</label>
                   <input
                     type='number'
@@ -89,8 +90,8 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
                     })}
                     className='mt-1 p-2 border border-gray-300 rounded w-full'
                   />
-                </div>
-                <div className='w-3/5'>
+                </div> */}
+                <div className='w-4/5'>
                   <label className='block font-medium'>タスク</label>
                   <input
                     {...register(`tasks.${index}.task`, { required: true })}
