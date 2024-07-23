@@ -29,6 +29,9 @@ const TargetList = (props: TargetListProps) => {
   }
   return (
     <section className='p-4 bg-white shadow rounded-sm flex'>
+      {props.targets.length === 0 && (
+        <p className='text-center w-full'>データが登録されていません。</p>
+      )}
       <ul className='flex flex-col items-start w-full'>
         {props.targets.map((target, index) => (
           <li

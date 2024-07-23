@@ -22,12 +22,19 @@ export class UserDTO implements DataTransferObject {
     this.deletedAt = args.deletedAt
   }
 
+  /** ユーザId */
   uid: string
+  /** ユーザ名 */
   username: string
+  /** メールアドレス */
   email: string
+  /** イメージURL */
   imageUrl: string
+  /** 作成日 */
   createdAt: Date
+  /** 更新日 */
   updatedAt: Date
+  /** 削除日 */
   deletedAt: Date | null
 
   static fromDoc(doc: DocumentData): UserDTO {

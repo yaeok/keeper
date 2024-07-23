@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import React from 'react'
 
 import Calendar from '@/components/target/Calendar'
 import Header from '@/components/target/Header'
@@ -8,39 +9,35 @@ import StudySchedule from '@/components/target/StudySchedule'
 import TargetList from '@/components/target/TargetList'
 import UserInfo from '@/components/target/UserInfo'
 import { Target } from '@/domain/entity/target_entity'
-import { TargetStatus } from '@/utils/target_status'
+import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
+import { GetRecentThreeActiveTargetsUseCase } from '@/use_case/get_recent_three_active_targets_use_case/get_recent_three_active_targets_use_case'
+import { GetRecentThreeCompletedTargetsUseCase } from '@/use_case/get_recent_three_completed_targets_use_case/get_recent_three_completed_targets_use_case'
 
 const TargetView: React.FC = () => {
   const router = useRouter()
+  const [roading, setLoading] = React.useState<boolean>(true)
+  const [activeTargets, setActiveTargets] = React.useState<Target[]>([])
+  const [completedTargets, setCompletedTargets] = React.useState<Target[]>([])
 
-  const targets: Target[] = [
-    {
-      targetId: '1',
-      target: 'AWS資格取得A',
-      studyDays: [1, 2, 3, 4, 5], // 平日
-      studyHoursPerDay: 2,
-      status: TargetStatus.ACTIVE,
-      startDate: '2024-07-16',
-      endDate: '2024-09-16',
-      ownerId: '1',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    },
-    {
-      targetId: '2',
-      target: 'AWS資格取得B',
-      studyDays: [1, 2, 3], // 平日
-      studyHoursPerDay: 2,
-      status: TargetStatus.ACTIVE,
-      startDate: '2024-07-16',
-      endDate: '2024-09-16',
-      ownerId: '1',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    },
-  ]
+  React.useEffect(() => {
+    const targetRepository = new ITargetRepository()
+    const fetchTargets = async () => {
+      // ステータスがactiveの目標を取得
+      const activeResult = await new GetRecentThreeActiveTargetsUseCase({
+        targetRepository: targetRepository,
+      }).execute({})
+      setActiveTargets(activeResult.result)
+
+      // ステータスがcompletedの目標を取得
+      const completedResult = await new GetRecentThreeCompletedTargetsUseCase({
+        targetRepository: targetRepository,
+      }).execute({})
+      setCompletedTargets(completedResult.result)
+
+      setLoading(false)
+    }
+    fetchTargets()
+  }, [])
 
   const handleSignupClick = () => {
     router.push('/target/register')
@@ -59,13 +56,13 @@ const TargetView: React.FC = () => {
           <div className='w-3/4 p-4'>
             <UserInfo />
             <h2 className='text-xl my-6'>挑戦中の目標</h2>
-            <TargetList targets={targets} />
+            <TargetList targets={activeTargets} />
             <h2 className='text-xl my-6'>学習状況</h2>
             <StudySchedule />
             <h2 className='text-xl my-6'>今週の学習時間</h2>
             <StudySchedule />
             <h2 className='text-xl my-6'>達成実績</h2>
-            <TargetList targets={targets} />
+            <TargetList targets={completedTargets} />
           </div>
           <div className='w-1/4'>
             <Calendar />

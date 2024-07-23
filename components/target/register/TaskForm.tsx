@@ -12,7 +12,19 @@ interface TaskFormProps {
 const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
   const { register, control, handleSubmit } = useForm<{ tasks: Task[] }>({
     defaultValues: {
-      tasks: [{ task: '', content: '', priority: 0, taskStudyHours: 0 }],
+      tasks: [
+        {
+          taskId: '',
+          task: '',
+          content: '',
+          priority: 0,
+          taskStudyHours: 0,
+          targetId: '',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+        },
+      ],
     },
   })
 

@@ -38,6 +38,7 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
       status: TargetStatus.ACTIVE,
       startDate: startDate,
       endDate: endDate,
+      ownerId: '1',
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,

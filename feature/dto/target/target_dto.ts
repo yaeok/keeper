@@ -1,7 +1,7 @@
 import { DocumentData } from 'firebase/firestore'
 
-import { DataTransferObject } from '@/feature/dto/dto'
 import { Target } from '@/domain/entity/target_entity'
+import { DataTransferObject } from '@/feature/dto/dto'
 
 export class TargetDTO implements DataTransferObject {
   constructor(args: {
@@ -55,14 +55,49 @@ export class TargetDTO implements DataTransferObject {
 
   static fromDoc(doc: DocumentData): TargetDTO {
     return new TargetDTO({
+      targetId: doc.targetId,
+      target: doc.target,
+      studyDays: doc.studyDays,
+      studyHoursPerDay: doc.studyHoursPerDay,
+      status: doc.status,
+      startDate: doc.startDate,
+      endDate: doc.endDate,
+      ownerId: doc.ownerId,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+      deletedAt: doc.deletedAt,
     })
   }
 
   static fromEntity(entity: Target): TargetDTO {
-    return new TargetDTO({})
+    return new TargetDTO({
+      targetId: entity.targetId,
+      target: entity.target,
+      studyDays: entity.studyDays,
+      studyHoursPerDay: entity.studyHoursPerDay,
+      status: entity.status,
+      startDate: entity.startDate,
+      endDate: entity.endDate,
+      ownerId: entity.ownerId,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+      deletedAt: entity.deletedAt,
+    })
   }
 
   toData(): { [name: string]: any } {
-    return {}
+    return {
+      targetId: this.targetId,
+      target: this.target,
+      studyDays: this.studyDays,
+      studyHoursPerDay: this.studyHoursPerDay,
+      status: this.status,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      ownerId: this.ownerId,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      deletedAt: this.deletedAt,
+    }
   }
 }

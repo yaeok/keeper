@@ -1,10 +1,13 @@
 'use client'
 
+import { isAfter, isBefore, isEqual } from 'date-fns'
 import React from 'react'
 
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
-import { isAfter, isBefore, isEqual } from 'date-fns'
+import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
+import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
+import { TargetAndTaskRegisterUseCase } from '@/use_case/target_and_task_register/target_and_task_register_use_case'
 
 interface TargetCalendarProps {
   initialTarget: Target | null
@@ -117,8 +120,25 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
   const taskDistribution = distributeTasks()
   const weeks = generateCalendar()
 
-  const onClickRegisterBtn = () => {
+  const onClickRegisterBtn = async () => {
     if (!initialTarget) return
+    const targetRepository = new ITargetRepository()
+    const taskRepository = new ITaskRepository()
+
+    try {
+      const result = await new TargetAndTaskRegisterUseCase({
+        targetRepository: targetRepository,
+        taskRepository: taskRepository,
+      }).execute({
+        target: initialTarget,
+        tasks: initialTasks,
+      })
+      if (result.result) {
+        alert('登録が完了しました')
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
