@@ -7,7 +7,9 @@ import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
 import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
-import { TargetAndTaskRegisterUseCase } from '@/use_case/target_and_task_register/target_and_task_register_use_case'
+import { TargetAndTaskRegisterUseCase } from '@/use_case/target_register/target_and_task_register_use_case'
+import { TargetRegisterUseCase } from '@/use_case/target_register/target_register_use_case/target_register_use_case'
+import { TaskRegisterUseCase } from '@/use_case/target_register/task_register_use_case/task_register_use_case'
 
 interface TargetCalendarProps {
   initialTarget: Target | null
@@ -123,12 +125,19 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
   const onClickRegisterBtn = async () => {
     if (!initialTarget) return
     const targetRepository = new ITargetRepository()
+    const targetRegisterUseCase = new TargetRegisterUseCase({
+      targetRepository: targetRepository,
+    })
+
     const taskRepository = new ITaskRepository()
+    const taskRegisterUseCase = new TaskRegisterUseCase({
+      taskRepository: taskRepository,
+    })
 
     try {
       const result = await new TargetAndTaskRegisterUseCase({
-        targetRepository: targetRepository,
-        taskRepository: taskRepository,
+        targetRegisterUseCase: targetRegisterUseCase,
+        taskRegisterUseCase: taskRegisterUseCase,
       }).execute({
         target: initialTarget,
         tasks: initialTasks,

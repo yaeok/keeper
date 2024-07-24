@@ -26,73 +26,23 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
   const [actuals, setActuals] = useState<Actual[]>([])
 
   useEffect(() => {
-    // データを取得するための擬似的なAPIコール
-    setTimeout(() => {
-      const fetchedTarget: Target = {
+    const fetchTarget = async () => {
+      // ダミーデータ
+      const dummyTarget: Target = {
         targetId: '1',
-        target: 'AWS資格取得',
-        studyDays: [1, 2, 3, 4, 5], // 平日
+        target: '目標1',
+        studyDays: [1, 3, 5],
         studyHoursPerDay: 2,
         status: TargetStatus.ACTIVE,
-        startDate: '2024-07-16',
-        endDate: '2024-09-16',
+        startDate: '2021-09-01',
+        endDate: '2021-09-30',
         ownerId: '1',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       }
-
-      const fetchedTasks: Task[] = [
-        {
-          taskId: '1',
-          task: '課題1',
-          content: 'AWSの基本知識を学ぶ',
-          priority: 1,
-          taskStudyHours: 10,
-          targetId: '1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        },
-        {
-          taskId: '2',
-          task: '課題2',
-          content: 'AWSのサービスを理解する',
-          priority: 2,
-          taskStudyHours: 20,
-          targetId: '1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        },
-      ]
-
-      const fetchedActuals: Actual[] = [
-        {
-          actualId: '1',
-          date: '2024-07-17',
-          studyHours: 2,
-          taskId: '1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        },
-        {
-          actualId: '2',
-          date: '2024-07-18',
-          studyHours: 1.5,
-          taskId: '2',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        },
-      ]
-
-      setTarget(fetchedTarget)
-      setTasks(fetchedTasks)
-      setActuals(fetchedActuals)
-      setLoading(false)
-    }, 2000)
+      setTarget(dummyTarget)
+    }
   }, [])
 
   const progress = 60 // 仮の進捗率
