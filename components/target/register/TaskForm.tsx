@@ -97,7 +97,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
             )}
             <div className='flex flex-col w-full space-y-2'>
               <section className='flex flex-row space-x-2 items-end'>
-                <div className='w-1/5'>
+                {/* <div className='w-1/5'>
                   <label className='block font-medium'>優先順位</label>
                   <input
                     type='number'
@@ -119,8 +119,8 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
                       {errors.tasks?.[index]?.priority?.message}
                     </p>
                   )}
-                </div>
-                <div className='w-4/5'>
+                </div> */}
+                <div className='w-3/5'>
                   <label className='block font-medium'>タスク</label>
                   <input
                     {...register(`tasks.${index}.task`, {
@@ -138,7 +138,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
                     </p>
                   )}
                 </div>
-                <div className='w-1/5'>
+                <div className='w-2/5'>
                   <label className='block font-medium'>勉強時間 (時間)</label>
                   <input
                     type='number'
@@ -146,7 +146,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
                       required: '勉強時間は必須です',
                       min: {
                         value: 1,
-                        message: '勉強時間は1時間以上でなければなりません',
+                        message: '1~24時間で入力してください',
                       },
                       max: {
                         value: 24,
