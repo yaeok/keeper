@@ -26,7 +26,7 @@ const TargetView: React.FC = () => {
       const activeResult = await new GetRecentThreeActiveTargetsUseCase({
         targetRepository: targetRepository,
       }).execute()
-      setActiveTargets(activeResult.result)
+      setActiveTargets(activeResult.targets)
     }
 
     const fetchCompletedTargets = async () => {
@@ -34,7 +34,7 @@ const TargetView: React.FC = () => {
       const completedResult = await new GetRecentThreeCompletedTargetsUseCase({
         targetRepository: targetRepository,
       }).execute()
-      setCompletedTargets(completedResult.result)
+      setCompletedTargets(completedResult.targets)
     }
 
     const fetchData = async () => {

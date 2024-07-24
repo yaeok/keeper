@@ -6,7 +6,7 @@ import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
 interface GetRecentThreeCompletedTargetsUseCaseInput extends UseCaseInput {}
 
 interface GetRecentThreeCompletedTargetsUseCaseOutput extends UseCaseOutput {
-  result: Target[]
+  targets: Target[]
 }
 
 /**
@@ -35,7 +35,7 @@ export class GetRecentThreeCompletedTargetsUseCase
       const uid = auth.currentUser?.uid ?? ''
       const targets =
         await this.targetRepository.getRecentThreeCompletedTargets({ uid })
-      return { result: targets }
+      return { targets }
     } catch (error) {
       console.error('Failed to register target and tasks:', error)
       throw new Error('Failed to register target and tasks')

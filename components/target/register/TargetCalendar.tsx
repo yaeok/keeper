@@ -7,9 +7,9 @@ import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
 import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
-import { TargetAndTaskRegisterUseCase } from '@/use_case/target_register/target_and_task_register_use_case'
-import { TargetRegisterUseCase } from '@/use_case/target_register/target_register_use_case/target_register_use_case'
-import { TaskRegisterUseCase } from '@/use_case/target_register/task_register_use_case/task_register_use_case'
+import { RegisterTargetAndTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_target_and_task_use_case'
+import { RegisterTargetUseCase } from '@/use_case/register_target_and_task_use_case/register_target_use_case/register_target_use_case'
+import { RegisterTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_task_use_case/register_task_use_case'
 
 interface TargetCalendarProps {
   initialTarget: Target | null
@@ -62,12 +62,6 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     // 与えられた日付の曜日を取得
     const dayOfWeek = date.getDay()
 
-    const dateBasic = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDay(),
-      9
-    )
     const dateStart = new Date(initialTarget.startDate)
     const dateEnd = new Date(initialTarget.endDate)
     const blStart = isAfter(date, dateStart) || isEqual(date, dateStart)
@@ -125,19 +119,19 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
   const onClickRegisterBtn = async () => {
     if (!initialTarget) return
     const targetRepository = new ITargetRepository()
-    const targetRegisterUseCase = new TargetRegisterUseCase({
+    const registerTargetUseCase = new RegisterTargetUseCase({
       targetRepository: targetRepository,
     })
 
     const taskRepository = new ITaskRepository()
-    const taskRegisterUseCase = new TaskRegisterUseCase({
+    const registerTaskUseCase = new RegisterTaskUseCase({
       taskRepository: taskRepository,
     })
 
     try {
-      const result = await new TargetAndTaskRegisterUseCase({
-        targetRegisterUseCase: targetRegisterUseCase,
-        taskRegisterUseCase: taskRegisterUseCase,
+      const result = await new RegisterTargetAndTaskUseCase({
+        registerTargetUseCase: registerTargetUseCase,
+        registerTaskUseCase: registerTaskUseCase,
       }).execute({
         target: initialTarget,
         tasks: initialTasks,

@@ -9,7 +9,10 @@ import Skeleton from '@/components/utils/skelton'
 import { Actual } from '@/domain/entity/actual_entity'
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
-import { TargetStatus } from '@/utils/target_status'
+import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
+import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
+import { GetTargetByIdUseCase } from '@/use_case/get_target_by_id_use_case/get_target_by_id_use_case'
+import { GetTaskByTargetIdUseCase } from '@/use_case/get_tasks_by_target_id_use_case/get_tasks_by_target_id_use_case'
 
 interface TargetDetailProps {
   params: {
@@ -27,22 +30,28 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
 
   useEffect(() => {
     const fetchTarget = async () => {
-      // ダミーデータ
-      const dummyTarget: Target = {
-        targetId: '1',
-        target: '目標1',
-        studyDays: [1, 3, 5],
-        studyHoursPerDay: 2,
-        status: TargetStatus.ACTIVE,
-        startDate: '2021-09-01',
-        endDate: '2021-09-30',
-        ownerId: '1',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-      }
-      setTarget(dummyTarget)
+      const targetRepository = new ITargetRepository()
+      const target = await new GetTargetByIdUseCase({
+        targetRepository: targetRepository,
+      }).execute({ id: props.params.id })
+      setTarget(target.target)
     }
+
+    const fetchTasks = async () => {
+      const taskRepository = new ITaskRepository()
+      const tasks = await new GetTaskByTargetIdUseCase({
+        taskRepository: taskRepository,
+      }).execute({ targetId: props.params.id })
+      setTasks(tasks.tasks)
+    }
+
+    const fetchData = async () => {
+      await fetchTarget()
+      await fetchTasks()
+      setLoading(false)
+    }
+
+    fetchData()
   }, [])
 
   const progress = 60 // 仮の進捗率

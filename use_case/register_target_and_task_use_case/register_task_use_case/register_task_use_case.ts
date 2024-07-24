@@ -2,21 +2,21 @@ import { Task } from '@/domain/entity/task_entity'
 import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
 import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
 
-interface TaskRegisterUseCaseInput extends UseCaseInput {
+interface RegisterTaskUseCaseInput extends UseCaseInput {
   targetId: string
   tasks: Task[]
 }
 
-interface TaskRegisterUseCaseOutput extends UseCaseOutput {
+interface RegisterTaskUseCaseOutput extends UseCaseOutput {
   result: boolean
 }
 
 /**
  * Taskを登録するユースケースクラス
  */
-export class TaskRegisterUseCase
+export class RegisterTaskUseCase
   implements
-    UseCase<TaskRegisterUseCaseInput, Promise<TaskRegisterUseCaseOutput>>
+    UseCase<RegisterTaskUseCaseInput, Promise<RegisterTaskUseCaseOutput>>
 {
   private taskRepository: ITaskRepository
 
@@ -30,8 +30,8 @@ export class TaskRegisterUseCase
    * @returns 登録結果
    */
   async execute(
-    input: TaskRegisterUseCaseInput
-  ): Promise<TaskRegisterUseCaseOutput> {
+    input: RegisterTaskUseCaseInput
+  ): Promise<RegisterTaskUseCaseOutput> {
     try {
       const taskResult: string[] = await this.taskRepository.createTasks({
         tasks: input.tasks,

@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Actual } from '@/domain/entity/actual_entity'
 import { Target } from '@/domain/entity/target_entity'
-import Skeleton from '@/components/utils/skelton'
 
 interface GoalSummaryProps {
   target: Target

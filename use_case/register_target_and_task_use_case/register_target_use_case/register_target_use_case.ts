@@ -3,20 +3,20 @@ import { auth } from '@/feature/infrastructure/firestore/config'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
 import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
 
-interface TargetRegisterUseCaseInput extends UseCaseInput {
+interface RegisterTargetUseCaseInput extends UseCaseInput {
   target: Target
 }
 
-interface TargetRegisterUseCaseOutput extends UseCaseOutput {
+interface RegisterTargetUseCaseOutput extends UseCaseOutput {
   result: string
 }
 
 /**
  * Targetを登録するユースケースクラス
  */
-export class TargetRegisterUseCase
+export class RegisterTargetUseCase
   implements
-    UseCase<TargetRegisterUseCaseInput, Promise<TargetRegisterUseCaseOutput>>
+    UseCase<RegisterTargetUseCaseInput, Promise<RegisterTargetUseCaseOutput>>
 {
   private targetRepository: ITargetRepository
 
@@ -30,8 +30,8 @@ export class TargetRegisterUseCase
    * @returns 登録結果
    */
   async execute(
-    input: TargetRegisterUseCaseInput
-  ): Promise<TargetRegisterUseCaseOutput> {
+    input: RegisterTargetUseCaseInput
+  ): Promise<RegisterTargetUseCaseOutput> {
     try {
       const uid = auth.currentUser?.uid ?? ''
       const regTarget = new Target({
@@ -50,4 +50,3 @@ export class TargetRegisterUseCase
     }
   }
 }
-
