@@ -21,22 +21,29 @@ const TargetView: React.FC = () => {
 
   React.useEffect(() => {
     const targetRepository = new ITargetRepository()
-    const fetchTargets = async () => {
+    const fetchActiveTargets = async () => {
       // ステータスがactiveの目標を取得
       const activeResult = await new GetRecentThreeActiveTargetsUseCase({
         targetRepository: targetRepository,
-      }).execute({})
+      }).execute()
       setActiveTargets(activeResult.result)
+    }
 
+    const fetchCompletedTargets = async () => {
       // ステータスがcompletedの目標を取得
       const completedResult = await new GetRecentThreeCompletedTargetsUseCase({
         targetRepository: targetRepository,
-      }).execute({})
+      }).execute()
       setCompletedTargets(completedResult.result)
+    }
 
+    const fetchData = async () => {
+      await fetchActiveTargets()
+      await fetchCompletedTargets()
       setLoading(false)
     }
-    fetchTargets()
+
+    fetchData()
   }, [])
 
   const handleSignupClick = () => {

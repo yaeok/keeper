@@ -1,17 +1,25 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import GoalSummary from '@/components/target/detail/GoalSummary'
+import TaskCalendar from '@/components/target/detail/TaskCalendar'
 import TaskList from '@/components/target/detail/TaskList'
 import Header from '@/components/target/Header'
+import Skeleton from '@/components/utils/skelton'
 import { Actual } from '@/domain/entity/actual_entity'
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
 import { TargetStatus } from '@/utils/target_status'
-import TaskCalendar from '@/components/target/detail/TaskCalendar'
-import Skeleton from '@/components/utils/skelton'
 
-const Dashboard: React.FC = () => {
+interface TargetDetailProps {
+  params: {
+    id: string
+  }
+}
+
+const TargetDetailView: React.FC<TargetDetailProps> = (
+  props: TargetDetailProps
+) => {
   const [loading, setLoading] = useState(true)
   const [target, setTarget] = useState<Target | null>(null)
   const [tasks, setTasks] = useState<Task[]>([])
@@ -126,4 +134,4 @@ const Dashboard: React.FC = () => {
   )
 }
 
-export default Dashboard
+export default TargetDetailView

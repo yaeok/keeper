@@ -20,6 +20,7 @@ const COLUMN_OWNERID = 'ownerId'
 const WHERE_EQUAL = '=='
 const COLUMN_CREATEDAT = 'createdAt'
 const COLUMN_STATUS = 'status'
+const COLUMN_TARGET_ID = 'targetId'
 const ORDERBY_DESC = 'desc'
 const RECENT_TARGETS_LIMIT = 3
 
@@ -102,6 +103,31 @@ export class ITargetRepository implements TargetRepository {
       throw new Error(
         `Failed to get recent three ${status.toLowerCase()} targets`
       )
+    }
+  }
+
+  /**
+   * 指定されたIDの目標を取得するメソッド
+   * @param args - 目標IDを含むオブジェクト
+   * @returns 目標
+   */
+  async getTargetById(args: { targetId: string }): Promise<Target> {
+    try {
+      const { targetId } = args
+      const colRef = collection(db, master, COLLECTION_TARGET)
+      const q = query(colRef, where(COLUMN_TARGET_ID, WHERE_EQUAL, targetId))
+
+      const querySnapshot = await getDocs(q)
+      const targets = querySnapshot.docs.map((doc) => {
+        const data = doc.data()
+        return TargetMapper.toDomain(TargetDTO.fromDoc(data))
+      })
+
+      // 最初の目標を返す
+      return targets[0]
+    } catch (error) {
+      console.error('Failed to get target by id:', error)
+      throw new Error('Failed to get target by id')
     }
   }
 }

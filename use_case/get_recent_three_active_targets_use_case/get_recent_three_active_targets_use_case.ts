@@ -30,9 +30,7 @@ export class GetRecentThreeActiveTargetsUseCase
    * @param input - TargetとTaskの情報を含むオブジェクト
    * @returns 登録結果
    */
-  async execute(
-    input: GetRecentThreeActiveTargetsUseCaseInput
-  ): Promise<GetRecentThreeActiveTargetsUseCaseOutput> {
+  async execute(): Promise<GetRecentThreeActiveTargetsUseCaseOutput> {
     try {
       const uid = auth.currentUser?.uid ?? ''
       const targets = await this.targetRepository.getRecentThreeActiveTargets({

@@ -1,5 +1,6 @@
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
+import { auth } from '@/feature/infrastructure/firestore/config'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
 import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
 import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
@@ -43,8 +44,13 @@ export class TargetAndTaskRegisterUseCase
     input: TargetAndTaskRegisterUseCaseInput
   ): Promise<TargetAndTaskRegisterUseCaseOutput> {
     try {
+      const uid = auth.currentUser?.uid ?? ''
+      const regTarget = new Target({
+        ...input.target,
+        ownerId: uid,
+      })
       const targetId = await this.targetRepository.createTarget({
-        target: input.target,
+        target: regTarget,
       })
       if (targetId) {
         const taskResult: string[] = await this.taskRepository.createTasks({

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
 import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
-import { SignInWithEmailUseCase } from '@/use_case/sign_in/sign_in_with_email_use_case'
+import { SignInWithEmailUseCase } from '@/use_case/sign_in_with_email_use_case/sign_in_with_email_use_case'
 
 interface LoginFormInputs {
   email: string

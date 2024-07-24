@@ -5,4 +5,6 @@ export interface TargetRepository {
 
   getRecentThreeActiveTargets: (args: { uid: string }) => Promise<Target[]>
   getRecentThreeCompletedTargets: (args: { uid: string }) => Promise<Target[]>
+
+  getTargetById: (args: { targetId: string }) => Promise<Target>
 }

@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
 import { IUserRepository } from '@/feature/infrastructure/repository/user_repository'
-import { SignUpWithEmailUseCase } from '@/use_case/sign_up/sign_up_with_email_use_case'
+import { SignUpWithEmailUseCase } from '@/use_case/sign_up_with_email_use_case/sign_up_with_email_use_case'
 
 interface SignUpFormInputs {
   username: string
