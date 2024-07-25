@@ -7,6 +7,8 @@ export class Actual {
   studyHours: number
   /** タスクId */
   taskId: string
+  /** メモ */
+  memo: string
   /** 作成日 */
   createdAt: Date
   /** 更新日 */
@@ -18,6 +20,7 @@ export class Actual {
     date: string
     studyHours: number
     taskId: string
+    memo: string
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -26,6 +29,7 @@ export class Actual {
     this.date = args.date
     this.studyHours = args.studyHours
     this.taskId = args.taskId
+    this.memo = args.memo
     this.createdAt = args.createdAt
     this.updatedAt = args.updatedAt
     this.deletedAt = args.deletedAt

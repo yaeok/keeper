@@ -33,7 +33,7 @@ export class RegisterTaskUseCase
     input: RegisterTaskUseCaseInput
   ): Promise<RegisterTaskUseCaseOutput> {
     try {
-      const taskResult: string[] = await this.taskRepository.createTasks({
+      const taskResult: string[] = await this.taskRepository.registerTasks({
         tasks: input.tasks,
         targetId: input.targetId,
       })

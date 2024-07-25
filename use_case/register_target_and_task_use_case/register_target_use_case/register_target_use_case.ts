@@ -39,7 +39,7 @@ export class RegisterTargetUseCase
         ownerId: uid,
       })
 
-      const targetId = await this.targetRepository.createTarget({
+      const targetId = await this.targetRepository.registerTarget({
         target: regTarget,
       })
 

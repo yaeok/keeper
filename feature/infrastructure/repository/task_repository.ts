@@ -3,6 +3,7 @@ import { TaskRepository } from '@/domain/repository/task_repository'
 import { TaskDTO } from '@/feature/dto/task/task_dto'
 import { db, master } from '@/feature/infrastructure/firestore/config'
 import { TaskMapper } from '@/feature/mapper/task_mapper'
+import { Constants } from '@/utils/constants'
 import {
   addDoc,
   collection,
@@ -11,10 +12,6 @@ import {
   updateDoc,
   where,
 } from '@firebase/firestore'
-
-const TASK_COLLECTION = 'tasks'
-const WHERE_EQUAL = '=='
-const COLUMN_TARGET_ID = 'targetId'
 
 /**
  * Firestoreを利用したTaskRepositoryの実装クラス
@@ -25,7 +22,7 @@ export class ITaskRepository implements TaskRepository {
    * @param args - 複数のTaskと対象のIDを含むオブジェクト
    * @returns 作成されたTaskのIDの配列
    */
-  async createTasks(args: {
+  async registerTasks(args: {
     tasks: Task[]
     targetId: string
   }): Promise<string[]> {
@@ -41,7 +38,7 @@ export class ITaskRepository implements TaskRepository {
       const taskIds: string[] = await Promise.all(
         regTasks.map(async (regTask) => {
           const docRef = await addDoc(
-            collection(db, master, TASK_COLLECTION),
+            collection(db, master, Constants.TASK_COLLECTION),
             regTask
           )
           await updateDoc(docRef, { taskId: docRef.id })
@@ -63,8 +60,11 @@ export class ITaskRepository implements TaskRepository {
   async getTasksByTargetId(args: { targetId: string }): Promise<Task[]> {
     try {
       const { targetId } = args
-      const colRef = collection(db, master, TASK_COLLECTION)
-      const q = query(colRef, where(COLUMN_TARGET_ID, WHERE_EQUAL, targetId))
+      const colRef = collection(db, master, Constants.TASK_COLLECTION)
+      const q = query(
+        colRef,
+        where(Constants.COLUMN_TARGET_ID, Constants.WHERE_EQUAL, targetId)
+      )
       const querySnapshot = await getDocs(q)
       const tasks: Task[] = querySnapshot.docs.map((doc) => {
         const data = doc.data()

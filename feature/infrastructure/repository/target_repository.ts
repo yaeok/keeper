@@ -3,6 +3,7 @@ import { TargetRepository } from '@/domain/repository/target_repository'
 import { TargetDTO } from '@/feature/dto/target/target_dto'
 import { db, master } from '@/feature/infrastructure/firestore/config'
 import { TargetMapper } from '@/feature/mapper/target_mapper'
+import { Constants } from '@/utils/constants'
 import { TargetStatus, TargetStatusType } from '@/utils/target_status'
 import {
   addDoc,
@@ -15,15 +16,6 @@ import {
   where,
 } from '@firebase/firestore'
 
-const COLLECTION_TARGET = 'targets'
-const COLUMN_OWNERID = 'ownerId'
-const WHERE_EQUAL = '=='
-const COLUMN_CREATEDAT = 'createdAt'
-const COLUMN_STATUS = 'status'
-const COLUMN_TARGET_ID = 'targetId'
-const ORDERBY_DESC = 'desc'
-const RECENT_TARGETS_LIMIT = 3
-
 /**
  * Firestoreを利用したTargetRepositoryの実装クラス
  */
@@ -33,10 +25,10 @@ export class ITargetRepository implements TargetRepository {
    * @param args - 新しいTargetを含むオブジェクト
    * @returns 作成されたTargetのID
    */
-  async createTarget(args: { target: Target }): Promise<string> {
+  async registerTarget(args: { target: Target }): Promise<string> {
     try {
       const { target } = args
-      const colRef = collection(db, master, COLLECTION_TARGET)
+      const colRef = collection(db, master, Constants.COLLECTION_TARGET)
       const regInfo = TargetDTO.fromEntity(target).toData()
 
       const docRef = await addDoc(colRef, regInfo)
@@ -79,13 +71,13 @@ export class ITargetRepository implements TargetRepository {
     status: TargetStatusType
   ): Promise<Target[]> {
     try {
-      const colRef = collection(db, master, COLLECTION_TARGET)
+      const colRef = collection(db, master, Constants.COLLECTION_TARGET)
       const q = query(
         colRef,
-        where(COLUMN_OWNERID, WHERE_EQUAL, uid),
-        where(COLUMN_STATUS, WHERE_EQUAL, status),
-        orderBy(COLUMN_CREATEDAT, ORDERBY_DESC),
-        limit(RECENT_TARGETS_LIMIT)
+        where(Constants.COLUMN_OWNER_ID, Constants.WHERE_EQUAL, uid),
+        where(Constants.COLUMN_STATUS, Constants.WHERE_EQUAL, status),
+        orderBy(Constants.COLUMN_CREATED_AT, Constants.ORDERBY_DESC),
+        limit(Constants.RECENT_TARGETS_LIMIT)
       )
 
       const querySnapshot = await getDocs(q)
@@ -114,8 +106,11 @@ export class ITargetRepository implements TargetRepository {
   async getTargetById(args: { targetId: string }): Promise<Target> {
     try {
       const { targetId } = args
-      const colRef = collection(db, master, COLLECTION_TARGET)
-      const q = query(colRef, where(COLUMN_TARGET_ID, WHERE_EQUAL, targetId))
+      const colRef = collection(db, master, Constants.COLLECTION_TARGET)
+      const q = query(
+        colRef,
+        where(Constants.COLUMN_TARGET_ID, Constants.WHERE_EQUAL, targetId)
+      )
 
       const querySnapshot = await getDocs(q)
       const targets = querySnapshot.docs.map((doc) => {

@@ -20,7 +20,15 @@ const isFirebaseError = (e: Error): e is FirebaseError => {
   return 'code' in e && 'message' in e
 }
 
+/**
+ * Firestoreを利用したAuthRepositoryの実装クラス
+ */
 export class IAuthRepository implements AuthRepository {
+  /**
+   * Emailとパスワードでサインインするメソッド
+   * @param args - emailとpasswordを含むオブジェクト
+   * @returns UserCredential
+   */
   async signInWithEmail(args: {
     email: string
     password: string
@@ -36,37 +44,43 @@ export class IAuthRepository implements AuthRepository {
     }
   }
 
+  /**
+   * Emailとパスワードでサインアップするメソッド
+   * @param args - emailとpasswordを含むオブジェクト
+   * @returns UserCredential
+   */
   async signUpWithEmail(args: {
     email: string
     password: string
   }): Promise<UserCredential> {
     const { email, password } = args
-    const userCredential: UserCredential = await new Promise<UserCredential>(
-      (resolve) => {
-        createUserWithEmailAndPassword(auth, email, password)
-          .then((response: UserCredential) => {
-            resolve(response)
-          })
-          .catch((error) => {
-            console.log(error)
-            if (isFirebaseError(error)) {
-              switch (error.code) {
-                case 'auth/user-not-found':
-                  return 'ユーザーが見つかりません'
-                case 'auth/wrong-password':
-                  return 'パスワードが間違っています'
-                default:
-                  return 'エラーが発生しました'
-              }
-            } else {
-              return 'エラーが発生しました'
-            }
-          })
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
+      return userCredential
+    } catch (error: any) {
+      if (isFirebaseError(error)) {
+        switch (error.code) {
+          case 'auth/user-not-found':
+            throw new Error('ユーザーが見つかりません')
+          case 'auth/wrong-password':
+            throw new Error('パスワードが間違っています')
+          default:
+            throw new Error('エラーが発生しました')
+        }
+      } else {
+        throw new Error('エラーが発生しました')
       }
-    )
-    return userCredential
+    }
   }
 
+  /**
+   * サインアウトするメソッド
+   * @returns void
+   */
   async signOut(): Promise<void> {
     try {
       await signOut(auth)
@@ -78,11 +92,15 @@ export class IAuthRepository implements AuthRepository {
     }
   }
 
+  /**
+   * メール認証を送信するメソッド
+   * @returns void
+   */
   async sendEmailVerification(): Promise<void> {
     const currentUser = auth.currentUser
     try {
       if (!currentUser) {
-        throw new Error('ユーザが存在しません')
+        throw new Error('ユーザーが存在しません')
       }
       await sendEmailVerification(currentUser)
     } catch (e: any) {
@@ -93,21 +111,25 @@ export class IAuthRepository implements AuthRepository {
     }
   }
 
-  // メール確認（修正要）
+  /**
+   * メール確認を行うメソッド
+   * @returns void
+   */
   async emailVerification(): Promise<void> {
-    const currentUser = await auth.currentUser?.reload()
     try {
+      const currentUser = auth.currentUser
       if (!currentUser) {
-        throw new Error('ユーザが存在しません')
+        throw new Error('ユーザーが存在しません')
       }
-      if (!currentUser) {
+      await currentUser.reload()
+      if (!currentUser.emailVerified) {
         throw new Error('メールが認証されていません')
       }
     } catch (e: any) {
       if (isFirebaseError(e)) {
         throw new Error(e.message)
       }
-      throw new Error('メールの送信に失敗しました')
+      throw new Error('メールの確認に失敗しました')
     }
   }
 }

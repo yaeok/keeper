@@ -1,10 +1,9 @@
 import { User } from '@/domain/entity/user_entity'
 import { UserRepository } from '@/domain/repository/user_repository'
-import { doc, setDoc } from '@firebase/firestore'
 import { UserDTO } from '@/feature/dto/user/user_dto'
 import { db, master } from '@/feature/infrastructure/firestore/config'
-
-const COLLECTION_USER = 'users'
+import { Constants } from '@/utils/constants'
+import { doc, setDoc } from '@firebase/firestore'
 
 /**
  * Firestoreを利用したUserRepositoryの実装クラス
@@ -23,7 +22,7 @@ export class IUserRepository implements UserRepository {
     try {
       const { uid, username, email } = args
 
-      const docRef = doc(db, master, COLLECTION_USER, uid)
+      const docRef = doc(db, master, Constants.COLLECTION_USER, uid)
 
       const userInfo = UserDTO.fromEntity(
         new User({

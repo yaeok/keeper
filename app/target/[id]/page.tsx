@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 
+import ActualsModal from '@/components/target/detail/ActualsModal'
 import GoalSummary from '@/components/target/detail/GoalSummary'
 import TaskCalendar from '@/components/target/detail/TaskCalendar'
 import TaskList from '@/components/target/detail/TaskList'
@@ -54,12 +55,31 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
     fetchData()
   }, [])
 
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const handleAddActual = (actualData: any) => {
+    console.log('Submitted Data:', actualData)
+    // 実績データをAPIを通じて送信する処理
+  }
+
   const progress = 60 // 仮の進捗率
 
   return (
     <main className='min-h-screen w-screen bg-gray-50'>
       <Header />
       <div className='w-3/5 mx-auto mt-20 bg-gray-50 p-4'>
+        <button
+          onClick={() => setModalOpen(true)}
+          className='mt-4 mb-2 px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700'
+        >
+          実績追加
+        </button>
+        <ActualsModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onSubmit={handleAddActual}
+          tasks={tasks}
+        />
         <h2 className='text-3xl font-bold border-b-red-400 border-b-2 my-4'>
           {loading ? <Skeleton className='h-12 w-full' /> : target?.target}
         </h2>
