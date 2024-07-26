@@ -26,6 +26,7 @@ export class RegisterActualUseCase
   ): Promise<RegisterActualUseCaseOutput> {
     const { actual } = input
     try {
+      console.log('usecase', actual.studyHours)
       const actualId = await this.actualRepository.registerActual({ actual })
       if (!actualId) {
         return { result: false }

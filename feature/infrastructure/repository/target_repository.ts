@@ -8,6 +8,7 @@ import { TargetStatus, TargetStatusType } from '@/utils/target_status'
 import {
   addDoc,
   collection,
+  getCountFromServer,
   getDocs,
   limit,
   orderBy,
@@ -118,11 +119,42 @@ export class ITargetRepository implements TargetRepository {
         return TargetMapper.toDomain(TargetDTO.fromDoc(data))
       })
 
-      // 最初の目標を返す
       return targets[0]
     } catch (error) {
       console.error('Failed to get target by id:', error)
       throw new Error('Failed to get target by id')
+    }
+  }
+
+  /**
+   * 指定されたユーザーIDの完了したターゲットの数を取得するメソッド
+   * @param args - ユーザーIDを含むオブジェクト
+   * @returns 完了したターゲットの数
+   * @throws 完了したターゲットの数の取得に失敗した場合にエラーをスローします
+   */
+  async getCompletedTargetCountByUserId(args: {
+    uid: string
+  }): Promise<number> {
+    try {
+      const { uid } = args
+      const colRef = collection(db, master, Constants.COLLECTION_TARGET)
+      const q = query(
+        colRef,
+        where(Constants.COLUMN_OWNER_ID, Constants.WHERE_EQUAL, uid),
+        where(
+          Constants.COLUMN_STATUS,
+          Constants.WHERE_EQUAL,
+          TargetStatus.COMPLETED
+        )
+      )
+
+      const querySnapshot = await getCountFromServer(q)
+      const count = querySnapshot.data().count
+
+      return count
+    } catch (error) {
+      console.error('Failed to get completed target count by user id:', error)
+      throw new Error('Failed to get completed target count by user id')
     }
   }
 }

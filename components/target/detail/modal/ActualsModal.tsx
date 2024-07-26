@@ -18,6 +18,7 @@ interface ActualsModalProps {
   onClose: () => void
   onSubmit: (data: ActualFormValues) => void
   tasks: Task[]
+  targeId: string
 }
 
 const ActualsModal: React.FC<ActualsModalProps> = ({
@@ -25,6 +26,7 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
   onClose,
   onSubmit,
   tasks,
+  targeId,
 }) => {
   const {
     register,
@@ -34,12 +36,14 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
   } = useForm<ActualFormValues>()
 
   const [taskSearch, setTaskSearch] = useState('')
+  const [studyHoursPerDay, setStudyHoursPerDay] = useState(0)
 
   const handleFormSubmit = async (data: ActualFormValues) => {
     const newActual = new Actual({
       actualId: '',
       date: data.date,
-      studyHours: data.hours,
+      studyHours: studyHoursPerDay,
+      targetId: targeId,
       taskId: data.taskId,
       memo: data.description,
       createdAt: new Date(),
@@ -79,8 +83,11 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
       <div className='flex items-center justify-center min-h-screen'>
         <div className='relative p-8 bg-white w-full max-w-2xl m-auto flex-col flex rounded-lg shadow-lg z-10'>
           <form onSubmit={handleSubmit(handleFormSubmit)} className='space-y-4'>
-            <div>
-              <label htmlFor='taskId' className='text-lg font-semibold'>
+            <section>
+              <label
+                htmlFor='taskId'
+                className='text-lg font-semibold block  border-b-red-400 border-b-2 mb-4'
+              >
                 タスク
               </label>
               <input
@@ -106,9 +113,12 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
                   {errors.taskId.message}
                 </p>
               )}
-            </div>
-            <div>
-              <label htmlFor='date' className='text-lg font-semibold'>
+            </section>
+            <section>
+              <label
+                htmlFor='date'
+                className='text-lg font-semibold block  border-b-red-400 border-b-2 mb-4'
+              >
                 日付
               </label>
               <input
@@ -122,30 +132,28 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
                   {errors.date.message}
                 </p>
               )}
-            </div>
-            <div>
-              <label htmlFor='hours' className='text-lg font-semibold'>
-                時間
+            </section>
+            <section>
+              <label className='text-lg font-semibold block  border-b-red-400 border-b-2 mb-4'>
+                勉強時間
               </label>
               <input
-                type='number'
-                id='hours'
+                type='range'
                 min='0'
-                step='0.1'
-                {...register('hours', {
-                  required: '時間は必須です',
-                  min: { value: 0, message: '時間は0以上でなければなりません' },
-                })}
-                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'
+                max='12'
+                value={studyHoursPerDay}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setStudyHoursPerDay(Number(e.target.value))
+                }
+                className='w-full'
               />
-              {errors.hours && (
-                <p className='text-red-500 text-sm mt-1'>
-                  {errors.hours.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <label htmlFor='description' className='text-lg font-semibold'>
+              <div className='text-right mt-2'>{studyHoursPerDay} 時間</div>
+            </section>
+            <section>
+              <label
+                htmlFor='description'
+                className='text-lg font-semibold block  border-b-red-400 border-b-2 mb-4'
+              >
                 詳細
               </label>
               <textarea
@@ -164,8 +172,8 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
                   {errors.description.message}
                 </p>
               )}
-            </div>
-            <div className='flex justify-between space-x-4'>
+            </section>
+            <section className='flex justify-between space-x-4'>
               <button
                 type='button'
                 onClick={onClose}
@@ -179,7 +187,7 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
               >
                 登録
               </button>
-            </div>
+            </section>
           </form>
         </div>
       </div>

@@ -10,7 +10,7 @@ import { doc, setDoc } from '@firebase/firestore'
  */
 export class IUserRepository implements UserRepository {
   /**
-   * Firestoreを利用してユーザーを作成するメソッド
+   * ユーザーを作成するメソッド
    * @param args - ユーザーの情報を含むオブジェクト
    * @returns 作成されたユーザー
    */
