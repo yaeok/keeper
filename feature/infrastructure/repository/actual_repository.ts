@@ -64,4 +64,85 @@ export class IActualRepository implements ActualRepository {
       throw new Error('Failed to register actual')
     }
   }
+
+  /**
+   * 指定されたターゲットIDに関連するActualのリストを取得するメソッド
+   * @param args - ターゲットIDを含むオブジェクト
+   * @returns Actualオブジェクトの配列
+   * @throws Actualの取得に失敗した場合にエラーをスローします
+   */
+  async getActualsByTargetId(args: { targetId: string }): Promise<Actual[]> {
+    try {
+      const { targetId } = args
+      const colRef = collection(db, master, Constants.COLLECTION_ACTUALS)
+      const q = query(
+        colRef,
+        where(Constants.COLUMN_TARGET_ID, Constants.WHERE_EQUAL, targetId)
+      )
+
+      const querySnapshot = await getDocs(q)
+      const actuals = querySnapshot.docs.map((doc) => {
+        const data = doc.data()
+        return ActualMapper.toDomain(ActualDTO.fromDoc(data))
+      })
+
+      return actuals
+    } catch (error) {
+      console.error('Failed to get actuals by target ID:', error)
+      throw new Error('Failed to get actuals by target ID')
+    }
+  }
+
+  /**
+   * 指定されたユーザーIDの今月のActualのリストを取得するメソッド
+   * @param args - ユーザーIDを含むオブジェクト
+   * @returns 今月のActualオブジェクトの配列
+   * @throws Actualの取得に失敗した場合にエラーをスローします
+   */
+  async getActualsByUserIdForMonthly(args: {
+    userId: string
+  }): Promise<Actual[]> {
+    try {
+      const { userId } = args
+      const colRef = collection(db, master, Constants.COLLECTION_ACTUALS)
+
+      // 現在の年月の開始と終了を取得
+      const startOfMonth = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1
+      )
+      const endOfMonth = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        0
+      )
+
+      const q = query(
+        colRef,
+        where(Constants.COLUMN_OWNER_ID, Constants.WHERE_EQUAL, userId),
+        where(
+          Constants.COLUMN_CREATED_AT,
+          Constants.WHERE_GREATER_EQUAL,
+          startOfMonth
+        ),
+        where(
+          Constants.COLUMN_CREATED_AT,
+          Constants.WHERE_LESS_EQUAL,
+          endOfMonth
+        )
+      )
+
+      const querySnapshot = await getDocs(q)
+      const actuals = querySnapshot.docs.map((doc) => {
+        const data = doc.data()
+        return ActualMapper.toDomain(ActualDTO.fromDoc(data))
+      })
+
+      return actuals
+    } catch (error) {
+      console.error('Failed to get actuals by user ID for monthly:', error)
+      throw new Error('Failed to get actuals by user ID for monthly')
+    }
+  }
 }

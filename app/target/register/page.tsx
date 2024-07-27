@@ -8,6 +8,11 @@ import TargetForm from '@/components/target/register/TargetForm'
 import TaskForm from '@/components/target/register/TaskForm'
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
+import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
+import { RegisterTargetUseCase } from '@/use_case/register_target_and_task_use_case/register_target_use_case/register_target_use_case'
+import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
+import { RegisterTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_task_use_case/register_task_use_case'
+import { RegisterTargetAndTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_target_and_task_use_case'
 
 const TargetRegisterView: React.FC = () => {
   const [currentTarget, setCurrentTarget] = useState<Target | null>(null)
@@ -19,6 +24,34 @@ const TargetRegisterView: React.FC = () => {
 
   const handleNewTask = (tasks: Task[]) => {
     setCurrentTasks(tasks)
+  }
+
+  const onClickRegisterBtn = async () => {
+    if (!currentTarget || currentTasks.length == 0) return
+    const targetRepository = new ITargetRepository()
+    const registerTargetUseCase = new RegisterTargetUseCase({
+      targetRepository: targetRepository,
+    })
+
+    const taskRepository = new ITaskRepository()
+    const registerTaskUseCase = new RegisterTaskUseCase({
+      taskRepository: taskRepository,
+    })
+
+    try {
+      const result = await new RegisterTargetAndTaskUseCase({
+        registerTargetUseCase: registerTargetUseCase,
+        registerTaskUseCase: registerTaskUseCase,
+      }).execute({
+        target: currentTarget,
+        tasks: currentTasks,
+      })
+      if (result.result) {
+        alert('登録が完了しました')
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
@@ -42,7 +75,7 @@ const TargetRegisterView: React.FC = () => {
             <TaskForm onNewTask={handleNewTask} />
           </div>
         </section>
-        <section className='my-2'>
+        {/* <section className='my-2'>
           <h2 className='text-xl font-bold bg-red-100 rounded-sm px-4 py-2'>
             スケジュール
           </h2>
@@ -52,6 +85,14 @@ const TargetRegisterView: React.FC = () => {
               initialTasks={currentTasks}
             />
           </div>
+        </section> */}
+        <section className='flex items-center justify-center mt-4'>
+          <button
+            className='font-bold w-1/2 py-4 bg-green-500 text-white rounded'
+            onClick={() => onClickRegisterBtn()}
+          >
+            新規目標・タスク登録
+          </button>
         </section>
       </div>
     </main>

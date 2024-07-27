@@ -12,16 +12,20 @@ import { Target } from '@/domain/entity/target_entity'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
 import { GetRecentThreeActiveTargetsUseCase } from '@/use_case/get_recent_three_active_targets_use_case/get_recent_three_active_targets_use_case'
 import { GetRecentThreeCompletedTargetsUseCase } from '@/use_case/get_recent_three_completed_targets_use_case/get_recent_three_completed_targets_use_case'
+import { Actual } from '@/domain/entity/actual_entity'
+import { IActualRepository } from '@/feature/infrastructure/repository/actual_repository'
+import { GetActualsByUserIdForMonthlyUseCase } from '@/use_case/get_actuals_by_user_id_for_monthly_use_case/get_actuals_by_user_id_for_monthly_use_case'
 
 const TargetView: React.FC = () => {
   const router = useRouter()
   const [loading, setLoading] = React.useState<boolean>(true)
   const [activeTargets, setActiveTargets] = React.useState<Target[]>([])
   const [completedTargets, setCompletedTargets] = React.useState<Target[]>([])
+  const [actuals, setActuals] = React.useState<Actual[]>([])
 
   React.useEffect(() => {
-    const targetRepository = new ITargetRepository()
     const fetchActiveTargets = async () => {
+      const targetRepository = new ITargetRepository()
       // ステータスがactiveの目標を取得
       const activeResult = await new GetRecentThreeActiveTargetsUseCase({
         targetRepository: targetRepository,
@@ -30,6 +34,7 @@ const TargetView: React.FC = () => {
     }
 
     const fetchCompletedTargets = async () => {
+      const targetRepository = new ITargetRepository()
       // ステータスがcompletedの目標を取得
       const completedResult = await new GetRecentThreeCompletedTargetsUseCase({
         targetRepository: targetRepository,
@@ -37,9 +42,18 @@ const TargetView: React.FC = () => {
       setCompletedTargets(completedResult.targets)
     }
 
+    const fetchActuals = async () => {
+      const actualRepository = new IActualRepository()
+      const actuals = await new GetActualsByUserIdForMonthlyUseCase({
+        actualRepository: actualRepository,
+      }).execute()
+      setActuals(actuals.actuals)
+    }
+
     const fetchData = async () => {
       await fetchActiveTargets()
       await fetchCompletedTargets()
+      await fetchActuals()
       setLoading(false)
     }
 
@@ -72,7 +86,7 @@ const TargetView: React.FC = () => {
             <TargetList targets={completedTargets} loading={loading} />
           </div>
           <div className='w-1/4'>
-            <Calendar />
+            <Calendar actuals={actuals} loading={loading} />
           </div>
         </div>
       </div>

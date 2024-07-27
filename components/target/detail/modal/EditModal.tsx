@@ -25,7 +25,7 @@ const EditModal: React.FC<EditModalProps> = ({
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center'>
       <div className='fixed inset-0 bg-black bg-opacity-50'></div>
-      <div className='relative bg-white p-6 rounded shadow-lg z-10 overflow-auto h-4/5 w-3/4 md:w-1/2'>
+      <div className='relative bg-white p-6 rounded-lg shadow-lg z-10 overflow-auto h-4/5 w-3/4 md:w-1/2'>
         <section className='flex justify-between items-center'>
           <h2 className='text-lg font-semibold'>目標とタスクの編集</h2>
           <button

@@ -4,14 +4,13 @@ import { useFieldArray, useForm } from 'react-hook-form'
 
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
+import { Constants } from '@/utils/constants'
 
 interface CombinedEditFormProps {
   target: Target
   tasks: Task[]
   onUpdate: (updatedTarget: Target, updatedTasks: Task[]) => void
 }
-
-const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土']
 
 const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
   target,
@@ -50,7 +49,7 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
   return (
     <form onSubmit={onSubmit} className='space-y-4'>
       <div className='py-1'>
-        <label className='text-lg font-semibold block  border-b-red-400 border-b-2 mb-4'>
+        <label className='block font-medium text-md  border-b-red-400 border-b-2 mb-4'>
           目標
         </label>
         <input
@@ -62,11 +61,11 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
         )}
       </div>
       <div className='py-1'>
-        <label className='text-lg font-semibold block  border-b-red-400 border-b-2 mb-4'>
+        <label className='block font-medium text-md  border-b-red-400 border-b-2 mb-4'>
           学習日
         </label>
         <div className='p-4 grid grid-cols-7 gap-2'>
-          {daysOfWeek.map((day, index) => (
+          {Constants.DAYS_OF_WEEK.map((day, index) => (
             <label key={index} className='flex items-center space-x-2'>
               <input
                 type='checkbox'
@@ -109,7 +108,9 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
             <div className='flex flex-col w-full space-y-2'>
               <section className='flex flex-row space-x-2 items-end'>
                 <div className='w-3/5'>
-                  <label className='block font-medium'>タスク</label>
+                  <label className='block font-medium text-md  border-b-red-400 border-b-2 mb-4'>
+                    タスク
+                  </label>
                   <input
                     {...register(`tasks.${index}.task`, {
                       required: 'タスクは必須です',
@@ -118,7 +119,7 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
                         message: 'タスクは2文字以上でなければなりません',
                       },
                     })}
-                    className='mt-1 p-2 border border-gray-300 rounded w-full'
+                    className='p-2 border border-gray-300 rounded w-full'
                   />
                   {errors.tasks?.[index]?.task && (
                     <p className='text-red-500 text-sm'>
@@ -127,7 +128,7 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
                   )}
                 </div>
                 <div className='w-2/5'>
-                  <label className='block font-medium text-lg  border-b-red-400 border-b-2 mb-4'>
+                  <label className='block font-medium text-md  border-b-red-400 border-b-2 mb-4'>
                     勉強時間 (時間)
                   </label>
                   <input
@@ -143,7 +144,7 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
                         message: '勉強時間は24時間以下でなければなりません',
                       },
                     })}
-                    className='mt-1 p-2 border border-gray-300 rounded w-full'
+                    className='p-2 border border-gray-300 rounded w-full'
                   />
                   {errors.tasks?.[index]?.taskStudyHours && (
                     <p className='text-red-500 text-sm'>
@@ -153,7 +154,9 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
                 </div>
               </section>
               <section>
-                <label className='block font-medium'>内容</label>
+                <label className='block font-medium text-md  border-b-red-400 border-b-2 mb-4'>
+                  内容
+                </label>
                 <textarea
                   {...register(`tasks.${index}.content`, {
                     required: '内容は必須です',
@@ -162,7 +165,7 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
                       message: '内容は10文字以上でなければなりません',
                     },
                   })}
-                  className='mt-1 p-2 border border-gray-300 rounded w-full'
+                  className='p-2 border border-gray-300 rounded w-full'
                 />
                 {errors.tasks?.[index]?.content && (
                   <p className='text-red-500 text-sm'>

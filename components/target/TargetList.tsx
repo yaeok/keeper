@@ -33,7 +33,9 @@ const TargetList = (props: TargetListProps) => {
   return (
     <section className='p-4 bg-white shadow rounded-sm flex'>
       {props.loading ? (
-        <Skeleton className='h-10 w-full' />
+        <>
+          <Skeleton className='h-10 w-full' />
+        </>
       ) : (
         <>
           {props.targets.length === 0 ? (

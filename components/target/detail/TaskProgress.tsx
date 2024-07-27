@@ -20,7 +20,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({ task, actuals }) => {
       <div className='w-full bg-gray-200 rounded-full h-4 mt-2'>
         <div
           className='bg-green-600 h-4 rounded-full'
-          style={{ width: `${progress}%` }}
+          style={{ width: `${progress > 101 ? 100 : progress}%` }}
         ></div>
       </div>
       <div className='mt-4 text-right'>

@@ -10,6 +10,7 @@ export class ActualDTO implements DataTransferObject {
     studyHours: number
     targetId: string
     taskId: string
+    ownerId: string
     memo: string
     createdAt: Date
     updatedAt: Date
@@ -20,6 +21,7 @@ export class ActualDTO implements DataTransferObject {
     this.studyHours = args.studyHours
     this.targetId = args.targetId
     this.taskId = args.taskId
+    this.ownerId = args.ownerId
     this.memo = args.memo
     this.createdAt = args.createdAt
     this.updatedAt = args.updatedAt
@@ -36,6 +38,8 @@ export class ActualDTO implements DataTransferObject {
   targetId: string
   /** タスクId */
   taskId: string
+  /** 所有者Id */
+  ownerId: string
   /** メモ */
   memo: string
   /** 作成日 */
@@ -52,6 +56,7 @@ export class ActualDTO implements DataTransferObject {
       studyHours: doc.studyHours,
       targetId: doc.targetId,
       taskId: doc.taskId,
+      ownerId: doc.ownerId,
       memo: doc.memo,
       createdAt: doc.createdAt.toDate(),
       updatedAt: doc.updatedAt.toDate(),
@@ -66,6 +71,7 @@ export class ActualDTO implements DataTransferObject {
       studyHours: entity.studyHours,
       targetId: entity.targetId,
       taskId: entity.taskId,
+      ownerId: entity.ownerId,
       memo: entity.memo,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
@@ -80,6 +86,7 @@ export class ActualDTO implements DataTransferObject {
       studyHours: this.studyHours,
       targetId: this.targetId,
       taskId: this.taskId,
+      ownerId: this.ownerId,
       memo: this.memo,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

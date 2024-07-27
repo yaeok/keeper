@@ -1,14 +1,11 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { Actual } from '@/domain/entity/actual_entity'
 import { Task } from '@/domain/entity/task_entity'
-import { IActualRepository } from '@/feature/infrastructure/repository/actual_repository'
-import { RegisterActualUseCase } from '@/use_case/register_actual_use_case/register_actual_use_case'
 
 interface ActualFormValues {
   date: string
-  hours: number
+  studyHours: number
   description: string
   taskId: string
 }
@@ -18,7 +15,6 @@ interface ActualsModalProps {
   onClose: () => void
   onSubmit: (data: ActualFormValues) => void
   tasks: Task[]
-  targeId: string
 }
 
 const ActualsModal: React.FC<ActualsModalProps> = ({
@@ -26,47 +22,29 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
   onClose,
   onSubmit,
   tasks,
-  targeId,
 }) => {
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
-  } = useForm<ActualFormValues>()
+  } = useForm<ActualFormValues>({
+    defaultValues: {
+      date: new Date().toISOString().split('T')[0],
+      studyHours: 0,
+      description: '',
+    },
+  })
 
   const [taskSearch, setTaskSearch] = useState('')
-  const [studyHoursPerDay, setStudyHoursPerDay] = useState(0)
 
   const handleFormSubmit = async (data: ActualFormValues) => {
-    const newActual = new Actual({
-      actualId: '',
-      date: data.date,
-      studyHours: studyHoursPerDay,
-      targetId: targeId,
-      taskId: data.taskId,
-      memo: data.description,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    })
-
-    const actualRepository = new IActualRepository()
-
-    const result = await new RegisterActualUseCase({
-      actualRepository: actualRepository,
-    }).execute({
-      actual: newActual,
-    })
-
-    if (result.result) {
-      onSubmit(data)
-      reset()
-      onClose()
-    } else {
-      console.error('Failed to register actual')
-    }
+    onSubmit(data)
+    reset()
+    onClose()
   }
+  const studyHours = watch('studyHours')
 
   const filteredTasks = tasks.filter((task) =>
     task.task.toLowerCase().includes(taskSearch.toLowerCase())
@@ -81,7 +59,7 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
         style={{ touchAction: 'none', overflow: 'hidden' }}
       ></div>
       <div className='flex items-center justify-center min-h-screen'>
-        <div className='relative p-8 bg-white w-full max-w-2xl m-auto flex-col flex rounded-lg shadow-lg z-10'>
+        <div className='relative p-6 bg-white w-3/4 md:w-1/2 m-auto flex-col flex rounded-lg shadow-lg z-10'>
           <form onSubmit={handleSubmit(handleFormSubmit)} className='space-y-4'>
             <section>
               <label
@@ -137,17 +115,21 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
               <label className='text-lg font-semibold block  border-b-red-400 border-b-2 mb-4'>
                 勉強時間
               </label>
-              <input
-                type='range'
-                min='0'
-                max='12'
-                value={studyHoursPerDay}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setStudyHoursPerDay(Number(e.target.value))
-                }
-                className='w-full'
-              />
-              <div className='text-right mt-2'>{studyHoursPerDay} 時間</div>
+              <label>
+                勉強時間: {studyHours} 時間
+                <input
+                  type='range'
+                  {...register('studyHours', {
+                    valueAsNumber: true, // 入力値を数値として取得
+                  })}
+                  min='0'
+                  max='12'
+                  className='w-full'
+                />
+              </label>
+              {errors.studyHours && (
+                <p className='text-red-500'>{errors.studyHours.message}</p>
+              )}
             </section>
             <section>
               <label

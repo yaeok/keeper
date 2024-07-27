@@ -14,9 +14,14 @@ export class Constants {
 
   // クエリパラメータ
   static readonly WHERE_EQUAL = '==' // 等しい比較
+  static readonly WHERE_GREATER_EQUAL = '>=' // 以上
+  static readonly WHERE_LESS_EQUAL = '<=' // 以下
   static readonly ORDERBY_DESC = 'desc' // 降順ソート
   static readonly ORDERBY_ASC = 'asc' // 昇順ソート
 
   // リミット値
   static readonly RECENT_TARGETS_LIMIT = 3 // 最近のターゲットのリミット
+
+  // 定数
+  static readonly DAYS_OF_WEEK = ['日', '月', '火', '水', '木', '金', '土']
 }

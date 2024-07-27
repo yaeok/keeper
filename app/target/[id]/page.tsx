@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import ActualsButton from '@/components/target/detail/button/ActualsButton'
 import ConfirmButton from '@/components/target/detail/button/ConfirmButton'
@@ -16,6 +16,16 @@ import { ITargetRepository } from '@/feature/infrastructure/repository/target_re
 import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
 import { GetTargetByIdUseCase } from '@/use_case/get_target_by_id_use_case/get_target_by_id_use_case'
 import { GetTaskByTargetIdUseCase } from '@/use_case/get_tasks_by_target_id_use_case/get_tasks_by_target_id_use_case'
+import { IActualRepository } from '@/feature/infrastructure/repository/actual_repository'
+import { GetActualsByTargetIdUseCase } from '@/use_case/get_actuals_by_target_id_use_case/get_actuals_by_target_id_use_case'
+import { RegisterActualUseCase } from '@/use_case/register_actual_use_case/register_actual_use_case'
+
+interface ActualFormValues {
+  date: string
+  studyHours: number
+  description: string
+  taskId: string
+}
 
 interface TargetDetailProps {
   params: {
@@ -26,12 +36,12 @@ interface TargetDetailProps {
 const TargetDetailView: React.FC<TargetDetailProps> = (
   props: TargetDetailProps
 ) => {
-  const [loading, setLoading] = useState(true)
-  const [target, setTarget] = useState<Target | null>(null)
-  const [tasks, setTasks] = useState<Task[]>([])
-  const [actuals, setActuals] = useState<Actual[]>([])
+  const [loading, setLoading] = React.useState(true)
+  const [target, setTarget] = React.useState<Target | null>(null)
+  const [tasks, setTasks] = React.useState<Task[]>([])
+  const [actuals, setActuals] = React.useState<Actual[]>([])
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchTarget = async () => {
       const targetRepository = new ITargetRepository()
       const target = await new GetTargetByIdUseCase({
@@ -48,21 +58,59 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
       setTasks(tasks.tasks)
     }
 
+    const fetchActuals = async () => {
+      const actualRepository = new IActualRepository()
+      const actuals = await new GetActualsByTargetIdUseCase({
+        actualRepository: actualRepository,
+      }).execute({ id: props.params.id })
+      setActuals(actuals.actuals)
+    }
+
     const fetchData = async () => {
       await fetchTarget()
       await fetchTasks()
+      await fetchActuals()
       setLoading(false)
     }
 
     fetchData()
-  }, [])
+  }, [props.params.id])
+
+  const handleAddActual = async (actualData: ActualFormValues) => {
+    try {
+      const newActual = new Actual({
+        actualId: '',
+        date: actualData.date,
+        studyHours: 1,
+        targetId: props.params.id,
+        taskId: actualData.taskId,
+        ownerId: '',
+        memo: actualData.description,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      })
+
+      const actualRepository = new IActualRepository()
+
+      const result = await new RegisterActualUseCase({
+        actualRepository: actualRepository,
+      }).execute({
+        actual: newActual,
+      })
+
+      setActuals([...actuals, result.actual])
+    } catch (error) {
+      console.error('Failed to register actual:', error)
+    }
+  }
 
   return (
     <main className='min-h-screen w-screen bg-gray-50'>
       <Header />
       <div className='w-3/5 mx-auto mt-20 bg-gray-50 p-4'>
         <section className='w-full flex flex-row justify-end space-x-2'>
-          <ActualsButton tasks={tasks} targetId={props.params.id} />
+          <ActualsButton tasks={tasks} onSubmit={handleAddActual} />
           <EditModalButton target={target!} tasks={tasks} />
           <ConfirmButton />
         </section>
@@ -86,14 +134,14 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
             <TaskList tasks={tasks} actuals={actuals} />
           )}
         </section>
-        <section className='mt-4'>
+        {/* <section className='mt-4'>
           <h2 className='text-xl font-bold'>スケジュール</h2>
           {loading ? (
             <Skeleton className='h-32 w-full' />
           ) : (
             <TaskCalendar actuals={actuals} />
           )}
-        </section>
+        </section> */}
       </div>
     </main>
   )

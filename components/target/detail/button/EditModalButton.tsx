@@ -24,7 +24,7 @@ const EditModalButton: React.FC<EditModalButtonProps> = ({ tasks, target }) => {
     <>
       <button
         onClick={handleOpenModal}
-        className='px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-700'
+        className='px-4 py-2 text-white bg-green-500 rounded hover:bg-green-700'
       >
         編集
       </button>

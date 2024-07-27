@@ -9,6 +9,7 @@ export class ActualMapper {
       studyHours: actual.studyHours,
       targetId: actual.targetId,
       taskId: actual.taskId,
+      ownerId: actual.ownerId,
       memo: actual.memo,
       createdAt: actual.createdAt,
       updatedAt: actual.updatedAt,

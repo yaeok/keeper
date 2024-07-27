@@ -1,4 +1,5 @@
 import { Actual } from '@/domain/entity/actual_entity'
+import { auth } from '@/feature/infrastructure/firestore/config'
 import { IActualRepository } from '@/feature/infrastructure/repository/actual_repository'
 import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
 
@@ -7,7 +8,7 @@ interface RegisterActualUseCaseInput extends UseCaseInput {
 }
 
 interface RegisterActualUseCaseOutput extends UseCaseOutput {
-  result: boolean
+  actual: Actual
 }
 
 export class RegisterActualUseCase
@@ -25,16 +26,25 @@ export class RegisterActualUseCase
     input: RegisterActualUseCaseInput
   ): Promise<RegisterActualUseCaseOutput> {
     const { actual } = input
+    const uid = auth.currentUser?.uid ?? ''
     try {
-      console.log('usecase', actual.studyHours)
-      const actualId = await this.actualRepository.registerActual({ actual })
-      if (!actualId) {
-        return { result: false }
+      const regActual = new Actual({
+        ...actual,
+        ownerId: uid,
+      })
+      const actualId = await this.actualRepository.registerActual({
+        actual: regActual,
+      })
+
+      const response: Actual = {
+        ...actual,
+        actualId: actualId,
       }
-      return { result: true }
+
+      return { actual: response }
     } catch (error) {
       console.error('Failed to register actual:', error)
-      return { result: false }
+      throw new Error('Failed to register actual')
     }
   }
 }
