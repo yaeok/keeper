@@ -3,28 +3,45 @@
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import { Target } from '@/domain/entity/target_entity'
+import { TargetStatus } from '@/utils/target_status'
+
 interface TargetFormProps {
   onNewTarget: (target: Target) => void
 }
 
 const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
-  const { register, handleSubmit, watch } = useForm<Target>()
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Target>()
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [studyHoursPerDay, setStudyHoursPerDay] = useState(0)
 
   const onSubmit: SubmitHandler<Target> = (data: Target) => {
+    if (!data.studyDays) return
+
     data.studyDays = data.studyDays.map(Number)
     data.studyHoursPerDay = studyHoursPerDay
   }
 
   const handleAddSchedule = () => {
+    if (!startDate || !endDate) return
     const data: Target = {
+      targetId: '',
       target: watch('target'),
       studyDays: watch('studyDays').map(Number),
       studyHoursPerDay: studyHoursPerDay,
+      status: TargetStatus.ACTIVE,
       startDate: startDate,
       endDate: endDate,
+      ownerId: '',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     }
     onNewTarget(data)
   }
@@ -57,9 +74,12 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
           目標
         </label>
         <input
-          {...register('target', { required: true })}
+          {...register('target', { required: '目標は必須項目です' })}
           className='mt-4 p-2 border border-gray-300 rounded w-full'
         />
+        {errors.target && (
+          <p className='text-red-500 text-xs mt-1'>{errors.target.message}</p>
+        )}
       </section>
       <section className='py-1'>
         <label className='block font-normal p-1 border-b-red-400 border-b-2'>
@@ -72,7 +92,7 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
                 type='checkbox'
                 value={day}
                 className='hidden peer'
-                {...register('studyDays')}
+                {...register('studyDays', { required: '勉強日は必須項目です' })}
               />
               <span className='w-4 h-4 inline-block border border-gray-400 rounded-full cursor-pointer peer-checked:bg-blue-500 peer-checked:border-blue-500' />
               <span>
@@ -81,6 +101,11 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
             </label>
           ))}
         </div>
+        {errors.studyDays && (
+          <p className='text-red-500 text-xs mt-1'>
+            {errors.studyDays.message}
+          </p>
+        )}
       </section>
       <section className='py-1'>
         <label className='block font-normal p-1 border-b-red-400 border-b-2'>
@@ -114,12 +139,17 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
           <input
             type='date'
             value={startDate}
-            {...register('startDate', { required: true })}
+            {...register('startDate', { required: '目標開始日は必須項目です' })}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setStartDate(e.target.value)
             }
             className='mt-4 p-2 border border-gray-300 rounded w-full'
           />
+          {errors.startDate && (
+            <p className='text-red-500 text-xs mt-1'>
+              {errors.startDate.message}
+            </p>
+          )}
         </div>
         <div className='w-1/2'>
           <label className='block font-normal p-1 border-b-red-400 border-b-2'>
@@ -128,12 +158,17 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
           <input
             type='date'
             value={endDate}
-            {...register('endDate', { required: true })}
+            {...register('endDate', { required: '目標終了日は必須項目です' })}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setEndDate(e.target.value)
             }
             className='mt-4 p-2 border border-gray-300 rounded w-full'
           />
+          {errors.endDate && (
+            <p className='text-red-500 text-xs mt-1'>
+              {errors.endDate.message}
+            </p>
+          )}
         </div>
       </section>
 

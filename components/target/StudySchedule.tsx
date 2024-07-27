@@ -1,6 +1,7 @@
 import React from 'react'
 import { startOfWeek, endOfWeek, eachDayOfInterval, format } from 'date-fns'
 import { ja } from 'date-fns/locale'
+import { Constants } from '@/utils/constants'
 
 const getCurrentWeek = () => {
   const today = new Date()
@@ -10,7 +11,6 @@ const getCurrentWeek = () => {
 }
 
 const StudySchedule = () => {
-  const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'] // 日曜日から始まるように修正
   const weekDays = getCurrentWeek()
   const studyHours = [2, 1.5, 0, 3, 2, 1, 2.5] // 仮の学習時間データ
 
@@ -19,7 +19,7 @@ const StudySchedule = () => {
       <table className='w-full text-center bg-white'>
         <thead>
           <tr>
-            {daysOfWeek.map((day, index) => (
+            {Constants.DAYS_OF_WEEK.map((day, index) => (
               <th key={index} className='py-2 w-24'>
                 {day}
               </th>

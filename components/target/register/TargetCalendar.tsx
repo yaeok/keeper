@@ -1,6 +1,15 @@
 'use client'
 
+import { isAfter, isBefore, isEqual } from 'date-fns'
 import React from 'react'
+
+import { Target } from '@/domain/entity/target_entity'
+import { Task } from '@/domain/entity/task_entity'
+import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
+import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
+import { RegisterTargetAndTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_target_and_task_use_case'
+import { RegisterTargetUseCase } from '@/use_case/register_target_and_task_use_case/register_target_use_case/register_target_use_case'
+import { RegisterTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_task_use_case/register_task_use_case'
 
 interface TargetCalendarProps {
   initialTarget: Target | null
@@ -18,6 +27,7 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     currentDate.getMonth(),
     1
   )
+
   const endOfMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
@@ -27,7 +37,11 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
   const generateCalendar = (): Date[][] => {
     const weeks: Date[][] = []
     let days: Date[] = []
-    let date = new Date(startOfMonth)
+    let date = new Date(
+      startOfMonth.getFullYear(),
+      startOfMonth.getMonth(),
+      startOfMonth.getDate()
+    )
     while (date.getDay() !== 0) {
       date.setDate(date.getDate() - 1)
     }
@@ -41,39 +55,20 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
     }
     return weeks
   }
+
   const isTargetDay = (date: Date): boolean => {
     if (!initialTarget) return false
 
     // 与えられた日付の曜日を取得
     const dayOfWeek = date.getDay()
 
-    // 与えられた日付、開始日、終了日を時間部分を切り捨ててISO形式の文字列に変換
-    const strDate = date.toISOString().split('T')[0]
-    const strStartDate = new Date(initialTarget.startDate)
-      .toISOString()
-      .split('T')[0]
-    const strEndDate = new Date(initialTarget.endDate)
-      .toISOString()
-      .split('T')[0]
+    const dateStart = new Date(initialTarget.startDate)
+    const dateEnd = new Date(initialTarget.endDate)
+    const blStart = isAfter(date, dateStart) || isEqual(date, dateStart)
+    const blEnd = isBefore(date, dateEnd) || isEqual(date, dateEnd)
+    const blDay = initialTarget.studyDays.includes(dayOfWeek)
 
-    // 再度、時間部分を切り捨てた日付オブジェクトを生成
-    const convertedDate = new Date(strDate + 'T00:00:00Z')
-    const startDate = new Date(strStartDate + 'T00:00:00Z')
-    const endDate = new Date(strEndDate + 'T00:00:00Z')
-
-    console.log('対象日', convertedDate)
-    console.log('開始日', startDate)
-    console.log('終了日', endDate)
-
-    // 日付が開始日と終了日の範囲内にあり、指定された曜日に含まれているかどうかを確認
-    const isTarget =
-      convertedDate >= startDate &&
-      convertedDate <= endDate &&
-      initialTarget.studyDays.includes(dayOfWeek)
-
-    if (isTarget) {
-      console.log('対象日: if', convertedDate)
-    }
+    const isTarget = blStart && blEnd && blDay
 
     return isTarget
   }
@@ -120,6 +115,34 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
 
   const taskDistribution = distributeTasks()
   const weeks = generateCalendar()
+
+  const onClickRegisterBtn = async () => {
+    if (!initialTarget) return
+    const targetRepository = new ITargetRepository()
+    const registerTargetUseCase = new RegisterTargetUseCase({
+      targetRepository: targetRepository,
+    })
+
+    const taskRepository = new ITaskRepository()
+    const registerTaskUseCase = new RegisterTaskUseCase({
+      taskRepository: taskRepository,
+    })
+
+    try {
+      const result = await new RegisterTargetAndTaskUseCase({
+        registerTargetUseCase: registerTargetUseCase,
+        registerTaskUseCase: registerTaskUseCase,
+      }).execute({
+        target: initialTarget,
+        tasks: initialTasks,
+      })
+      if (result.result) {
+        alert('登録が完了しました')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
     <div>
@@ -171,7 +194,7 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
               }`}
             >
               <div className='px-1'>{day.getDate()}</div>
-              {taskDistribution[day.toISOString().split('T')[0]]?.map(
+              {/* {taskDistribution[day.toISOString().split('T')[0]]?.map(
                 (task, index) => (
                   <div
                     key={index}
@@ -180,10 +203,18 @@ const TargetCalendar: React.FC<TargetCalendarProps> = ({
                     {task.task} - {task.taskStudyHours}時間
                   </div>
                 )
-              )}
+              )} */}
             </div>
           ))
         )}
+      </section>
+      <section className='flex items-center justify-center mt-4'>
+        <button
+          className='font-bold w-1/2 py-4 bg-green-500 text-white rounded'
+          onClick={() => onClickRegisterBtn()}
+        >
+          新規目標・タスク登録
+        </button>
       </section>
     </div>
   )

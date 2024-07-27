@@ -1,45 +1,97 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import NextLink from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+
+import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
+import { SignInWithEmailUseCase } from '@/use_case/sign_in_with_email_use_case/sign_in_with_email_use_case'
+
+interface LoginFormInputs {
+  email: string
+  password: string
+}
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormInputs>()
   const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    router.push('/home')
+  const onSubmit = async (data: LoginFormInputs) => {
+    const authRepository = new IAuthRepository()
+    try {
+      const result = await new SignInWithEmailUseCase(authRepository).execute({
+        email: data.email,
+        password: data.password,
+      })
+      if (result != null) {
+        router.push('/target')
+      }
+    } catch (e) {
+      if (e instanceof String) {
+        alert(e)
+      } else {
+        alert('エラーが発生しました')
+      }
+    }
   }
 
   return (
     <div className='min-h-screen w-screen flex items-center justify-center bg-gray-100'>
       <div className='bg-white p-8 rounded shadow-md w-full max-w-md'>
         <h1 className='text-2xl font-bold mb-6 text-center'>ログイン画面</h1>
-        <form onSubmit={handleSubmit} className='space-y-6'>
+        <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
           <div>
             <label className='block text-gray-700'>Email</label>
             <input
               type='text'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register('email', {
+                required: 'メールアドレスを入力してください',
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: '有効なメールアドレスを入力してください',
+                },
+                maxLength: {
+                  value: 50,
+                  message: 'メールアドレスは50文字以内で入力してください',
+                },
+              })}
               className='mt-1 block w-full px-4 py-2 border rounded-sm shadow-sm focus:ring focus:ring-opacity-50'
               placeholder='Enter your email'
-              required
             />
+            {errors.email && (
+              <p className='text-red-500 mt-1'>{errors.email.message}</p>
+            )}
           </div>
           <div>
             <label className='block text-gray-700'>Password</label>
             <input
               type='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              {...register('password', {
+                required: 'パスワードを入力してください',
+                minLength: {
+                  value: 8,
+                  message: 'パスワードは8文字以上で入力してください',
+                },
+                maxLength: {
+                  value: 50,
+                  message: 'パスワードは50文字以下で入力してください',
+                },
+                validate: {
+                  combination: (value) =>
+                    /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/.test(value) ||
+                    'パスワードは英数字と1文字以上の大文字を含めてください',
+                },
+              })}
               className='mt-1 block w-full px-4 py-2 border rounded-sm shadow-sm focus:ring focus:ring-opacity-50'
               placeholder='Enter your password'
-              required
             />
+            {errors.password && (
+              <p className='text-red-500 mt-1'>{errors.password.message}</p>
+            )}
           </div>
           <button
             type='submit'
