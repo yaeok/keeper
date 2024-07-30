@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import NextLink from 'next/link'
 
 import { Target } from '@/domain/entity/target_entity'
 import Skeleton from '@/components/utils/skelton'
@@ -9,6 +10,7 @@ import Skeleton from '@/components/utils/skelton'
 interface TargetListProps {
   loading: boolean
   targets: Target[]
+  isTransitionListView: boolean
 }
 
 const TargetList = (props: TargetListProps) => {
@@ -41,23 +43,30 @@ const TargetList = (props: TargetListProps) => {
           {props.targets.length === 0 ? (
             <p className='text-center w-full'>データが登録されていません。</p>
           ) : (
-            <ul className='flex flex-col items-start w-full'>
-              {props.targets.map((target, index) => (
-                <li
-                  key={index}
-                  className='flex flex-row bg-gray-100 shadow my-2 text-left w-full cursor-pointer'
-                  onClick={() => handleTransition(target.targetId)}
-                >
-                  <span className='bg-primaryBlue-300 w-20 h-full'></span>
-                  <div className='flex flex-col py-6 px-4 space-y-2'>
-                    <span className='text-lg'>{target.target}</span>
-                    <span className='text-sm px-4'>
-                      学習時間：{calculateTotalHours(target)}時間
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <div className='flex flex-col space-y-2 w-full'>
+              <ul className='flex flex-col items-start w-full'>
+                {props.targets.map((target, index) => (
+                  <li
+                    key={index}
+                    className='flex flex-row bg-gray-100 shadow my-2 text-left w-full cursor-pointer'
+                    onClick={() => handleTransition(target.targetId)}
+                  >
+                    <span className='bg-primaryBlue-300 w-20 h-full'></span>
+                    <div className='flex flex-col py-6 px-4 space-y-2'>
+                      <span className='text-lg'>{target.target}</span>
+                      <span className='text-sm px-4'>
+                        学習時間：{calculateTotalHours(target)}時間
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              {!props.isTransitionListView ? (
+                <div className='flex justify-end'>
+                  <NextLink href='/target/list'>全て見る</NextLink>
+                </div>
+              ) : null}
+            </div>
           )}
         </>
       )}

@@ -7,4 +7,6 @@ export interface TaskRepository {
   }) => Promise<string[]>
 
   getTasksByTargetId: (args: { targetId: string }) => Promise<Task[]>
+
+  updateTasks: (args: { tasks: Task[]; targetId: string }) => Promise<Task[]>
 }

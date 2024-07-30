@@ -2,8 +2,8 @@ import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
 import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
 
-import { RegisterTargetUseCase } from './register_target_use_case/register_target_use_case'
-import { RegisterTaskUseCase } from './register_task_use_case/register_task_use_case'
+import { RegisterTargetUseCase } from '@/use_case/register_target_and_task_use_case/register_target_use_case/register_target_use_case'
+import { RegisterTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_task_use_case/register_task_use_case'
 
 interface RegisterTargetAndTaskUseCaseInput extends UseCaseInput {
   target: Target

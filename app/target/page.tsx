@@ -73,17 +73,25 @@ const TargetView: React.FC = () => {
         >
           新しく目標をたてる
         </button>
-        <div className='flex flex-row my-12 space-x-2 w-3/5 justify-center'>
+        <div className='flex flex-row my-12 space-x-2 w-4/5 justify-center'>
           <div className='w-3/4 p-4'>
             <UserInfo />
             <h2 className='text-xl my-6'>挑戦中の目標</h2>
-            <TargetList targets={activeTargets} loading={loading} />
+            <TargetList
+              targets={activeTargets}
+              loading={loading}
+              isTransitionListView={false}
+            />
             <h2 className='text-xl my-6'>学習状況</h2>
-            <StudySchedule />
+            <StudySchedule actuals={actuals} />
             <h2 className='text-xl my-6'>今週の学習時間</h2>
-            <StudySchedule />
+            <StudySchedule actuals={actuals} />
             <h2 className='text-xl my-6'>達成実績</h2>
-            <TargetList targets={completedTargets} loading={loading} />
+            <TargetList
+              targets={completedTargets}
+              loading={loading}
+              isTransitionListView={false}
+            />
           </div>
           <div className='w-1/4'>
             <Calendar actuals={actuals} loading={loading} />
