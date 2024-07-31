@@ -1,24 +1,25 @@
-// 'use client'
-// import { useRouter } from 'next/navigation'
-// import { ReactNode } from 'react'
+'use client'
+import { useRouter } from 'next/navigation'
+import { ReactNode } from 'react'
 
-// import { auth } from '@/feature/infrastructure/firestore/config'
+import Loading from '@/components/utils/loading'
+import { auth } from '@/feature/infrastructure/firestore/config'
 
-// type Props = {
-//   children: ReactNode
-// }
+type Props = {
+  children: ReactNode
+}
 
-// export const AuthGuard = ({ children }: Props) => {
-//   const user = auth.currentUser
-//   const router = useRouter()
+export const AuthGuard = ({ children }: Props) => {
+  const user = auth.currentUser
+  const router = useRouter()
 
-//   if (typeof user === 'undefined') {
-//     return <Loading />
-//   }
-//   if (user === null) {
-//     router.replace('/signin')
-//     return null
-//   }
+  if (typeof user === 'undefined') {
+    return <Loading />
+  }
+  if (user === null) {
+    router.replace('/sign_in')
+    return null
+  }
 
-//   return <>{children}</>
-// }
+  return <>{children}</>
+}
