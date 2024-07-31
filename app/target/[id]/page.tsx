@@ -28,7 +28,7 @@ interface CombinedEditFormValues {
 }
 
 interface ActualFormValues {
-  date: string
+  studyDate: Date
   studyHours: number
   description: string
   taskId: string
@@ -62,7 +62,8 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
       const tasks = await new GetTaskByTargetIdUseCase({
         taskRepository: taskRepository,
       }).execute({ targetId: props.params.id })
-      setTasks(tasks.tasks)
+      const sortTasks = tasks.tasks.sort((a, b) => a.priority - b.priority)
+      setTasks(sortTasks)
     }
 
     const fetchActuals = async () => {
@@ -81,13 +82,13 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
     }
 
     fetchData()
-  }, [props.params.id])
+  }, [])
 
   const handleAddActual = async (actualData: ActualFormValues) => {
     try {
       const newActual = new Actual({
         actualId: '',
-        date: actualData.date,
+        studyDate: new Date(actualData.studyDate),
         studyHours: Number(actualData.studyHours),
         targetId: props.params.id,
         taskId: actualData.taskId,
@@ -132,7 +133,8 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
         tasks: editData.tasks,
       })
       setTarget(result.target)
-      setTasks(result.tasks)
+      const sortTasks = result.tasks.sort((a, b) => a.priority - b.priority)
+      setTasks(sortTasks)
     } catch (error) {
       console.error('Failed to update target and tasks:', error)
     }

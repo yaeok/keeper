@@ -16,6 +16,7 @@ import { GetActualsByUserIdForMonthlyUseCase } from '@/use_case/get_actuals_by_u
 import { GetCompletedTargetCountByUserIdUseCase } from '@/use_case/get_completed_target_count_by_user_id_use_case/get_completed_target_count_by_user_id_use_case'
 import { GetRecentThreeActiveTargetsUseCase } from '@/use_case/get_recent_three_active_targets_use_case/get_recent_three_active_targets_use_case'
 import { GetRecentThreeCompletedTargetsUseCase } from '@/use_case/get_recent_three_completed_targets_use_case/get_recent_three_completed_targets_use_case'
+import Loading from '@/components/utils/loading'
 
 const TargetView: React.FC = () => {
   const router = useRouter()
@@ -75,7 +76,9 @@ const TargetView: React.FC = () => {
   const handleSignupClick = () => {
     router.push('/target/register')
   }
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <main className='w-screen bg-gray-50'>
       <Header />
       <div className='flex flex-col mt-20 items-center'>
@@ -98,8 +101,6 @@ const TargetView: React.FC = () => {
               loading={loading}
               isTransitionListView={false}
             />
-            <h2 className='text-xl my-6'>学習状況</h2>
-            <StudySchedule actuals={actuals} />
             <h2 className='text-xl my-6'>今週の学習時間</h2>
             <StudySchedule actuals={actuals} />
             <h2 className='text-xl my-6'>達成実績</h2>

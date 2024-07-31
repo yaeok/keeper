@@ -4,7 +4,7 @@ import ActualsModal from '@/components/target/detail/modal/ActualsModal'
 import { Task } from '@/domain/entity/task_entity'
 
 interface ActualFormValues {
-  date: string
+  studyDate: Date
   studyHours: number
   description: string
   taskId: string

@@ -22,7 +22,7 @@ const StudySchedule: React.FC<StudyScheduleProps> = ({ actuals }) => {
   const dailyHours = weekDays.map((day) => {
     const dayStr = format(day, 'yyyy-MM-dd')
     const totalHours = actuals
-      .filter((actual) => actual.date === dayStr)
+      .filter((actual) => format(actual.studyDate, 'yyyy-MM-dd') === dayStr)
       .reduce((sum, current) => sum + current.studyHours, 0)
     return totalHours
   })

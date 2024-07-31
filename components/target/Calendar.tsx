@@ -23,7 +23,8 @@ const Calendar: React.FC<CalendarProps> = (props: CalendarProps) => {
 
   // 日付をキーとして実績データをマップする
   const actualsMap = props.actuals.reduce((map, actual) => {
-    const date = format(new Date(actual.date), 'yyyy-MM-dd')
+    console.log(actual.studyDate)
+    const date = format(actual.studyDate, 'yyyy-MM-dd')
     map[date] = actual
     return map
   }, {} as Record<string, Actual>)
