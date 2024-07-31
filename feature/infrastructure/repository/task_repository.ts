@@ -7,8 +7,10 @@ import { Constants } from '@/utils/constants'
 import {
   addDoc,
   collection,
+  doc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
 } from '@firebase/firestore'
@@ -75,6 +77,51 @@ export class ITaskRepository implements TaskRepository {
     } catch (error) {
       console.error('Failed to get tasks:', error)
       throw new Error('Failed to get tasks')
+    }
+  }
+
+  /**
+   * 指定されたタスクを更新するメソッド
+   * @param args - タスクの配列を含むオブジェクト
+   * @returns 更新されたタスクの配列
+   * @throws タスクの更新に失敗した場合にエラーをスローします
+   */
+  async updateTasks(args: {
+    tasks: Task[]
+    targetId: string
+  }): Promise<Task[]> {
+    try {
+      const { tasks } = args
+      const updatedTasks = await Promise.all(
+        tasks.map(async (task) => {
+          const regTask = new Task({ ...task, targetId: args.targetId })
+          const taskData = TaskDTO.fromEntity(regTask).toData()
+          const now = new Date()
+
+          if (!taskData.taskId) {
+            const colRef = collection(db, master, Constants.TASK_COLLECTION)
+            const docRef = await addDoc(colRef, taskData)
+            await updateDoc(docRef, { taskId: docRef.id })
+            return { ...task, taskId: docRef.id }
+          } else {
+            const docRef = doc(
+              db,
+              master,
+              Constants.TASK_COLLECTION,
+              taskData.taskId
+            )
+            await updateDoc(docRef, {
+              ...taskData,
+              updatedAt: now,
+            })
+            return { ...task, updatedAt: now }
+          }
+        })
+      )
+      return updatedTasks
+    } catch (error) {
+      console.error('Failed to update tasks:', error)
+      throw new Error('Failed to update tasks')
     }
   }
 }

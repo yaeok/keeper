@@ -4,19 +4,27 @@ import EditModal from '@/components/target/detail/modal/EditModal'
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
 
+interface CombinedEditFormValues {
+  target: Target
+  tasks: Task[]
+}
+
 interface EditModalButtonProps {
   tasks: Task[]
   target: Target
+  onUpdate: (updateData: CombinedEditFormValues) => void
 }
 
-const EditModalButton: React.FC<EditModalButtonProps> = ({ tasks, target }) => {
+const EditModalButton: React.FC<EditModalButtonProps> = (
+  props: EditModalButtonProps
+) => {
   const [isModalOpen, setModalOpen] = useState(false)
 
   const handleOpenModal = () => setModalOpen(true)
   const handleCloseModal = () => setModalOpen(false)
 
-  const handleUpdate = (updatedTarget: Target, updatedTasks: Task[]) => {
-    console.log('Update Target and Tasks:', updatedTarget, updatedTasks)
+  const handleUpdate = (updateData: CombinedEditFormValues) => {
+    props.onUpdate(updateData)
     setModalOpen(false)
   }
 
@@ -33,8 +41,8 @@ const EditModalButton: React.FC<EditModalButtonProps> = ({ tasks, target }) => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onUpdate={handleUpdate}
-          tasks={tasks}
-          target={target}
+          tasks={props.tasks}
+          target={props.target}
         />
       )}
     </>

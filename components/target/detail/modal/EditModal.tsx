@@ -5,12 +5,17 @@ import CombinedEditForm from '@/components/target/detail/CombinedEditForm'
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
 
+interface CombinedEditFormValues {
+  target: Target
+  tasks: Task[]
+}
+
 interface EditModalProps {
   isOpen: boolean
   onClose: () => void
   target: Target
   tasks: Task[]
-  onUpdate: (updatedTarget: Target, updatedTasks: Task[]) => void
+  onUpdate: (updateData: CombinedEditFormValues) => void
 }
 
 const EditModal: React.FC<EditModalProps> = ({
@@ -21,6 +26,27 @@ const EditModal: React.FC<EditModalProps> = ({
   onUpdate,
 }) => {
   if (!isOpen) return null
+
+  const handleFormSubmit = async (data: CombinedEditFormValues) => {
+    const updTask = data.tasks.map((task) => {
+      return new Task({
+        taskId: task.taskId,
+        task: task.task,
+        content: task.content,
+        priority: task.priority,
+        taskStudyHours: Number(task.taskStudyHours),
+        targetId: task.targetId,
+        createdAt: task.createdAt,
+        updatedAt: task.updatedAt,
+        deletedAt: task.deletedAt,
+      })
+    })
+    const updData: CombinedEditFormValues = {
+      target: data.target,
+      tasks: updTask,
+    }
+    onUpdate(updData)
+  }
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center'>
@@ -38,10 +64,7 @@ const EditModal: React.FC<EditModalProps> = ({
         <CombinedEditForm
           target={target}
           tasks={tasks}
-          onUpdate={(updatedTarget, updatedTasks) => {
-            onUpdate(updatedTarget, updatedTasks)
-            onClose() // 更新後にモーダルを閉じる
-          }}
+          onUpdate={handleFormSubmit}
         />
       </div>
     </div>

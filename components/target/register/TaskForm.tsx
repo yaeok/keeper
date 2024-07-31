@@ -38,7 +38,20 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
   })
 
   const onSubmit: SubmitHandler<{ tasks: Task[] }> = (data) => {
-    onNewTask(data.tasks)
+    const updTask = data.tasks.map((task) => {
+      return new Task({
+        taskId: task.taskId,
+        task: task.task,
+        content: task.content,
+        priority: task.priority,
+        taskStudyHours: Number(task.taskStudyHours),
+        targetId: task.targetId,
+        createdAt: task.createdAt,
+        updatedAt: task.updatedAt,
+        deletedAt: task.deletedAt,
+      })
+    })
+    onNewTask(updTask)
   }
 
   return (
@@ -125,10 +138,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
                   <input
                     {...register(`tasks.${index}.task`, {
                       required: 'タスクは必須です',
-                      minLength: {
-                        value: 2,
-                        message: 'タスクは2文字以上でなければなりません',
-                      },
                     })}
                     className='mt-1 p-2 border border-gray-300 rounded w-full'
                   />
@@ -146,11 +155,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
                       required: '勉強時間は必須です',
                       min: {
                         value: 1,
-                        message: '1~24時間で入力してください',
-                      },
-                      max: {
-                        value: 24,
-                        message: '勉強時間は24時間以下でなければなりません',
+                        message: '1以上で登録してください',
                       },
                     })}
                     className='mt-1 p-2 border border-gray-300 rounded w-full'
@@ -167,10 +172,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
                 <textarea
                   {...register(`tasks.${index}.content`, {
                     required: '内容は必須です',
-                    minLength: {
-                      value: 10,
-                      message: '内容は10文字以上でなければなりません',
-                    },
                   })}
                   className='mt-1 p-2 border border-gray-300 rounded w-full'
                 />

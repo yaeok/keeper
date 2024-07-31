@@ -5,20 +5,27 @@ import ActualsButton from '@/components/target/detail/button/ActualsButton'
 import ConfirmButton from '@/components/target/detail/button/ConfirmButton'
 import EditModalButton from '@/components/target/detail/button/EditModalButton'
 import GoalSummary from '@/components/target/detail/GoalSummary'
-import TaskCalendar from '@/components/target/detail/TaskCalendar'
 import TaskList from '@/components/target/detail/TaskList'
 import Header from '@/components/target/Header'
 import Skeleton from '@/components/utils/skelton'
 import { Actual } from '@/domain/entity/actual_entity'
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
+import { IActualRepository } from '@/feature/infrastructure/repository/actual_repository'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
 import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
+import { GetActualsByTargetIdUseCase } from '@/use_case/get_actuals_by_target_id_use_case/get_actuals_by_target_id_use_case'
 import { GetTargetByIdUseCase } from '@/use_case/get_target_by_id_use_case/get_target_by_id_use_case'
 import { GetTaskByTargetIdUseCase } from '@/use_case/get_tasks_by_target_id_use_case/get_tasks_by_target_id_use_case'
-import { IActualRepository } from '@/feature/infrastructure/repository/actual_repository'
-import { GetActualsByTargetIdUseCase } from '@/use_case/get_actuals_by_target_id_use_case/get_actuals_by_target_id_use_case'
 import { RegisterActualUseCase } from '@/use_case/register_actual_use_case/register_actual_use_case'
+import { UpdateTargetAndTaskUseCase } from '@/use_case/update_target_and_task_use_case/update_target_and_task_use_case'
+import { UpdateTargetUseCase } from '@/use_case/update_target_and_task_use_case/update_target_use_case/update_target_use_case'
+import { UpdateTaskUseCase } from '@/use_case/update_target_and_task_use_case/update_task_use_case/update_task_use_case'
+
+interface CombinedEditFormValues {
+  target: Target
+  tasks: Task[]
+}
 
 interface ActualFormValues {
   date: string
@@ -81,7 +88,7 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
       const newActual = new Actual({
         actualId: '',
         date: actualData.date,
-        studyHours: 1,
+        studyHours: Number(actualData.studyHours),
         targetId: props.params.id,
         taskId: actualData.taskId,
         ownerId: '',
@@ -105,21 +112,57 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
     }
   }
 
+  const handleUpdate = async (editData: CombinedEditFormValues) => {
+    try {
+      const targetRepository = new ITargetRepository()
+      const updateTargetUseCase = new UpdateTargetUseCase({
+        targetRepository: targetRepository,
+      })
+
+      const taskRepository = new ITaskRepository()
+      const updateTaskUseCase = new UpdateTaskUseCase({
+        taskRepository: taskRepository,
+      })
+
+      const result = await new UpdateTargetAndTaskUseCase({
+        updateTargetUseCase: updateTargetUseCase,
+        updateTaskUseCase: updateTaskUseCase,
+      }).execute({
+        target: editData.target,
+        tasks: editData.tasks,
+      })
+      setTarget(result.target)
+      setTasks(result.tasks)
+    } catch (error) {
+      console.error('Failed to update target and tasks:', error)
+    }
+  }
+
   return (
     <main className='min-h-screen w-screen bg-gray-50'>
       <Header />
-      <div className='w-3/5 mx-auto mt-20 bg-gray-50 p-4'>
+      <div className='w-3/5 mx-auto mt-20 mb-10 bg-gray-50 p-4'>
         <section className='w-full flex flex-row justify-end space-x-2'>
-          <ActualsButton tasks={tasks} onSubmit={handleAddActual} />
-          <EditModalButton target={target!} tasks={tasks} />
-          <ConfirmButton />
+          {loading ? (
+            <Skeleton className='h-12 w-1/3' />
+          ) : (
+            <>
+              <ActualsButton tasks={tasks} onSubmit={handleAddActual} />
+              <EditModalButton
+                target={target!}
+                tasks={tasks}
+                onUpdate={handleUpdate}
+              />
+              <ConfirmButton targetId={target!.targetId} />
+            </>
+          )}
         </section>
         <h2 className='text-3xl font-bold border-b-red-400 border-b-2 my-4'>
           {loading ? <Skeleton className='h-12 w-full' /> : target?.target}
         </h2>
 
         <section className='mt-4'>
-          <h2 className='text-xl font-bold'>進捗</h2>
+          <h2 className='text-xl'>進捗</h2>
           {loading ? (
             <Skeleton className='h-32 w-full' />
           ) : (
@@ -127,7 +170,7 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
           )}
         </section>
         <section className='mt-4'>
-          <h2 className='text-xl font-bold'>タスク一覧</h2>
+          <h2 className='text-xl'>タスク一覧</h2>
           {loading ? (
             <Skeleton className='h-32 w-full' />
           ) : (

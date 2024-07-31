@@ -35,7 +35,7 @@ const Calendar: React.FC<CalendarProps> = (props: CalendarProps) => {
 
   return (
     <div className=''>
-      <h2 className='text-lg mb-4 w-full'>学習カレンダー</h2>
+      <h2 className='text-xl mb-4 w-full'>学習カレンダー</h2>
       {props.loading ? (
         <>
           <Skeleton className='h-32 w-full' />

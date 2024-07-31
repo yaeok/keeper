@@ -6,10 +6,15 @@ import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
 import { Constants } from '@/utils/constants'
 
+interface CombinedEditFormValues {
+  target: Target
+  tasks: Task[]
+}
+
 interface CombinedEditFormProps {
   target: Target
   tasks: Task[]
-  onUpdate: (updatedTarget: Target, updatedTasks: Task[]) => void
+  onUpdate: (updateData: CombinedEditFormValues) => void
 }
 
 const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
@@ -21,12 +26,8 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
     register,
     handleSubmit,
     control,
-    setValue,
     formState: { errors },
-  } = useForm<{
-    target: Target
-    tasks: Task[]
-  }>({
+  } = useForm<CombinedEditFormValues>({
     defaultValues: {
       target,
       tasks,
@@ -38,12 +39,8 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
     name: 'tasks',
   })
 
-  React.useEffect(() => {
-    setValue('target', target)
-  }, [target, setValue])
-
-  const onSubmit = handleSubmit((data) => {
-    onUpdate(data.target, data.tasks)
+  const onSubmit = handleSubmit((data: CombinedEditFormValues) => {
+    onUpdate(data)
   })
 
   return (
@@ -114,10 +111,6 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
                   <input
                     {...register(`tasks.${index}.task`, {
                       required: 'タスクは必須です',
-                      minLength: {
-                        value: 2,
-                        message: 'タスクは2文字以上でなければなりません',
-                      },
                     })}
                     className='p-2 border border-gray-300 rounded w-full'
                   />
@@ -137,14 +130,10 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
                       required: '勉強時間は必須です',
                       min: {
                         value: 1,
-                        message: '1~24時間で入力してください',
-                      },
-                      max: {
-                        value: 24,
-                        message: '勉強時間は24時間以下でなければなりません',
+                        message: '1以上で登録してください',
                       },
                     })}
-                    className='p-2 border border-gray-300 rounded w-full'
+                    className='mt-1 p-2 border border-gray-300 rounded w-full'
                   />
                   {errors.tasks?.[index]?.taskStudyHours && (
                     <p className='text-red-500 text-sm'>
@@ -160,10 +149,6 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
                 <textarea
                   {...register(`tasks.${index}.content`, {
                     required: '内容は必須です',
-                    minLength: {
-                      value: 10,
-                      message: '内容は10文字以上でなければなりません',
-                    },
                   })}
                   className='p-2 border border-gray-300 rounded w-full'
                 />

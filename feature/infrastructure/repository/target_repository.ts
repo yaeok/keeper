@@ -8,6 +8,7 @@ import { TargetStatus, TargetStatusType } from '@/utils/target_status'
 import {
   addDoc,
   collection,
+  doc,
   getCountFromServer,
   getDocs,
   limit,
@@ -155,6 +156,90 @@ export class ITargetRepository implements TargetRepository {
     } catch (error) {
       console.error('Failed to get completed target count by user id:', error)
       throw new Error('Failed to get completed target count by user id')
+    }
+  }
+
+  /**
+   * 指定されたターゲットを更新するメソッド
+   * @param args - ターゲットを含むオブジェクト
+   * @returns 更新されたターゲット
+   * @throws ターゲットの更新に失敗した場合にエラーをスローします
+   */
+  async updateTarget(args: { target: Target }): Promise<Target> {
+    try {
+      const { target } = args
+      const targetData = TargetDTO.fromEntity(target).toData()
+      const now = new Date()
+
+      const docRef = doc(
+        db,
+        master,
+        Constants.COLLECTION_TARGET,
+        targetData.targetId
+      )
+      await updateDoc(docRef, {
+        ...targetData,
+        updatedAt: now,
+      })
+
+      return {
+        ...target,
+        updatedAt: now,
+      }
+    } catch (error) {
+      console.error('Failed to update target:', error)
+      throw new Error('Failed to update target')
+    }
+  }
+
+  /**
+   * 指定されたユーザーIDのターゲットを取得するメソッド
+   * @param args - ユーザーIDを含むオブジェクト
+   * @returns ターゲットの配列
+   * @throws ターゲットの取得に失敗した場合にエラーをスローします
+   */
+  async getTargetsByUserId(args: { uid: string }): Promise<Target[]> {
+    try {
+      const { uid } = args
+      console.log('uid:', uid)
+      const colRef = collection(db, master, Constants.COLLECTION_TARGET)
+      const q = query(
+        colRef,
+        where(Constants.COLUMN_OWNER_ID, Constants.WHERE_EQUAL, uid)
+      )
+
+      const querySnapshot = await getDocs(q)
+      const targets: Target[] = querySnapshot.docs.map((doc) => {
+        const data = doc.data()
+        return TargetMapper.toDomain(TargetDTO.fromDoc(data))
+      })
+      console.log('targets:', targets)
+
+      return targets
+    } catch (error) {
+      console.error('Failed to get targets by user id:', error)
+      throw new Error('Failed to get targets by user id')
+    }
+  }
+
+  /**
+   * 指定されたIDの目標のステータスを完了に更新するメソッド
+   * @param args - 目標IDを含むオブジェクト
+   * @throws 目標のステータスの更新に失敗した場合にエラーをスローします
+   * @returns なし
+   */
+  async updateTargetStatusCompletedById(args: {
+    targetId: string
+  }): Promise<void> {
+    try {
+      const { targetId } = args
+      const docRef = doc(db, master, Constants.COLLECTION_TARGET, targetId)
+      await updateDoc(docRef, {
+        status: TargetStatus.COMPLETED,
+      })
+    } catch (error) {
+      console.error('Failed to update target status completed by id:', error)
+      throw new Error('Failed to update target status completed by id')
     }
   }
 }

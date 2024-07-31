@@ -19,10 +19,10 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, actuals }) => {
               <span className='text-lg font-bold border-b-red-400 border-b-2'>
                 {task.task}
               </span>
-              <span>優先度: {task.priority}</span>
+              {/* <span>優先度: {task.priority}</span> */}
             </div>
-            <div className='mt-1'>{task.content}</div>
             <TaskProgress task={task} actuals={actuals} />
+            <div className='mt-1'>{task.content}</div>
           </li>
         ))}
       </ul>
