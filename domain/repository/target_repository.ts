@@ -10,4 +10,8 @@ export interface TargetRepository {
   getTargetById: (args: { targetId: string }) => Promise<Target>
 
   getCompletedTargetCountByUserId: (args: { uid: string }) => Promise<number>
+
+  updateTargetStatusCompletedById: (argss: {
+    targetId: string
+  }) => Promise<void>
 }

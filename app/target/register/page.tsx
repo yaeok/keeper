@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import Header from '@/components/target/Header'
@@ -9,12 +10,13 @@ import TaskForm from '@/components/target/register/TaskForm'
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
-import { RegisterTargetUseCase } from '@/use_case/register_target_and_task_use_case/register_target_use_case/register_target_use_case'
 import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
-import { RegisterTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_task_use_case/register_task_use_case'
 import { RegisterTargetAndTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_target_and_task_use_case'
+import { RegisterTargetUseCase } from '@/use_case/register_target_and_task_use_case/register_target_use_case/register_target_use_case'
+import { RegisterTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_task_use_case/register_task_use_case'
 
 const TargetRegisterView: React.FC = () => {
+  const router = useRouter()
   const [currentTarget, setCurrentTarget] = useState<Target | null>(null)
   const [currentTasks, setCurrentTasks] = useState<Task[]>([])
 
@@ -48,7 +50,7 @@ const TargetRegisterView: React.FC = () => {
         tasks: currentTasks,
       })
       if (result.result) {
-        alert('登録が完了しました')
+        router.back()
       }
     } catch (error) {
       console.error('Failed to register target and tasks:', error)

@@ -1,12 +1,28 @@
 import React, { useState } from 'react'
 
 import ConfirmModal from '@/components/target/detail/modal/ConfirmModal'
+import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
+import { UpdateTargetStatusCompletedByIdUseCase } from '@/use_case/update_target_status_completed_by_id_use_case/update_target_status_completed_use_case'
 
-const ConfirmButton: React.FC = () => {
+interface ConfirmButtonProps {
+  targetId: string
+}
+
+const ConfirmButton: React.FC<ConfirmButtonProps> = (
+  props: ConfirmButtonProps
+) => {
   const [modalOpen, setModalOpen] = useState(false)
 
-  const handleConfirm = () => {
-    console.log('目標を完了としてマーク')
+  const handleConfirm = async () => {
+    try {
+      const targetRepository = new ITargetRepository()
+      new UpdateTargetStatusCompletedByIdUseCase({
+        targetRepository: targetRepository,
+      }).execute({ targetId: props.targetId })
+    } catch (error) {
+      console.error('Failed to confirm target:', error)
+      alert('完了に失敗しました')
+    }
     setModalOpen(false)
   }
 

@@ -192,6 +192,12 @@ export class ITargetRepository implements TargetRepository {
     }
   }
 
+  /**
+   * 指定されたユーザーIDのターゲットを取得するメソッド
+   * @param args - ユーザーIDを含むオブジェクト
+   * @returns ターゲットの配列
+   * @throws ターゲットの取得に失敗した場合にエラーをスローします
+   */
   async getTargetsByUserId(args: { uid: string }): Promise<Target[]> {
     try {
       const { uid } = args
@@ -213,6 +219,27 @@ export class ITargetRepository implements TargetRepository {
     } catch (error) {
       console.error('Failed to get targets by user id:', error)
       throw new Error('Failed to get targets by user id')
+    }
+  }
+
+  /**
+   * 指定されたIDの目標のステータスを完了に更新するメソッド
+   * @param args - 目標IDを含むオブジェクト
+   * @throws 目標のステータスの更新に失敗した場合にエラーをスローします
+   * @returns なし
+   */
+  async updateTargetStatusCompletedById(args: {
+    targetId: string
+  }): Promise<void> {
+    try {
+      const { targetId } = args
+      const docRef = doc(db, master, Constants.COLLECTION_TARGET, targetId)
+      await updateDoc(docRef, {
+        status: TargetStatus.COMPLETED,
+      })
+    } catch (error) {
+      console.error('Failed to update target status completed by id:', error)
+      throw new Error('Failed to update target status completed by id')
     }
   }
 }

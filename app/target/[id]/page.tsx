@@ -11,16 +11,16 @@ import Skeleton from '@/components/utils/skelton'
 import { Actual } from '@/domain/entity/actual_entity'
 import { Target } from '@/domain/entity/target_entity'
 import { Task } from '@/domain/entity/task_entity'
+import { IActualRepository } from '@/feature/infrastructure/repository/actual_repository'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
 import { ITaskRepository } from '@/feature/infrastructure/repository/task_repository'
+import { GetActualsByTargetIdUseCase } from '@/use_case/get_actuals_by_target_id_use_case/get_actuals_by_target_id_use_case'
 import { GetTargetByIdUseCase } from '@/use_case/get_target_by_id_use_case/get_target_by_id_use_case'
 import { GetTaskByTargetIdUseCase } from '@/use_case/get_tasks_by_target_id_use_case/get_tasks_by_target_id_use_case'
-import { IActualRepository } from '@/feature/infrastructure/repository/actual_repository'
-import { GetActualsByTargetIdUseCase } from '@/use_case/get_actuals_by_target_id_use_case/get_actuals_by_target_id_use_case'
 import { RegisterActualUseCase } from '@/use_case/register_actual_use_case/register_actual_use_case'
+import { UpdateTargetAndTaskUseCase } from '@/use_case/update_target_and_task_use_case/update_target_and_task_use_case'
 import { UpdateTargetUseCase } from '@/use_case/update_target_and_task_use_case/update_target_use_case/update_target_use_case'
 import { UpdateTaskUseCase } from '@/use_case/update_target_and_task_use_case/update_task_use_case/update_task_use_case'
-import { UpdateTargetAndTaskUseCase } from '@/use_case/update_target_and_task_use_case/update_target_and_task_use_case'
 
 interface CombinedEditFormValues {
   target: Target
@@ -113,7 +113,6 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
   }
 
   const handleUpdate = async (editData: CombinedEditFormValues) => {
-    console.log('test')
     try {
       const targetRepository = new ITargetRepository()
       const updateTargetUseCase = new UpdateTargetUseCase({
@@ -154,7 +153,7 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
                 tasks={tasks}
                 onUpdate={handleUpdate}
               />
-              <ConfirmButton />
+              <ConfirmButton targetId={target!.targetId} />
             </>
           )}
         </section>
