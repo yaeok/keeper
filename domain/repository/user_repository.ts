@@ -6,4 +6,6 @@ export interface UserRepository {
     username: string
     email: string
   }) => Promise<User>
+
+  getUserById: (args: { uid: string }) => Promise<User>
 }
