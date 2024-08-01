@@ -5,7 +5,7 @@ export class ActualMapper {
   static toDomain(actual: ActualDTO): Actual {
     return new Actual({
       actualId: actual.actualId,
-      date: actual.date,
+      studyDate: actual.studyDate,
       studyHours: actual.studyHours,
       targetId: actual.targetId,
       taskId: actual.taskId,

@@ -6,7 +6,7 @@ import { DataTransferObject } from '@/feature/dto/dto'
 export class ActualDTO implements DataTransferObject {
   constructor(args: {
     actualId: string
-    date: string
+    studyDate: Date
     studyHours: number
     targetId: string
     taskId: string
@@ -17,7 +17,7 @@ export class ActualDTO implements DataTransferObject {
     deletedAt: Date | null
   }) {
     this.actualId = args.actualId
-    this.date = args.date
+    this.studyDate = args.studyDate
     this.studyHours = args.studyHours
     this.targetId = args.targetId
     this.taskId = args.taskId
@@ -31,7 +31,7 @@ export class ActualDTO implements DataTransferObject {
   /** 実績Id */
   actualId: string
   /** 学習日 */
-  date: string
+  studyDate: Date
   /** 学習時間 */
   studyHours: number
   /** 目標Id */
@@ -52,7 +52,7 @@ export class ActualDTO implements DataTransferObject {
   static fromDoc(doc: DocumentData): ActualDTO {
     return new ActualDTO({
       actualId: doc.actualId,
-      date: doc.date,
+      studyDate: doc.studyDate.toDate(),
       studyHours: doc.studyHours,
       targetId: doc.targetId,
       taskId: doc.taskId,
@@ -67,7 +67,7 @@ export class ActualDTO implements DataTransferObject {
   static fromEntity(entity: Actual): ActualDTO {
     return new ActualDTO({
       actualId: entity.actualId,
-      date: entity.date,
+      studyDate: entity.studyDate,
       studyHours: entity.studyHours,
       targetId: entity.targetId,
       taskId: entity.taskId,
@@ -82,7 +82,7 @@ export class ActualDTO implements DataTransferObject {
   toData(): { [name: string]: any } {
     return {
       actualId: this.actualId,
-      date: this.date,
+      studyDate: this.studyDate,
       studyHours: this.studyHours,
       targetId: this.targetId,
       taskId: this.taskId,

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { Task } from '@/domain/entity/task_entity'
 
 interface ActualFormValues {
-  date: string
+  studyDate: Date
   studyHours: number
   description: string
   taskId: string
@@ -31,7 +31,7 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
     formState: { errors },
   } = useForm<ActualFormValues>({
     defaultValues: {
-      date: new Date().toISOString().split('T')[0],
+      studyDate: new Date(),
       studyHours: 0,
       description: '',
     },
@@ -102,12 +102,12 @@ const ActualsModal: React.FC<ActualsModalProps> = ({
               <input
                 type='date'
                 id='date'
-                {...register('date', { required: '日付は必須です' })}
+                {...register('studyDate', { required: '日付は必須です' })}
                 className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'
               />
-              {errors.date && (
+              {errors.studyDate && (
                 <p className='text-red-500 text-sm mt-1'>
-                  {errors.date.message}
+                  {errors.studyDate.message}
                 </p>
               )}
             </section>

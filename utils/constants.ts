@@ -8,6 +8,7 @@ export class Constants {
   // フィールド名
   static readonly COLUMN_OWNER_ID = 'ownerId' // 所有者ID
   static readonly COLUMN_CREATED_AT = 'createdAt' // 作成日時
+  static readonly COLUMN_STUDY_DATE = 'studyDate' // 日付
   static readonly COLUMN_STATUS = 'status' // ステータス
   static readonly COLUMN_TARGET_ID = 'targetId' // ターゲットID
   static readonly COLUMN_TASK_ID = 'taskId' // タスクID

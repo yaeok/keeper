@@ -2,7 +2,7 @@ export class Actual {
   /** 実績Id */
   actualId: string
   /** 学習日 */
-  date: string
+  studyDate: Date
   /** 学習時間 */
   studyHours: number
   /** 目標Id */
@@ -21,7 +21,7 @@ export class Actual {
   deletedAt: Date | null
   constructor(args: {
     actualId: string
-    date: string
+    studyDate: Date
     studyHours: number
     targetId: string
     taskId: string
@@ -32,7 +32,7 @@ export class Actual {
     deletedAt: Date | null
   }) {
     this.actualId = args.actualId
-    this.date = args.date
+    this.studyDate = args.studyDate
     this.studyHours = args.studyHours
     this.targetId = args.targetId
     this.taskId = args.taskId

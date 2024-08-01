@@ -115,19 +115,19 @@ export class IActualRepository implements ActualRepository {
       const endOfMonth = new Date(
         new Date().getFullYear(),
         new Date().getMonth() + 1,
-        0
+        1
       )
 
       const q = query(
         colRef,
         where(Constants.COLUMN_OWNER_ID, Constants.WHERE_EQUAL, userId),
         where(
-          Constants.COLUMN_CREATED_AT,
+          Constants.COLUMN_STUDY_DATE,
           Constants.WHERE_GREATER_EQUAL,
           startOfMonth
         ),
         where(
-          Constants.COLUMN_CREATED_AT,
+          Constants.COLUMN_STUDY_DATE,
           Constants.WHERE_LESS_EQUAL,
           endOfMonth
         )
