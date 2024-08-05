@@ -4,9 +4,14 @@ import { IAuthRepository } from '@/feature/infrastructure/repository/auth_reposi
 import { SignOutUseCase } from '@/use_case/sign_out_use_case/sign_out_use_case'
 
 const Header = () => {
-  const logout = () => {
+  const logout = async () => {
     const authRepository = new IAuthRepository()
-    new SignOutUseCase({ authRepository: authRepository }).execute()
+    const response = await new SignOutUseCase({
+      authRepository: authRepository,
+    }).execute()
+    if (response.result) {
+      window.location.href = '/sign_in'
+    }
   }
   return (
     <header className='w-full bg-gray-800 text-white p-6 flex justify-between items-center fixed top-0 z-50'>

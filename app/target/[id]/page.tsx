@@ -21,6 +21,7 @@ import { RegisterActualUseCase } from '@/use_case/register_actual_use_case/regis
 import { UpdateTargetAndTaskUseCase } from '@/use_case/update_target_and_task_use_case/update_target_and_task_use_case'
 import { UpdateTargetUseCase } from '@/use_case/update_target_and_task_use_case/update_target_use_case/update_target_use_case'
 import { UpdateTaskUseCase } from '@/use_case/update_target_and_task_use_case/update_task_use_case/update_task_use_case'
+import Sidebar from '@/components/target/detail/SideBar'
 
 interface CombinedEditFormValues {
   target: Target
@@ -143,43 +144,45 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
   return (
     <main className='min-h-screen w-screen bg-gray-50'>
       <Header />
-      <div className='w-3/5 mx-auto mt-20 mb-10 bg-gray-50 p-4'>
-        <section className='w-full flex flex-row justify-end space-x-2'>
-          {loading ? (
-            <Skeleton className='h-12 w-1/3' />
-          ) : (
-            <>
-              <ActualsButton tasks={tasks} onSubmit={handleAddActual} />
-              <EditModalButton
-                target={target!}
-                tasks={tasks}
-                onUpdate={handleUpdate}
-              />
-              <ConfirmButton targetId={target!.targetId} />
-            </>
-          )}
-        </section>
-        <h2 className='text-3xl font-bold border-b-red-400 border-b-2 my-4'>
-          {loading ? <Skeleton className='h-12 w-full' /> : target?.target}
-        </h2>
+      <div className='flex'>
+        <Sidebar />
+        <div className='w-3/5 mx-auto mt-20 mb-10 bg-gray-50 p-4'>
+          <section className='w-full flex flex-row justify-end space-x-2'>
+            {loading ? (
+              <Skeleton className='h-12 w-1/3' />
+            ) : (
+              <>
+                <ActualsButton tasks={tasks} onSubmit={handleAddActual} />
+                <EditModalButton
+                  target={target!}
+                  tasks={tasks}
+                  onUpdate={handleUpdate}
+                />
+                <ConfirmButton targetId={target!.targetId} />
+              </>
+            )}
+          </section>
+          <h2 className='text-3xl font-bold border-b-red-400 border-b-2 my-4'>
+            {loading ? <Skeleton className='h-12 w-full' /> : target?.target}
+          </h2>
 
-        <section className='mt-4'>
-          <h2 className='text-xl'>進捗</h2>
-          {loading ? (
-            <Skeleton className='h-32 w-full' />
-          ) : (
-            <GoalSummary target={target!} actuals={actuals} />
-          )}
-        </section>
-        <section className='mt-4'>
-          <h2 className='text-xl'>タスク一覧</h2>
-          {loading ? (
-            <Skeleton className='h-32 w-full' />
-          ) : (
-            <TaskList tasks={tasks} actuals={actuals} />
-          )}
-        </section>
-        {/* <section className='mt-4'>
+          <section className='mt-4'>
+            <h2 className='text-xl'>進捗</h2>
+            {loading ? (
+              <Skeleton className='h-32 w-full' />
+            ) : (
+              <GoalSummary target={target!} actuals={actuals} />
+            )}
+          </section>
+          <section className='mt-4'>
+            <h2 className='text-xl'>タスク一覧</h2>
+            {loading ? (
+              <Skeleton className='h-32 w-full' />
+            ) : (
+              <TaskList tasks={tasks} actuals={actuals} />
+            )}
+          </section>
+          {/* <section className='mt-4'>
           <h2 className='text-xl font-bold'>スケジュール</h2>
           {loading ? (
             <Skeleton className='h-32 w-full' />
@@ -187,6 +190,7 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
             <TaskCalendar actuals={actuals} />
           )}
         </section> */}
+        </div>
       </div>
     </main>
   )

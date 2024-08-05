@@ -81,9 +81,10 @@ export class IAuthRepository implements AuthRepository {
    * サインアウトするメソッド
    * @returns void
    */
-  async signOut(): Promise<void> {
+  async signOut(): Promise<boolean> {
     try {
       await signOut(auth)
+      return true
     } catch (e: any) {
       if (isFirebaseError(e)) {
         throw new Error(e.message)
