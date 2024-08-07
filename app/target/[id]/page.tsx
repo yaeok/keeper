@@ -1,10 +1,13 @@
 'use client'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 import ActualsButton from '@/components/target/detail/button/ActualsButton'
 import ConfirmButton from '@/components/target/detail/button/ConfirmButton'
 import EditModalButton from '@/components/target/detail/button/EditModalButton'
+import GanttChart from '@/components/target/detail/GanttChart'
 import GoalSummary from '@/components/target/detail/GoalSummary'
+import Sidebar from '@/components/target/detail/SideBar'
 import TaskList from '@/components/target/detail/TaskList'
 import Header from '@/components/target/Header'
 import Skeleton from '@/components/utils/skelton'
@@ -21,7 +24,7 @@ import { RegisterActualUseCase } from '@/use_case/register_actual_use_case/regis
 import { UpdateTargetAndTaskUseCase } from '@/use_case/update_target_and_task_use_case/update_target_and_task_use_case'
 import { UpdateTargetUseCase } from '@/use_case/update_target_and_task_use_case/update_target_use_case/update_target_use_case'
 import { UpdateTaskUseCase } from '@/use_case/update_target_and_task_use_case/update_task_use_case/update_task_use_case'
-import Sidebar from '@/components/target/detail/SideBar'
+import { UpdateTargetStatusCompletedByIdUseCase } from '@/use_case/update_target_status_completed_by_id_use_case/update_target_status_completed_use_case'
 
 interface CombinedEditFormValues {
   target: Target
@@ -48,6 +51,7 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
   const [target, setTarget] = React.useState<Target | null>(null)
   const [tasks, setTasks] = React.useState<Task[]>([])
   const [actuals, setActuals] = React.useState<Actual[]>([])
+  const router = useRouter()
 
   React.useEffect(() => {
     const fetchTarget = async () => {
@@ -141,6 +145,21 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
     }
   }
 
+  const handleConfirm = async () => {
+    try {
+      const targetRepository = new ITargetRepository()
+      const result = await new UpdateTargetStatusCompletedByIdUseCase({
+        targetRepository: targetRepository,
+      }).execute({ targetId: target!.targetId })
+      if (result.result) {
+        router.back()
+      }
+    } catch (error) {
+      console.error('Failed to confirm target:', error)
+      alert('完了に失敗しました')
+    }
+  }
+
   return (
     <main className='min-h-screen w-screen bg-gray-50'>
       <Header />
@@ -158,7 +177,7 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
                   tasks={tasks}
                   onUpdate={handleUpdate}
                 />
-                <ConfirmButton targetId={target!.targetId} />
+                <ConfirmButton onConfirm={handleConfirm} />
               </>
             )}
           </section>
@@ -172,6 +191,14 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
               <Skeleton className='h-32 w-full' />
             ) : (
               <GoalSummary target={target!} actuals={actuals} />
+            )}
+          </section>
+          <section className='mt-4'>
+            <h2 className='text-xl'>ガントチャート</h2>
+            {loading ? (
+              <Skeleton className='h-32 w-full' />
+            ) : (
+              <GanttChart tasks={tasks} actuals={actuals} />
             )}
           </section>
           <section className='mt-4'>

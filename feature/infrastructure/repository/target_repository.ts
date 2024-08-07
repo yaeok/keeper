@@ -230,13 +230,14 @@ export class ITargetRepository implements TargetRepository {
    */
   async updateTargetStatusCompletedById(args: {
     targetId: string
-  }): Promise<void> {
+  }): Promise<boolean> {
     try {
       const { targetId } = args
       const docRef = doc(db, master, Constants.COLLECTION_TARGET, targetId)
       await updateDoc(docRef, {
         status: TargetStatus.COMPLETED,
       })
+      return true
     } catch (error) {
       console.error('Failed to update target status completed by id:', error)
       throw new Error('Failed to update target status completed by id')
