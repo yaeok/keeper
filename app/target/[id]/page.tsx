@@ -165,7 +165,7 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
       <Header />
       <div className='flex'>
         <Sidebar />
-        <div className='w-3/5 mx-auto mt-20 mb-10 bg-gray-50 p-4'>
+        <div className='w-2/3 mx-auto mt-20 mb-10 bg-gray-50 p-4'>
           <section className='w-full flex flex-row justify-end space-x-2'>
             {loading ? (
               <Skeleton className='h-12 w-1/3' />

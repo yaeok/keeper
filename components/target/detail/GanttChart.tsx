@@ -3,7 +3,6 @@ import {
   endOfMonth,
   format,
   isSameDay,
-  parseISO,
   startOfMonth,
 } from 'date-fns'
 import React from 'react'
@@ -27,44 +26,57 @@ const GanttChart: React.FC<GanttChartProps> = ({ tasks, actuals }) => {
     )
   }
 
+  const taskStartDate = tasks.map((task) => {
+    const afActuals = actuals.map((actual) => {
+      if (task.taskId === actual.taskId) {
+        return actual
+      }
+    })
+  })
+
   return (
-    <div className='flex flex-col gap-2 overflow-x-auto'>
-      <div className='min-w-max'>
-        <div className='grid grid-flow-col auto-cols-auto gap-1 p-2 bg-white'>
-          <strong>Title</strong>
-          <strong>Content</strong>
-          <strong>Priority</strong>
-          <strong>Planned Hours</strong>
-          <strong>Start Date</strong>
-          <strong>End Date</strong>
-          {allDays.map((day, index) => (
-            <strong key={index} className=''>
-              {format(day, 'MM/dd')}
-            </strong>
-          ))}
-        </div>
-        {tasks.map((task) => (
-          <div
-            key={task.taskId}
-            className='grid grid-flow-col auto-cols-auto gap-1 p-2 bg-white'
-          >
-            <span>{task.task}</span>
-            <span>{task.content}</span>
-            <span>{task.priority}</span>
-            <span>{`${task.taskStudyHours}h`}</span>
-            <span>{format(task.createdAt, 'MM/dd/yyyy')}</span>
-            <span>{format(task.updatedAt, 'MM/dd/yyyy')}</span>
+    <div className='overflow-x-auto mt-4 bg-white shadow-md rounded-lg p-4'>
+      <table className='min-w-max w-full table-auto border-collapse'>
+        <thead>
+          <tr className='bg-blue-300'>
+            <th className='px-2 py-1 border'>順序</th>
+            <th className='px-2 py-1 border'>タスク名</th>
+            <th className='px-2 py-1 border'>所要時間</th>
+            <th className='px-2 py-1 border'>開始日</th>
+            <th className='px-2 py-1 border'>完了日</th>
             {allDays.map((day, index) => (
-              <div
-                key={index}
-                className={`h-4 w-4 ${
-                  isActiveDay(day, task.taskId) ? 'bg-green-500' : 'bg-gray-300'
-                }`}
-              />
+              <th key={index} className='px-2 py-1 border'>
+                {format(day, 'MM/dd')}
+              </th>
             ))}
-          </div>
-        ))}
-      </div>
+          </tr>
+        </thead>
+        <tbody>
+          {tasks.map((task) => (
+            <tr key={task.taskId} className='hover:bg-gray-50'>
+              <td className='px-2 py-1 border text-center'>{task.priority}</td>
+              <td className='px-2 py-1 border'>{task.task}</td>
+              <td className='px-2 py-1 border'>{`${task.taskStudyHours}h`}</td>
+              <td className='px-2 py-1 border'>
+                {format(task.createdAt, 'yyyy/MM/dd')}
+              </td>
+              <td className='px-2 py-1 border'>
+                {format(task.updatedAt, 'yyyy/MM/dd')}
+              </td>
+              {allDays.map((day, index) => (
+                <td
+                  key={index}
+                  className={`px-2 py-1 border ${
+                    isActiveDay(day, task.taskId)
+                      ? 'bg-green-500'
+                      : 'bg-gray-100'
+                  }`}
+                />
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
