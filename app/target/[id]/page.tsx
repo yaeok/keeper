@@ -161,11 +161,11 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
   }
 
   return (
-    <main className='min-h-screen w-screen bg-gray-50'>
+    <main className='min-h-screen w-screen bg-gray-50 hidden-scrollbar'>
       <Header />
       <div className='flex'>
         <Sidebar />
-        <div className='w-2/3 mx-auto mt-20 mb-10 bg-gray-50 p-4'>
+        <div className='w-3/5 mx-auto mt-20 mb-10 bg-gray-50 p-4'>
           <section className='w-full flex flex-row justify-end space-x-2'>
             {loading ? (
               <Skeleton className='h-12 w-1/3' />
@@ -198,7 +198,7 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
             {loading ? (
               <Skeleton className='h-32 w-full' />
             ) : (
-              <GanttChart tasks={tasks} actuals={actuals} />
+              <GanttChart target={target!} tasks={tasks} actuals={actuals} />
             )}
           </section>
           <section className='mt-4'>
