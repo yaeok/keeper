@@ -37,10 +37,20 @@ export class IAuthRepository implements AuthRepository {
     try {
       return await signInWithEmailAndPassword(auth, email, password)
     } catch (e: any) {
+      console.log(e)
       if (isFirebaseError(e)) {
-        throw new Error(e.message)
+        switch (e.code) {
+          case 'auth/invalid-credential':
+            throw new Error('認証情報が正しくありません')
+          case 'auth/too-many-requests':
+            throw new Error(
+              'リクエストが多すぎます。後でもう一度お試しください'
+            )
+          default:
+            throw new Error('エラーが発生しました')
+        }
       }
-      throw new Error('ログインに失敗しました')
+      throw new Error('エラーが発生しました')
     }
   }
 
@@ -64,10 +74,16 @@ export class IAuthRepository implements AuthRepository {
     } catch (error: any) {
       if (isFirebaseError(error)) {
         switch (error.code) {
-          case 'auth/user-not-found':
-            throw new Error('ユーザーが見つかりません')
-          case 'auth/wrong-password':
-            throw new Error('パスワードが間違っています')
+          case 'auth/invalid-email':
+            throw new Error('メールアドレスの形式が正しくありません')
+          case 'auth/invalid-password':
+            throw new Error('パスワードの形式が正しくありません')
+          case 'auth/email-already-in-use':
+            throw new Error('このメールアドレスは既に使用されています')
+          case 'auth/too-many-requests':
+            throw new Error(
+              'リクエストが多すぎます。後でもう一度お試しください'
+            )
           default:
             throw new Error('エラーが発生しました')
         }
@@ -81,9 +97,10 @@ export class IAuthRepository implements AuthRepository {
    * サインアウトするメソッド
    * @returns void
    */
-  async signOut(): Promise<void> {
+  async signOut(): Promise<boolean> {
     try {
       await signOut(auth)
+      return true
     } catch (e: any) {
       if (isFirebaseError(e)) {
         throw new Error(e.message)

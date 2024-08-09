@@ -40,7 +40,24 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
   })
 
   const onSubmit = handleSubmit((data: CombinedEditFormValues) => {
-    onUpdate(data)
+    const updTasks = data.tasks.map((task, index) => {
+      return new Task({
+        taskId: task.taskId,
+        task: task.task,
+        content: task.content,
+        priority: index + 1,
+        taskStudyHours: Number(task.taskStudyHours),
+        targetId: task.targetId,
+        createdAt: task.createdAt,
+        updatedAt: task.updatedAt,
+        deletedAt: task.deletedAt,
+      })
+    })
+    const updateData = {
+      target: data.target,
+      tasks: updTasks,
+    }
+    onUpdate(updateData)
   })
 
   return (

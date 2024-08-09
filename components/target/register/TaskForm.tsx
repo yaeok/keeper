@@ -38,12 +38,13 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
   })
 
   const onSubmit: SubmitHandler<{ tasks: Task[] }> = (data) => {
-    const updTask = data.tasks.map((task) => {
+    console.log('submit', data)
+    const updTask = data.tasks.map((task, index) => {
       return new Task({
         taskId: task.taskId,
         task: task.task,
         content: task.content,
-        priority: task.priority,
+        priority: index + 1,
         taskStudyHours: Number(task.taskStudyHours),
         targetId: task.targetId,
         createdAt: task.createdAt,
@@ -51,6 +52,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
         deletedAt: task.deletedAt,
       })
     })
+    console.log(updTask)
     onNewTask(updTask)
   }
 

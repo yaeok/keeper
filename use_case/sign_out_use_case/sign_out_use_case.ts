@@ -1,10 +1,14 @@
 import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
-import { UseCase, UseCaseInput } from '@/use_case/use_case'
+import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
 
 interface SignOutUseCaseInput extends UseCaseInput {}
 
+interface SignOutUseCaseOutput extends UseCaseOutput {
+  result: boolean
+}
+
 export class SignOutUseCase
-  implements UseCase<SignOutUseCaseInput, Promise<void>>
+  implements UseCase<SignOutUseCaseInput, Promise<SignOutUseCaseOutput>>
 {
   constructor(args: { authRepository: IAuthRepository }) {
     const { authRepository } = args
@@ -13,7 +17,13 @@ export class SignOutUseCase
 
   private authRepository: IAuthRepository
 
-  async execute(): Promise<void> {
-    await this.authRepository.signOut()
+  async execute(): Promise<SignOutUseCaseOutput> {
+    try {
+      const result = await this.authRepository.signOut()
+      return { result }
+    } catch (error) {
+      console.log(error)
+      throw new Error('ログアウトに失敗しました')
+    }
   }
 }

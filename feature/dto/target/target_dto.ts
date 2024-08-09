@@ -63,9 +63,9 @@ export class TargetDTO implements DataTransferObject {
       startDate: doc.startDate,
       endDate: doc.endDate,
       ownerId: doc.ownerId,
-      createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
-      deletedAt: doc.deletedAt,
+      createdAt: doc.createdAt.toDate(),
+      updatedAt: doc.updatedAt.toDate(),
+      deletedAt: doc.deletedAt ? doc.deletedAt.toDate() : null,
     })
   }
 

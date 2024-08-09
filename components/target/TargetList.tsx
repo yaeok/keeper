@@ -5,7 +5,7 @@ import React from 'react'
 import NextLink from 'next/link'
 
 import { Target } from '@/domain/entity/target_entity'
-import Skeleton from '@/components/utils/skelton'
+import Skeleton from '@/components/utils/Skelton'
 
 interface TargetListProps {
   loading: boolean

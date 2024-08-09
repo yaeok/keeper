@@ -2,10 +2,15 @@
 
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
+import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import Modal from '@/components/utils/modal/Modal'
 import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
 import { IUserRepository } from '@/feature/infrastructure/repository/user_repository'
+import { RegisterUserUseCase } from '@/use_case/sign_up_with_email_use_case/register_user_use_case/register_user_use_case'
+import { SendEmailVerificationUseCase } from '@/use_case/sign_up_with_email_use_case/send_email_verification_use_case/send_email_verification_use_case'
+import { SignUpUseCase } from '@/use_case/sign_up_with_email_use_case/sign_up_use_case/sign_up_use_case'
 import { SignUpWithEmailUseCase } from '@/use_case/sign_up_with_email_use_case/sign_up_with_email_use_case'
 
 interface SignUpFormInputs {
@@ -14,21 +19,34 @@ interface SignUpFormInputs {
   password: string
 }
 
-const SignUpView = () => {
+const SignUpWithEmailPage: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpFormInputs>()
   const router = useRouter()
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [message, setMessage] = React.useState<String>('')
 
   const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
     const authRepository = new IAuthRepository()
     const userRepository = new IUserRepository()
+
+    const signUpUseCase = new SignUpUseCase({
+      authRepository: authRepository,
+    })
+    const registerUserUseCase = new RegisterUserUseCase({
+      userRepository: userRepository,
+    })
+    const sendEmailVerificationUseCase = new SendEmailVerificationUseCase({
+      authRepository: authRepository,
+    })
     try {
       const result = await new SignUpWithEmailUseCase({
-        authRepository: authRepository,
-        userRepository: userRepository,
+        signUpUseCase: signUpUseCase,
+        registerUserUseCase: registerUserUseCase,
+        sendEmailVerificationUseCase: sendEmailVerificationUseCase,
       }).execute({
         username: data.username,
         email: data.email,
@@ -37,18 +55,23 @@ const SignUpView = () => {
       if (result != null) {
         router.push('/target')
       }
-    } catch (e) {
-      if (typeof e === 'string') {
-        alert(e)
+    } catch (e: any) {
+      setIsOpen(true)
+      if (e instanceof Error) {
+        setMessage(e.message)
       } else {
-        alert('エラーが発生しました')
-        console.log(e)
+        setMessage('エラーが発生しました')
       }
     }
   }
 
   return (
     <div className='min-h-screen w-screen flex items-center justify-center bg-gray-100'>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        message={message}
+      />
       <div className='bg-white p-8 rounded shadow-md w-full max-w-md'>
         <h1 className='text-2xl font-bold mb-6 text-center'>新規登録画面</h1>
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
@@ -138,4 +161,4 @@ const SignUpView = () => {
   )
 }
 
-export default SignUpView
+export default SignUpWithEmailPage

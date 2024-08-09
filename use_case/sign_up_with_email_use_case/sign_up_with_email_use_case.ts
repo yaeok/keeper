@@ -1,6 +1,7 @@
 import { User } from '@/domain/entity/user_entity'
-import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
-import { IUserRepository } from '@/feature/infrastructure/repository/user_repository'
+import { RegisterUserUseCase } from '@/use_case/sign_up_with_email_use_case/register_user_use_case/register_user_use_case'
+import { SendEmailVerificationUseCase } from '@/use_case/sign_up_with_email_use_case/send_email_verification_use_case/send_email_verification_use_case'
+import { SignUpUseCase } from '@/use_case/sign_up_with_email_use_case/sign_up_use_case/sign_up_use_case'
 import { UseCase, UseCaseInput, UseCaseOutput } from '@/use_case/use_case'
 
 interface SignUpWithEmailUseCaseInput extends UseCaseInput {
@@ -18,32 +19,40 @@ export class SignUpWithEmailUseCase
     UseCase<SignUpWithEmailUseCaseInput, Promise<SignUpWithEmailUseCaseOutput>>
 {
   constructor(args: {
-    authRepository: IAuthRepository
-    userRepository: IUserRepository
+    registerUserUseCase: RegisterUserUseCase
+    sendEmailVerificationUseCase: SendEmailVerificationUseCase
+    signUpUseCase: SignUpUseCase
   }) {
-    const { authRepository, userRepository } = args
-    this.authRepository = authRepository
-    this.userRepository = userRepository
+    const { registerUserUseCase, sendEmailVerificationUseCase, signUpUseCase } =
+      args
+    this.registerUserUseCase = registerUserUseCase
+    this.sendEmailVerificationUseCase = sendEmailVerificationUseCase
+    this.signUpUseCase = signUpUseCase
   }
 
-  private authRepository: IAuthRepository
-  private userRepository: IUserRepository
+  private registerUserUseCase: RegisterUserUseCase
+  private sendEmailVerificationUseCase: SendEmailVerificationUseCase
+  private signUpUseCase: SignUpUseCase
 
   async execute(
     input: SignUpWithEmailUseCaseInput
   ): Promise<SignUpWithEmailUseCaseOutput> {
-    let result = null
-    const response = await this.authRepository.signUpWithEmail({
+    const signUpResult = await this.signUpUseCase.execute({
       email: input.email,
       password: input.password,
+      username: input.username,
     })
-    if (response.user != null) {
-      result = await this.userRepository.createUser({
-        uid: response.user.uid,
+    if (signUpResult.result) {
+      const registerUserResult = await this.registerUserUseCase.execute({
+        user: signUpResult.result,
         username: input.username,
-        email: input.email!,
       })
+      if (registerUserResult.result) {
+        await this.sendEmailVerificationUseCase.execute({})
+      }
+      return { result: registerUserResult.result }
+    } else {
+      return { result: null }
     }
-    return { result }
   }
 }

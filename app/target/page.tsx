@@ -8,6 +8,7 @@ import Header from '@/components/target/Header'
 import StudySchedule from '@/components/target/StudySchedule'
 import TargetList from '@/components/target/TargetList'
 import UserInfo from '@/components/target/UserInfo'
+import Loading from '@/components/utils/Loading'
 import { Actual } from '@/domain/entity/actual_entity'
 import { Target } from '@/domain/entity/target_entity'
 import { IActualRepository } from '@/feature/infrastructure/repository/actual_repository'
@@ -16,9 +17,8 @@ import { GetActualsByUserIdForMonthlyUseCase } from '@/use_case/get_actuals_by_u
 import { GetCompletedTargetCountByUserIdUseCase } from '@/use_case/get_completed_target_count_by_user_id_use_case/get_completed_target_count_by_user_id_use_case'
 import { GetRecentThreeActiveTargetsUseCase } from '@/use_case/get_recent_three_active_targets_use_case/get_recent_three_active_targets_use_case'
 import { GetRecentThreeCompletedTargetsUseCase } from '@/use_case/get_recent_three_completed_targets_use_case/get_recent_three_completed_targets_use_case'
-import Loading from '@/components/utils/loading'
 
-const TargetView: React.FC = () => {
+const HomePage: React.FC = () => {
   const router = useRouter()
   const [loading, setLoading] = React.useState<boolean>(true)
   const [activeTargets, setActiveTargets] = React.useState<Target[]>([])
@@ -119,4 +119,4 @@ const TargetView: React.FC = () => {
   )
 }
 
-export default TargetView
+export default HomePage

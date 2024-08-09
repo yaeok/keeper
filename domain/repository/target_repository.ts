@@ -13,5 +13,5 @@ export interface TargetRepository {
 
   updateTargetStatusCompletedById: (argss: {
     targetId: string
-  }) => Promise<void>
+  }) => Promise<boolean>
 }

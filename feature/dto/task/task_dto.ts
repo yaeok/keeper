@@ -53,9 +53,9 @@ export class TaskDTO implements DataTransferObject {
       priority: doc.priority,
       taskStudyHours: doc.taskStudyHours,
       targetId: doc.targetId,
-      createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
-      deletedAt: doc.deletedAt,
+      createdAt: doc.createdAt.toDate(),
+      updatedAt: doc.updatedAt.toDate(),
+      deletedAt: doc.deletedAt ? doc.deletedAt.toDate() : null,
     })
   }
 

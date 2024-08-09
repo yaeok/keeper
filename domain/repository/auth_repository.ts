@@ -9,7 +9,7 @@ export interface AuthRepository {
     email: string
     password: string
   }) => Promise<UserCredential>
-  signOut: () => Promise<void>
+  signOut: () => Promise<boolean>
   sendEmailVerification: () => Promise<void>
   emailVerification: () => Promise<void>
 }
