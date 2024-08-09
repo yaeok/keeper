@@ -9,7 +9,7 @@ import Modal from '@/components/utils/modal/Modal'
 import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
 import { SignInWithEmailUseCase } from '@/use_case/sign_in_with_email_use_case/sign_in_with_email_use_case'
 
-interface LoginFormInputs {
+interface SignInWithEmailFormInputs {
   email: string
   password: string
 }
@@ -19,12 +19,12 @@ const SignInWithEmailPage: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormInputs>()
+  } = useForm<SignInWithEmailFormInputs>()
   const router = useRouter()
   const [isOpen, setIsOpen] = React.useState(false)
   const [message, setMessage] = React.useState<String>('')
 
-  const onSubmit = async (data: LoginFormInputs) => {
+  const onSubmit = async (data: SignInWithEmailFormInputs) => {
     const authRepository = new IAuthRepository()
     try {
       const result = await new SignInWithEmailUseCase(authRepository).execute({
@@ -109,10 +109,15 @@ const SignInWithEmailPage: React.FC = () => {
           >
             ログイン
           </button>
-          <div className='mt-6 text-center'>
+          <div className='mt-6 flex flex-col space-y-4 items-center'>
             <NextLink href='/sign_up'>
               <p className='text-blue-500 hover:underline'>
                 アカウントをお持ちでない方はこちらから
+              </p>
+            </NextLink>
+            <NextLink href='/sign_up'>
+              <p className='text-blue-500 hover:underline'>
+                パスワードをお忘れの方はこちらから
               </p>
             </NextLink>
           </div>
