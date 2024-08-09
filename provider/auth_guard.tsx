@@ -21,5 +21,10 @@ export const AuthGuard = ({ children }: Props) => {
     return null
   }
 
+  if (user.emailVerified === false) {
+    router.replace('/email_verifyed')
+    return null
+  }
+
   return <>{children}</>
 }

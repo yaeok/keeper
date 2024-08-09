@@ -44,7 +44,7 @@ interface TargetDetailProps {
   }
 }
 
-const TargetDetailView: React.FC<TargetDetailProps> = (
+const TargetDetailPage: React.FC<TargetDetailProps> = (
   props: TargetDetailProps
 ) => {
   const [loading, setLoading] = React.useState(true)
@@ -223,4 +223,4 @@ const TargetDetailView: React.FC<TargetDetailProps> = (
   )
 }
 
-export default TargetDetailView
+export default TargetDetailPage

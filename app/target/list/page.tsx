@@ -1,13 +1,14 @@
 'use client'
 
+import React from 'react'
+
 import Header from '@/components/target/Header'
 import TargetList from '@/components/target/TargetList'
 import { Target } from '@/domain/entity/target_entity'
 import { ITargetRepository } from '@/feature/infrastructure/repository/target_repository'
 import { GetTargetsByUserIdUseCase } from '@/use_case/get_targets_by_user_id_use_case/get_targets_by_user_id_use_case'
-import React from 'react'
 
-const TargetListView: React.FC = () => {
+const TargetListPage: React.FC = () => {
   const [targets, setTargets] = React.useState<Target[]>([])
   const [loading, setLoading] = React.useState<boolean>(true)
 
@@ -42,4 +43,4 @@ const TargetListView: React.FC = () => {
   )
 }
 
-export default TargetListView
+export default TargetListPage

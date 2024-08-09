@@ -2,8 +2,10 @@
 
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 
+import Modal from '@/components/utils/modal/Modal'
 import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
 import { SignInWithEmailUseCase } from '@/use_case/sign_in_with_email_use_case/sign_in_with_email_use_case'
 
@@ -12,13 +14,15 @@ interface LoginFormInputs {
   password: string
 }
 
-const LoginPage = () => {
+const SignInWithEmailPage: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>()
   const router = useRouter()
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [message, setMessage] = React.useState<String>('')
 
   const onSubmit = async (data: LoginFormInputs) => {
     const authRepository = new IAuthRepository()
@@ -30,17 +34,23 @@ const LoginPage = () => {
       if (result != null) {
         router.push('/target')
       }
-    } catch (e) {
-      if (e instanceof String) {
-        alert(e)
+    } catch (e: any) {
+      setIsOpen(true)
+      if (e instanceof Error) {
+        setMessage(e.message)
       } else {
-        alert('エラーが発生しました')
+        setMessage('エラーが発生しました')
       }
     }
   }
 
   return (
     <div className='min-h-screen w-screen flex items-center justify-center bg-gray-100'>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        message={message}
+      />
       <div className='bg-white p-8 rounded shadow-md w-full max-w-md'>
         <h1 className='text-2xl font-bold mb-6 text-center'>ログイン画面</h1>
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
@@ -112,4 +122,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default SignInWithEmailPage

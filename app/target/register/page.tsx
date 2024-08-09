@@ -15,7 +15,7 @@ import { RegisterTargetAndTaskUseCase } from '@/use_case/register_target_and_tas
 import { RegisterTargetUseCase } from '@/use_case/register_target_and_task_use_case/register_target_use_case/register_target_use_case'
 import { RegisterTaskUseCase } from '@/use_case/register_target_and_task_use_case/register_task_use_case/register_task_use_case'
 
-const TargetRegisterView: React.FC = () => {
+const TargetRegisterPage: React.FC = () => {
   const router = useRouter()
   const [currentTarget, setCurrentTarget] = useState<Target | null>(null)
   const [currentTasks, setCurrentTasks] = useState<Task[]>([])
@@ -104,4 +104,4 @@ const TargetRegisterView: React.FC = () => {
   )
 }
 
-export default TargetRegisterView
+export default TargetRegisterPage
