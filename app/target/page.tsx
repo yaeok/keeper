@@ -16,7 +16,7 @@ import { GetActualsByUserIdForMonthlyUseCase } from '@/use_case/get_actuals_by_u
 import { GetCompletedTargetCountByUserIdUseCase } from '@/use_case/get_completed_target_count_by_user_id_use_case/get_completed_target_count_by_user_id_use_case'
 import { GetRecentThreeActiveTargetsUseCase } from '@/use_case/get_recent_three_active_targets_use_case/get_recent_three_active_targets_use_case'
 import { GetRecentThreeCompletedTargetsUseCase } from '@/use_case/get_recent_three_completed_targets_use_case/get_recent_three_completed_targets_use_case'
-import Loading from '@/components/utils/loading'
+import Loading from '@/components/utils/Loading'
 
 const TargetView: React.FC = () => {
   const router = useRouter()

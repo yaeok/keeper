@@ -68,6 +68,8 @@ export class IAuthRepository implements AuthRepository {
             throw new Error('ユーザーが見つかりません')
           case 'auth/wrong-password':
             throw new Error('パスワードが間違っています')
+          case 'auth/email-already-in-use':
+            throw new Error('このメールアドレスは既に使用されています')
           default:
             throw new Error('エラーが発生しました')
         }

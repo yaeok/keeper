@@ -2,7 +2,7 @@ import { Constants } from '@/utils/constants'
 import { eachDayOfInterval, endOfMonth, startOfMonth, format } from 'date-fns'
 import React from 'react'
 import { Actual } from '@/domain/entity/actual_entity'
-import Skeleton from '../utils/skelton'
+import Skeleton from '../utils/Skelton'
 
 interface CalendarProps {
   actuals: Actual[]

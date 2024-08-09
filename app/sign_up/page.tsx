@@ -7,6 +7,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
 import { IUserRepository } from '@/feature/infrastructure/repository/user_repository'
 import { SignUpWithEmailUseCase } from '@/use_case/sign_up_with_email_use_case/sign_up_with_email_use_case'
+import Modal from '@/components/utils/modal/Modal'
+import React from 'react'
 
 interface SignUpFormInputs {
   username: string
@@ -14,13 +16,14 @@ interface SignUpFormInputs {
   password: string
 }
 
-const SignUpView = () => {
+const SignUpView: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpFormInputs>()
   const router = useRouter()
+  const [isOpen, setIsOpen] = React.useState(false)
 
   const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
     const authRepository = new IAuthRepository()
@@ -38,11 +41,18 @@ const SignUpView = () => {
         router.push('/target')
       }
     } catch (e) {
-      if (typeof e === 'string') {
-        alert(e)
+      if (e instanceof String) {
+        return (
+          <Modal isOpen={true} onClose={() => setIsOpen(false)} message={e} />
+        )
       } else {
-        alert('エラーが発生しました')
-        console.log(e)
+        return (
+          <Modal
+            isOpen={true}
+            onClose={() => setIsOpen(false)}
+            message='エラーが発生しました'
+          />
+        )
       }
     }
   }
