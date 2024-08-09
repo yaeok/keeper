@@ -1,10 +1,9 @@
 import { eachDayOfInterval, endOfMonth, format, startOfMonth } from 'date-fns'
 import React from 'react'
 
+import Skeleton from '@/components/utils/Skelton'
 import { Actual } from '@/domain/entity/actual_entity'
 import { Constants } from '@/utils/constants'
-
-import Skeleton from '../utils/Skelton_test'
 
 interface CalendarProps {
   actuals: Actual[]
