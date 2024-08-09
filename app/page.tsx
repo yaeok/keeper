@@ -1,8 +1,5 @@
-'use client'
-
 import Head from 'next/head'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 
 import Features from '@/components/home/Feature'
 import Header from '@/components/home/Header'
@@ -10,15 +7,9 @@ import Signup from '@/components/home/SignUp'
 import SignUpButton from '@/components/home/SignUpButton'
 import Testimonials from '@/components/home/Testimonials'
 
-const TopView = () => {
-  const router = useRouter()
-
-  const handleSignupClick = () => {
-    router.push('/sign_up')
-  }
-
+const LandingPage: React.FC = () => {
   return (
-    <div className='w-2/3'>
+    <div className='w-screen'>
       <Head>
         <title>KeePer - 資格取得のモチベーション維持</title>
         <meta
@@ -40,10 +31,7 @@ const TopView = () => {
           資格取得や個人開発のモチベーションを維持し、目標達成をサポートします。
         </p>
 
-        <SignUpButton
-          handleClick={handleSignupClick}
-          title='登録してはじめる'
-        ></SignUpButton>
+        <SignUpButton title='登録してはじめる'></SignUpButton>
 
         <div className='flex flex-wrap items-center justify-around max-w-4xl mt-10'>
           <a
@@ -103,4 +91,4 @@ const TopView = () => {
   )
 }
 
-export default TopView
+export default LandingPage

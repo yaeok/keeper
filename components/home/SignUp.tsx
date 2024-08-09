@@ -1,15 +1,6 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
 import SignUpButton from '@/components/home/SignUpButton'
 
 const Signup = () => {
-  const router = useRouter()
-
-  const handleSignupClick = () => {
-    router.push('/sign_up')
-  }
-
   return (
     <section id='signup' className='flex items-center justify-center shadow-lg'>
       <section
@@ -23,10 +14,7 @@ const Signup = () => {
             <br />
             いますぐ登録しましょう！
           </p>
-          <SignUpButton
-            handleClick={handleSignupClick}
-            title='登録する'
-          ></SignUpButton>
+          <SignUpButton title='登録する'></SignUpButton>
         </div>
       </section>
       <section className='w-96 h-96 bg-primary text-black flex items-center justify-center shadow-lg'>
