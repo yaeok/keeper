@@ -3,6 +3,7 @@ import {
   sendEmailVerification,
   signInWithEmailAndPassword,
   signOut,
+  User,
   UserCredential,
 } from 'firebase/auth'
 
@@ -36,10 +37,9 @@ export class IAuthRepository implements AuthRepository {
     const { email, password } = args
     try {
       return await signInWithEmailAndPassword(auth, email, password)
-    } catch (e: any) {
-      console.log(e)
-      if (isFirebaseError(e)) {
-        switch (e.code) {
+    } catch (error: any) {
+      if (isFirebaseError(error)) {
+        switch (error.code) {
           case 'auth/invalid-credential':
             throw new Error('認証情報が正しくありません')
           case 'auth/too-many-requests':
@@ -113,18 +113,27 @@ export class IAuthRepository implements AuthRepository {
    * メール認証を送信するメソッド
    * @returns void
    */
-  async sendEmailVerification(): Promise<void> {
+  async sendEmailVerification(): Promise<boolean> {
     const currentUser = auth.currentUser
     try {
       if (!currentUser) {
         throw new Error('ユーザーが存在しません')
       }
       await sendEmailVerification(currentUser)
+      return true
     } catch (e: any) {
       if (isFirebaseError(e)) {
-        throw new Error(e.message)
+        switch (e.code) {
+          case 'auth/too-many-requests':
+            throw new Error(
+              'リクエストが多すぎます。後でもう一度お試しください'
+            )
+          default:
+            throw new Error('メールの送信に失敗しました')
+        }
+      } else {
+        throw new Error('メールの送信に失敗しました')
       }
-      throw new Error('メールの送信に失敗しました')
     }
   }
 
@@ -132,17 +141,16 @@ export class IAuthRepository implements AuthRepository {
    * メール確認を行うメソッド
    * @returns void
    */
-  async emailVerification(): Promise<void> {
+  async emailVerification(): Promise<User> {
     try {
       const currentUser = auth.currentUser
       if (!currentUser) {
         throw new Error('ユーザーが存在しません')
       }
       await currentUser.reload()
-      if (!currentUser.emailVerified) {
-        throw new Error('メールが認証されていません')
-      }
+      return currentUser
     } catch (e: any) {
+      console.log(e)
       if (isFirebaseError(e)) {
         throw new Error(e.message)
       }
