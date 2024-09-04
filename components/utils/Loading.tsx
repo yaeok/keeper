@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Loading: React.FC = () => {
   return (
     <div className='fixed top-0 left-0 z-50 w-screen h-screen flex items-center justify-center bg-gray-100 bg-opacity-50'>
