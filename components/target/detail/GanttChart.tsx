@@ -1,9 +1,9 @@
-import { eachDayOfInterval, format, isSameDay } from 'date-fns';
-import React from 'react';
+import { eachDayOfInterval, format, isSameDay } from 'date-fns'
+import React from 'react'
 
-import { Actual } from '@/domain/entity/actual_entity';
-import { Target } from '@/domain/entity/target_entity';
-import { Task } from '@/domain/entity/task_entity';
+import { Actual } from '@/domain/entity/actual_entity'
+import { Target } from '@/domain/entity/target_entity'
+import { Task } from '@/domain/entity/task_entity'
 
 interface GanttChartProps {
   target: Target
@@ -61,7 +61,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ target, tasks, actuals }) => {
     <div className='overflow-x-auto mt-4 bg-white shadow-md rounded-lg p-4'>
       <table className='min-w-max w-full table-auto border-collapse'>
         <thead>
-          <tr className='bg-blue-300'>
+          <tr className='bg-indigo-300'>
             <th className='px-2 py-1 border'>順序</th>
             <th className='px-2 py-1 border'>タスク名</th>
             <th className='px-2 py-1 border'>所要時間</th>

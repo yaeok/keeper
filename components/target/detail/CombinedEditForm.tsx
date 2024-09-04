@@ -88,7 +88,7 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
                 defaultChecked={target.studyDays?.includes(index)}
                 className='hidden peer'
               />
-              <span className='w-4 h-4 inline-block border border-gray-400 rounded-full cursor-pointer peer-checked:bg-blue-500 peer-checked:border-blue-500' />
+              <span className='w-4 h-4 inline-block border border-gray-400 rounded-full cursor-pointer peer-checked:bg-indigo-500 peer-checked:border-indigo-500' />
               <span>{day}</span>
             </label>
           ))}
@@ -195,7 +195,7 @@ const CombinedEditForm: React.FC<CombinedEditFormProps> = ({
               deletedAt: null,
             })
           }
-          className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700'
+          className='px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-700'
         >
           タスクを追加
         </button>

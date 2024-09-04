@@ -83,7 +83,7 @@ const HomePage: React.FC = () => {
       <Header />
       <div className='flex flex-col mt-20 items-center'>
         <button
-          className='bg-blue-500 text-white font-bold py-4 px-6 mt-12 rounded w-1/3'
+          className='bg-indigo-500 text-white font-bold py-4 px-6 mt-12 rounded w-1/3'
           onClick={handleSignupClick}
         >
           新しく目標をたてる

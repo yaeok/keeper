@@ -94,7 +94,7 @@ const TargetForm: React.FC<TargetFormProps> = ({ onNewTarget }) => {
                 className='hidden peer'
                 {...register('studyDays', { required: '勉強日は必須項目です' })}
               />
-              <span className='w-4 h-4 inline-block border border-gray-400 rounded-full cursor-pointer peer-checked:bg-blue-500 peer-checked:border-blue-500' />
+              <span className='w-4 h-4 inline-block border border-gray-400 rounded-full cursor-pointer peer-checked:bg-indigo-500 peer-checked:border-indigo-500' />
               <span>
                 {['日', '月', '火', '水', '木', '金', '土'][Number(day)]}
               </span>

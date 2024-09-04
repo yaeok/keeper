@@ -30,7 +30,7 @@ const ActualsButton: React.FC<ActualsButtonProps> = ({
     <>
       <button
         onClick={() => setModalOpen(true)}
-        className='px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700'
+        className='px-4 py-2 text-white bg-indigo-500 rounded hover:bg-indigo-700'
       >
         実績追加
       </button>
