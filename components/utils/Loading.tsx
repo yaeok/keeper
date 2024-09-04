@@ -5,7 +5,7 @@ const Loading: React.FC = () => {
         {[...Array(3)].map((_, index) => (
           <div
             key={index}
-            className={`w-4 h-4 bg-blue-500 rounded-full mx-1 animate-bounce${
+            className={`w-4 h-4 bg-indigo-500 rounded-full mx-1 animate-bounce${
               index + 1
             }`}
           ></div>

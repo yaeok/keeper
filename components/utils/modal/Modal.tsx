@@ -20,7 +20,7 @@ const Modal: React.FC<ModalProps> = (props: ModalProps) => {
         <div className='flex space-x-12'>
           <button
             onClick={props.onClose}
-            className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors'
+            className='px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors'
           >
             閉じる
           </button>

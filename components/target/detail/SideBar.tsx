@@ -10,13 +10,13 @@ const Sidebar: React.FC = () => {
             className='mb-2 cursor-pointer'
             onClick={() => console.log('onClick')}
           >
-            <p className='block text-gray-900 hover:text-blue-500'>ホーム</p>
+            <p className='block text-gray-900 hover:text-indigo-500'>ホーム</p>
           </li>
           <li
             className='mb-2 cursor-pointer'
             onClick={() => console.log('onClick')}
           >
-            <p className='block text-gray-900 hover:text-blue-500'>
+            <p className='block text-gray-900 hover:text-indigo-500'>
               プロファイル
             </p>
           </li>
@@ -24,13 +24,13 @@ const Sidebar: React.FC = () => {
             className='mb-2 cursor-pointer'
             onClick={() => console.log('onClick')}
           >
-            <p className='block text-gray-900 hover:text-blue-500'>設定</p>
+            <p className='block text-gray-900 hover:text-indigo-500'>設定</p>
           </li>
           <li
             className='mb-2 cursor-pointer'
             onClick={() => console.log('onClick')}
           >
-            <p className='block text-gray-900 hover:text-blue-500'>
+            <p className='block text-gray-900 hover:text-indigo-500'>
               ログアウト
             </p>
           </li>

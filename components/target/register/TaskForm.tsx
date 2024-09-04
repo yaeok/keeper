@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+
 import { Task } from '@/domain/entity/task_entity'
 
 interface TaskFormProps {
@@ -74,7 +75,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onNewTask }) => {
               deletedAt: null,
             })
           }
-          className='px-4 py-2 bg-blue-500 text-white rounded'
+          className='px-4 py-2 bg-indigo-500 text-white rounded'
         >
           + タスクを追加
         </button>
