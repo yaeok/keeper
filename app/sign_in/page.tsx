@@ -51,7 +51,7 @@ const SignInWithEmailPage: React.FC = () => {
         onClose={() => setIsOpen(false)}
         message={message}
       />
-      <div className='bg-white p-8 rounded shadow-md w-full max-w-md'>
+      <div className='bg-white p-8 rounded shadow-md w-full max-w-md lg:mx-auto mx-4'>
         <h1 className='text-2xl font-bold mb-6 text-center'>ログイン画面</h1>
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
           <section className='space-y-4'>
