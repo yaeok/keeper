@@ -58,7 +58,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ target, tasks, actuals }) => {
   }
 
   return (
-    <div className='overflow-x-auto mt-4 bg-white shadow-md rounded-lg p-4'>
+    <div className='overflow-x-auto mt-4 bg-white shadow-md p-4'>
       <table className='min-w-max w-full table-auto border-collapse'>
         <thead>
           <tr className='bg-indigo-300'>

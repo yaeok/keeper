@@ -1,19 +1,27 @@
 'use client'
 
-import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
-import React from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import Modal from '@/components/utils/modal/Modal'
-import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
-import { IUserRepository } from '@/feature/infrastructure/repository/user_repository'
-import { RegisterUserUseCase } from '@/use_case/sign_up_with_email_use_case/register_user_use_case/register_user_use_case'
-import { SendEmailVerificationUseCase } from '@/use_case/sign_up_with_email_use_case/send_email_verification_use_case/send_email_verification_use_case'
-import { SignUpUseCase } from '@/use_case/sign_up_with_email_use_case/sign_up_use_case/sign_up_use_case'
-import { SignUpWithEmailUseCase } from '@/use_case/sign_up_with_email_use_case/sign_up_with_email_use_case'
+import Modal from '@/components/utils/modal/Modal';
+import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository';
+import { IUserRepository } from '@/feature/infrastructure/repository/user_repository';
+import {
+  RegisterUserUseCase
+} from '@/use_case/sign_up_with_email_use_case/register_user_use_case/register_user_use_case';
+import {
+  SendEmailVerificationUseCase
+} from '@/use_case/sign_up_with_email_use_case/send_email_verification_use_case/send_email_verification_use_case';
+import {
+  SignUpUseCase
+} from '@/use_case/sign_up_with_email_use_case/sign_up_use_case/sign_up_use_case';
+import {
+  SignUpWithEmailUseCase
+} from '@/use_case/sign_up_with_email_use_case/sign_up_with_email_use_case';
 
-interface SignUpFormInputs {
+interface SignUpWithEmailFormInputs {
   username: string
   email: string
   password: string
@@ -24,12 +32,12 @@ const SignUpWithEmailPage: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpFormInputs>()
+  } = useForm<SignUpWithEmailFormInputs>()
   const router = useRouter()
   const [isOpen, setIsOpen] = React.useState(false)
   const [message, setMessage] = React.useState<String>('')
 
-  const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<SignUpWithEmailFormInputs> = async (data) => {
     const authRepository = new IAuthRepository()
     const userRepository = new IUserRepository()
 

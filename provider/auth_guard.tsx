@@ -16,6 +16,7 @@ export const AuthGuard = ({ children }: Props) => {
   if (typeof user === 'undefined') {
     return <Loading />
   }
+
   if (user === null) {
     router.replace('/sign_in')
     return null
