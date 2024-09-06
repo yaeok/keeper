@@ -5,7 +5,7 @@ const Signup = () => {
     <section id='signup' className='flex items-center justify-center shadow-lg'>
       <section
         id='signup'
-        className='w-96 h-96 p-4 bg-primary-light text-white flex items-center justify-center shadow-lg'
+        className='w-96 h-96 p-4 bg-indigo-100 text-white flex items-center justify-center shadow-lg'
       >
         <div className='max-w-4xl mx-auto text-center'>
           <h2 className='text-2xl font-bold mb-6'>今すぐ登録</h2>

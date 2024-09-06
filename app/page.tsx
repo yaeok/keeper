@@ -1,5 +1,5 @@
-import Head from 'next/head'
 import Image from 'next/image'
+import NextLink from 'next/link'
 
 import Features from '@/components/home/Feature'
 import Header from '@/components/home/Header'
@@ -10,31 +10,28 @@ import Testimonials from '@/components/home/Testimonials'
 const LandingPage: React.FC = () => {
   return (
     <div className='w-screen'>
-      <Head>
-        <title>KeePer - 資格取得のモチベーション維持</title>
-        <meta
-          name='description'
-          content='KeePerは、資格取得のモチベーションを維持するためのサービスです。'
-        />
-      </Head>
-
       <Header />
 
       <main className='flex flex-col items-center justify-center min-h-screen py-8 mt-16'>
-        <section className='text-4xl font-bold text-center text-black my-10'>
-          <p>KeePerへようこそ！</p>
-          <br />
-          <p>モチベーションを高め、目標達成しよう！</p>
+        <section className='flex flex-col space-y-8 items-center my-10'>
+          <p className='text-4xl font-bold'>KeePer</p>
+          <p className='text-2xl font-semibold'>
+            KeePerは、目標に向かってモチベーションを維持するためのサービスです。
+          </p>
+          <div>
+            <p className='text-center text-lg text-black'>
+              資格取得や個人開発といった目標に向けて、タスクを細分化し、
+            </p>
+            <p className='text-center text-lg text-black'>
+              達成度を可視化することで、モチベーション管理と目標達成をサポートします。
+            </p>
+          </div>
         </section>
-
-        <p className='text-center text-lg text-black my-4'>
-          資格取得や個人開発のモチベーションを維持し、目標達成をサポートします。
-        </p>
 
         <SignUpButton title='登録してはじめる'></SignUpButton>
 
         <div className='flex flex-wrap items-center justify-around max-w-4xl mt-10'>
-          <a
+          <NextLink
             href='#features'
             className='w-80 p-6 m-4 text-left border border-white rounded-xl hover:text-primary-dark hover:border-primary-dark bg-white shadow-lg'
           >
@@ -44,7 +41,7 @@ const LandingPage: React.FC = () => {
             <p className='mt-4 text-primary'>
               KeePerの機能や特徴をご紹介します。
             </p>
-          </a>
+          </NextLink>
 
           <a
             href='#testimonials'
@@ -74,18 +71,8 @@ const LandingPage: React.FC = () => {
         <Signup />
       </main>
 
-      <footer className='flex items-center justify-center w-full h-16 border-t  text-black'>
-        <a
-          className='flex items-center justify-center'
-          href='https://yourcompany.com'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Powered by{' '}
-          <span className='h-4 ml-2'>
-            <Image src='/vercel.svg' alt='Vercel Logo' width={72} height={16} />
-          </span>
-        </a>
+      <footer className='w-full h-16 border-t text-black flex items-center justify-center'>
+        <p className='flex items-center justify-center'>Created By</p>
       </footer>
     </div>
   )

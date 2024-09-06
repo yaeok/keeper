@@ -81,7 +81,7 @@ const HomePage: React.FC = () => {
   ) : (
     <main className='w-screen bg-gray-50'>
       <Header />
-      <div className='flex flex-col mt-20 items-center'>
+      <section className='min-h-screen pt-16 bg-gray-50 flex flex-col items-center'>
         <button
           className='bg-indigo-500 text-white font-bold py-4 px-6 mt-12 rounded w-1/3'
           onClick={handleSignupClick}
@@ -89,9 +89,8 @@ const HomePage: React.FC = () => {
           新しく目標をたてる
         </button>
         <div className='flex flex-row my-12 space-x-2 w-4/5 justify-center'>
-          <div className='w-3/5 p-4'>
+          <section className='w-3/5 p-4'>
             <UserInfo
-              avatarUrl='https://via.placeholder.com/150'
               name='八重尾'
               completedTargetsCount={completedTargetsCount}
             />
@@ -109,12 +108,12 @@ const HomePage: React.FC = () => {
               loading={loading}
               isTransitionListView={false}
             />
-          </div>
-          <div className='w-1/4'>
+          </section>
+          <section className='w-1/4'>
             <Calendar actuals={actuals} loading={loading} />
-          </div>
+          </section>
         </div>
-      </div>
+      </section>
     </main>
   )
 }

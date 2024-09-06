@@ -1,25 +1,17 @@
 'use client'
 
-import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import NextLink from 'next/link'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
-import Modal from '@/components/utils/modal/Modal';
-import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository';
-import { IUserRepository } from '@/feature/infrastructure/repository/user_repository';
-import {
-  RegisterUserUseCase
-} from '@/use_case/sign_up_with_email_use_case/register_user_use_case/register_user_use_case';
-import {
-  SendEmailVerificationUseCase
-} from '@/use_case/sign_up_with_email_use_case/send_email_verification_use_case/send_email_verification_use_case';
-import {
-  SignUpUseCase
-} from '@/use_case/sign_up_with_email_use_case/sign_up_use_case/sign_up_use_case';
-import {
-  SignUpWithEmailUseCase
-} from '@/use_case/sign_up_with_email_use_case/sign_up_with_email_use_case';
+import Modal from '@/components/utils/modal/Modal'
+import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
+import { IUserRepository } from '@/feature/infrastructure/repository/user_repository'
+import { RegisterUserUseCase } from '@/use_case/sign_up_with_email_use_case/register_user_use_case/register_user_use_case'
+import { SendEmailVerificationUseCase } from '@/use_case/sign_up_with_email_use_case/send_email_verification_use_case/send_email_verification_use_case'
+import { SignUpUseCase } from '@/use_case/sign_up_with_email_use_case/sign_up_use_case/sign_up_use_case'
+import { SignUpWithEmailUseCase } from '@/use_case/sign_up_with_email_use_case/sign_up_with_email_use_case'
 
 interface SignUpWithEmailFormInputs {
   username: string
@@ -80,31 +72,33 @@ const SignUpWithEmailPage: React.FC = () => {
         onClose={() => setIsOpen(false)}
         message={message}
       />
-      <div className='bg-white p-8 rounded shadow-md w-full max-w-md lg:mx-auto mx-4'>
-        <h1 className='text-2xl font-bold mb-6 text-center'>新規登録画面</h1>
+      <div className='lg:w-1/4 bg-white px-6 py-4 rounded shadow-md max-w-md lg:mx-auto space-y-4'>
+        <h1 className='text-2xl font-bold text-center'>新規登録画面</h1>
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
-          <section className='space-y-4'>
-            <div>
+          <section className='space-y-2'>
+            <section>
               <label className='block text-gray-700'>ユーザ名</label>
               <input
                 type='text'
                 {...register('username', {
-                  required: 'ユーザー名を入力してください',
+                  required: 'ユーザ名を入力してください',
                   maxLength: {
                     value: 50,
-                    message: 'ユーザー名は50文字以内で入力してください',
+                    message: '50文字以内で入力してください',
                   },
                 })}
                 className='mt-1 block w-full px-2 py-2 border rounded-sm shadow-sm'
               />
               {errors.username && (
-                <p className='text-red-500 mt-1'>{errors.username.message}</p>
+                <p className='text-sm text-red-500 mt-1 mx-2'>
+                  {errors.username.message}
+                </p>
               )}
-            </div>
-            <div>
+            </section>
+            <section>
               <label className='block text-gray-700'>メールアドレス</label>
               <input
-                type='email'
+                type='text'
                 {...register('email', {
                   required: 'メールアドレスを入力してください',
                   pattern: {
@@ -113,16 +107,18 @@ const SignUpWithEmailPage: React.FC = () => {
                   },
                   maxLength: {
                     value: 50,
-                    message: 'メールアドレスは50文字以内で入力してください',
+                    message: '50文字以内で入力してください',
                   },
                 })}
                 className='mt-1 block w-full px-2 py-2 border rounded-sm shadow-sm'
               />
               {errors.email && (
-                <p className='text-red-500 mt-1'>{errors.email.message}</p>
+                <p className='text-sm text-red-500 mt-1 mx-2'>
+                  {errors.email.message}
+                </p>
               )}
-            </div>
-            <div>
+            </section>
+            <section>
               <label className='block text-gray-700'>パスワード</label>
               <input
                 type='password'
@@ -130,29 +126,31 @@ const SignUpWithEmailPage: React.FC = () => {
                   required: 'パスワードを入力してください',
                   minLength: {
                     value: 8,
-                    message: 'パスワードは8文字以上で入力してください',
+                    message: '8文字以上で入力してください',
                   },
                   maxLength: {
                     value: 50,
-                    message: 'パスワードは50文字以下で入力してください',
+                    message: '50文字以内で入力してください',
                   },
                   validate: {
                     combination: (value) =>
                       /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/.test(value) ||
-                      'パスワードは英数字の組み合わせかつ大文字を含めてください',
+                      '英数字と1文字以上の大文字を含めてください',
                   },
                 })}
                 className='mt-1 block w-full px-2 py-2 border rounded-sm shadow-sm'
               />
               {errors.password && (
-                <p className='text-red-500 mt-1'>{errors.password.message}</p>
+                <p className='text-sm text-red-500 mt-1 mx-2'>
+                  {errors.password.message}
+                </p>
               )}
-            </div>
+            </section>
           </section>
           <section className='space-y-4'>
             <button
               type='submit'
-              className='w-full bg-indigo-500 text-white py-2 rounded-sm hover:bg-indigo-600 transition duration-300'
+              className='w-full text-white font-bold py-2 rounded-sm bg-indigo-500 hover:bg-indigo-600'
             >
               新規登録
             </button>

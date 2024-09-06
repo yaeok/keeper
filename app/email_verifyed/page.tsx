@@ -4,11 +4,11 @@ import NextLink from 'next/link'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
-import Modal from '@/components/utils/modal/Modal'
-import { SendEmailVerificationUseCase } from '@/use_case/send_email_verification_use_case/send_email_verification_use_case'
-import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
 import Loading from '@/components/utils/Loading'
+import Modal from '@/components/utils/modal/Modal'
+import { IAuthRepository } from '@/feature/infrastructure/repository/auth_repository'
 import { ConfirmEmailVerifyedUseCase } from '@/use_case/confirm_email_verifyed_use_case/confirm_email_verifyed_use_case'
+import { SendEmailVerificationUseCase } from '@/use_case/send_email_verification_use_case/send_email_verification_use_case'
 
 interface EmailVerifyedFormInputs {
   email: string
@@ -73,16 +73,16 @@ const EmailVerifyedPage: React.FC = () => {
         onClose={() => setIsOpen(false)}
         message={message}
       />
-      <div className='bg-white p-8 rounded shadow-md w-full max-w-md'>
-        <h1 className='text-2xl font-bold mb-6 text-center'>メール確認画面</h1>
+      <div className='lg:w-1/4 bg-white px-6 py-4 rounded shadow-md max-w-md lg:mx-auto space-y-4'>
+        <h1 className='text-2xl font-bold text-center'>メール確認画面</h1>
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
           <button
             type='submit'
-            className='w-full bg-blue-500 text-white py-2 rounded-sm hover:bg-blue-600 transition duration-300'
+            className='w-full text-white font-bold py-2 rounded-sm bg-indigo-500 hover:bg-indigo-600'
           >
             確認メールを再送信
           </button>
-          <div className='mt-6 text-center'>
+          <div className='text-center'>
             <NextLink href='/sign_in'>
               <p className='text-blue-500 hover:underline'>
                 ログイン画面へ戻る

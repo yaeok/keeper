@@ -2,7 +2,7 @@ const Features = () => (
   <section id='features' className='flex items-center justify-center shadow-lg'>
     <section
       id='features'
-      className='w-96 h-96 bg-primary-light text-white flex items-center justify-center shadow-lg'
+      className='w-96 h-96 bg-indigo-100 text-black flex items-center justify-center shadow-sm'
     >
       <div className='max-w-4xl mx-auto'>
         <h2 className='text-2xl font-bold mb-6'>サービスの特徴</h2>
@@ -13,7 +13,7 @@ const Features = () => (
         </ul>
       </div>
     </section>
-    <section className='w-96 h-96 bg-primary text-black flex items-center justify-center shadow-lg'>
+    <section className='w-96 h-96 bg-white text-black flex items-center justify-center shadow-lg'>
       <div className='max-w-4xl mx-auto text-center'>
         <h2 className='text-2xl font-bold mb-6'>利用者の声</h2>
         <blockquote className='text-md mb-6'>

@@ -59,9 +59,9 @@ const TargetRegisterPage: React.FC = () => {
   }
 
   return (
-    <main className='bg-gray-100 w-screen'>
+    <main className='w-screen bg-gray-50'>
       <Header />
-      <div className='w-3/5 mx-auto p-4 bg-white mt-20 pb-10'>
+      <div className='w-4/5 mx-auto p-4 bg-white mt-20 pb-10'>
         <h1 className='text-3xl font-bold mb-4'>目標とタスク登録</h1>
         <section className='my-2'>
           <h2 className='text-xl font-bold bg-red-100 rounded-sm px-4 py-2'>

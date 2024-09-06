@@ -1,28 +1,22 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react'
 
 interface UserInfoProps {
-  avatarUrl: string
   name: string
   completedTargetsCount: number
 }
 
-const UserInfo = (props: UserInfoProps) => {
+const UserInfo: React.FC<UserInfoProps> = (props: UserInfoProps) => {
   return (
-    <section className='p-6 bg-white shadow rounded-sm flex items-center justify-center'>
-      <div className='mx-8 flex items-center'>
-        <img
-          src={props.avatarUrl}
-          alt='User Avatar'
-          className='w-20 h-20 rounded-full mr-4'
-        />
-        <h2 className='text-md'>{props.name}</h2>
-      </div>
+    <section className='p-6 bg-white shadow rounded-sm flex flex-row items-center justify-evenly'>
+      <section className='flex flex-row items-center space-x-2'>
+        <div className='w-16 h-16 rounded-full bg-indigo-400' />
+        <p className='text-md'>{props.name}</p>
+      </section>
       <div className='border-r border-gray-300 h-28'></div>
-      <div className='mx-8'>
+      <section className='flex flex-col items-center space-y-1'>
         <p className='text-sm'>達成した目標数</p>
         <h2 className='text-3xl'>{props.completedTargetsCount}</h2>
-      </div>
+      </section>
     </section>
   )
 }

@@ -1,15 +1,15 @@
 import NextLink from 'next/link'
 
-interface ButtonProps {
+export type ButtonProps = {
   title: string
 }
 
 const SignUpButton = (props: ButtonProps) => {
   return (
     <NextLink href='/sign_up'>
-      <div className='px-6 py-4 text-sm  text-white bg-primary rounded-sm bg-primary-light hover:bg-primary-dark cursor-pointer'>
+      <p className='px-6 py-4 text-md font-bold text-white rounded-md shadow-lg bg-indigo-500 hover:bg-indigo-600 cursor-pointer'>
         {props.title}
-      </div>
+      </p>
     </NextLink>
   )
 }

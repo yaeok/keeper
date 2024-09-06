@@ -16,7 +16,7 @@ const Testimonials = () => (
         </blockquote>
       </div>
     </section>
-    <section className='w-96 h-96 bg-primary-light text-white flex items-center justify-center shadow-lg'>
+    <section className='w-96 h-96 bg-indigo-100 text-white flex items-center justify-center shadow-lg'>
       <div className='max-w-4xl mx-auto'>
         <h2 className='text-2xl font-bold mb-6'>サービスの特徴</h2>
         <ul className='space-y-4'>

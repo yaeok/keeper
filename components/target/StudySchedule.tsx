@@ -1,8 +1,9 @@
-import React from 'react'
-import { startOfWeek, endOfWeek, eachDayOfInterval, format } from 'date-fns'
+import { eachDayOfInterval, endOfWeek, format, startOfWeek } from 'date-fns'
 import { ja } from 'date-fns/locale'
-import { Constants } from '@/utils/constants'
+import React from 'react'
+
 import { Actual } from '@/domain/entity/actual_entity'
+import { Constants } from '@/utils/constants'
 
 interface StudyScheduleProps {
   actuals: Actual[]
@@ -28,12 +29,12 @@ const StudySchedule: React.FC<StudyScheduleProps> = ({ actuals }) => {
   })
 
   return (
-    <section className='mb-4 p-6 bg-white shadow rounded-sm flex items-center justify-center'>
+    <section className='p-6 bg-white shadow-md rounded-sm flex items-center justify-center'>
       <table className='w-full text-center bg-white'>
         <thead>
           <tr>
             {Constants.DAYS_OF_WEEK.map((day, index) => (
-              <th key={index} className='py-2 w-24'>
+              <th key={index} className='py-2'>
                 {day}
               </th>
             ))}
@@ -42,14 +43,14 @@ const StudySchedule: React.FC<StudyScheduleProps> = ({ actuals }) => {
         <tbody>
           <tr>
             {weekDays.map((day, index) => (
-              <td key={index} className='py-2 w-24'>
+              <td key={index} className='py-2'>
                 {format(day, 'MM/dd', { locale: ja })}
               </td>
             ))}
           </tr>
           <tr>
             {dailyHours.map((hours, index) => (
-              <td key={index} className='py-2 w-24'>
+              <td key={index} className='py-2'>
                 {hours}h
               </td>
             ))}
